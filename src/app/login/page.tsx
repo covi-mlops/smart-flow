@@ -40,8 +40,8 @@ export default function LoginPage() {
         <Image
           src="/assets/nexten_logo_b.png"
           alt="nexten logo"
-          width={323}
-          height={159}
+          width={254}
+          height={127}
           priority
           fetchPriority="high"
         />
