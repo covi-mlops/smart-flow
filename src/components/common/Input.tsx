@@ -7,7 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export default function Input({ label, className = "", ...props }: InputProps) {
   return (
     <div className="flex items-center gap-4 w-full">
-      <div className="min-w-[130px]">
+      <div className="w-[130px]">
         {
           label && (
             <label className="text-black text-2xl font-normal whitespace-nowrap min-w-20">
@@ -17,7 +17,7 @@ export default function Input({ label, className = "", ...props }: InputProps) {
         }
       </div>
       <input
-        className={`flex-1 h-[70px] min-w-[410px] rounded-[30px] border-4 border-light-gray bg-white px-6 text-medium-gray text-xl outline-none focus:border-medium-gray transition-colors ${className}`}
+        className={`flex-1 w-[440px] h-[70px] rounded-[30px] border-4 border-light-gray bg-white px-6 text-medium-gray text-xl outline-none focus:border-medium-gray transition-colors ${className}`}
         {...props}
       />
     </div>

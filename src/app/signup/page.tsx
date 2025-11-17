@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
@@ -18,30 +18,10 @@ export default function SignupPage() {
     businessOffice: ""
   });
 
-  const handleUserIdChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, userId: e.target.value });
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, password: e.target.value });
-  };
-
-  const handlePasswordConfirmChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, passwordConfirm: e.target.value });
-  };
-
-  const handleDepartmentChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, department: e.target.value });
-  };
-
-  const handleBusinessOfficeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, businessOffice: e.target.value });
-  };
-
   const handleSignupSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // TODO: Implement signup API call
+    // TODO: API call
     console.log("Signup attempt:", formData);
   };
 
@@ -67,14 +47,13 @@ export default function SignupPage() {
           onSubmit={handleSignupSubmit}
           className="w-full flex flex-col gap-12"
         >
-          <div className="w-[550px] flex gap-6">
+          <div className="w-[588px] flex gap-6">
             <Input
               label="아이디"
               type="text"
               placeholder="4~30자의 영문 대소문자만 사용 가능"
               value={formData.userId}
-              width="350"
-              onChange={handleUserIdChange}
+              onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
             />
           </div>
 
@@ -84,7 +63,7 @@ export default function SignupPage() {
               type="password"
               placeholder="4자 숫자만 사용 가능"
               value={formData.password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
 
             <Input
@@ -92,7 +71,7 @@ export default function SignupPage() {
               type="password"
               placeholder="4자 숫자만 사용 가능"
               value={formData.passwordConfirm}
-              onChange={handlePasswordConfirmChange}
+              onChange={(e) => setFormData({ ...formData, passwordConfirm: e.target.value })}
             />
           </div>
 
@@ -102,7 +81,7 @@ export default function SignupPage() {
               type="text"
               placeholder="국영문, 숫자, 공백, 특수 기호(-), (_)만 사용 가능"
               value={formData.department}
-              onChange={handleDepartmentChange}
+              onChange={(e) => setFormData({ ...formData, department: e.target.value })}
             />
 
             <Input
@@ -110,18 +89,28 @@ export default function SignupPage() {
               type="text"
               placeholder="국영문, 숫자, 공백, 특수 기호(-), (_)만 사용 가능"
               value={formData.businessOffice}
-              onChange={handleBusinessOfficeChange}
+              onChange={(e) => setFormData({ ...formData, businessOffice: e.target.value })}
             />
           </div>
         </form>
 
-        <Button
-          type="submit"
-          variant="primary"
-          className="mt-10"
-        >
-          계정 생성
-        </Button>
+        <div className="flex flex-row w-full gap-6">
+          <Button
+            type="submit"
+            variant="default"
+            className="mt-10"
+            onClick={() => router.back()}
+          >
+            뒤로 가기
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            className="mt-10"
+          >
+            계정 생성
+          </Button>
+        </div>
       </div>
     </div>
   );
