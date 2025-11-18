@@ -75,7 +75,7 @@ export function Picker({ value, title, type, onChange, options = [] }: PickerPro
                 </label>
             )}
 
-            <div className="relative w-full">
+            <div className="relative w-full" ref={dropdownRef}>
                 {
                     type === "date" ? (
                         <input
@@ -83,7 +83,7 @@ export function Picker({ value, title, type, onChange, options = [] }: PickerPro
                             type="date"
                             aria-label="date picker"
                             value={value}
-                            className="text-sm w-full bg-transparent pr-4 outline-none [&::-webkit-calendar-picker-indicator]:hidden"
+                            className="text-sm w-full bg-transparent pr-4 outline-none [&::-webkit-calendar-picker-indicator]:hidden cursor-pointer"
                             onChange={handleDateChange}
                             onClick={(e) => e.stopPropagation()}
                         />

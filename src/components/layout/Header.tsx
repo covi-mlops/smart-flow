@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { lazy, Suspense } from 'react';
-import { useMemberStore } from "@/store/store";
+import { useMemberModalStore, useMemberStore } from "@/store/store";
+import MemberModal from "../modal/MemberModal";
 
 interface HeaderProps {
     title: string;
@@ -13,7 +14,8 @@ const BiDown = lazy(() => import('react-icons/bi').then(module => ({
 })));
 
 export default function Header({ title }: HeaderProps) {
-    const { username: id } = useMemberStore();
+    const { username, role } = useMemberStore();
+    const { isModalOpen, setIsModalOpen, setIsModalClose } = useMemberModalStore();
 
     return (
         <div className="bg-white text-black border-b-[4px] border-point-red w-full h-[140px] px-[30px]">
@@ -34,12 +36,22 @@ export default function Header({ title }: HeaderProps) {
                     <p className="text-4xl font-bold whitespace-nowrap">{title}</p>
                     <button
                         className="flex flex-row items-center gap-4 cursor-pointer"
+                        onClick={() => setIsModalOpen()}
                     >
-                        <p className="text-3xl font-bold whitespace-nowrap">{id}</p>
+                        {
+                            role === "ADMIN"
+                            && <div className="w-[100px] h-[50px] bg-medium-gray text-white flex items-center justify-center font-bold rounded-xl">
+                                관리자
+                            </div>
+                        }
+                        <p className="text-3xl font-bold whitespace-nowrap">{username}</p>
                         <Suspense fallback={<div></div>}>
                             <BiDown size={50} />
                         </Suspense>
                     </button>
+                    {
+                        isModalOpen && <MemberModal onClose={() => setIsModalClose()} />
+                    }
                 </div>
             </div>
         </div>

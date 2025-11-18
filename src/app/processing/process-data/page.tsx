@@ -350,6 +350,10 @@ export default function ProcessDataPage() {
         };
     }, [isOpenTab]);
 
+    useEffect(() => {
+        setSelectedItems([]);
+    }, [currentPage]);
+
     const productOptions = [
         { label: "전체", value: "전체" },
         { label: "contactpin_1", value: "contactpin_1" },
@@ -500,9 +504,9 @@ export default function ProcessDataPage() {
                         <tbody>
                             {
                                 MOCK_DATA.length !== 0 ?
-                                    MOCK_DATA.map((item) => (
+                                    MOCK_DATA.slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage)).map((item) => (
                                         <tr key={item.id} className="text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer">
-                                            <td className="px-4 py-3">
+                                            <td className="p-4">
                                                 <input
                                                     type="checkbox"
                                                     checked={selectedItems.includes(item.id)}
