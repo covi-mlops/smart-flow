@@ -518,6 +518,7 @@ export default function ProcessDataPage() {
                                                     type="checkbox"
                                                     checked={selectedItems.includes(item.id)}
                                                     onChange={() => handleToggleItem(item.id)}
+                                                    onClick={(e) => e.stopPropagation()}
                                                     className="w-8 h-8 cursor-pointer accent-point-blue"
                                                 />
                                             </td>

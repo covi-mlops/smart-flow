@@ -18,6 +18,8 @@
   --color-point-red: #C8000B;
   --color-point-blue: #0A54B5;
   --color-point-orange: #FB832E;
+  --color-processing-point: #00B71B;
+  --color-processing-bg: #026F16;
 }
 
 @media (prefers-color-scheme: dark) {
