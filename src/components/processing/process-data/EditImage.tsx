@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
+import { polygon } from "framer-motion/client";
 // 목데이터
 // TODO: API 연동 시 수정
 const INITIAL_MASK_POLY = [
@@ -108,6 +109,11 @@ export default function EditImage({ onDataChange }: EditImageProps) {
     const MAX_SCALE = 6; // 600%까지 확대 가능
     const ZOOM_STEP = 0.2; // 20% 간격으로 축소/확대
 
+    // useEffect(() => {
+    //     // debug
+    //     console.log(draggedPoint);
+    // }, [isDragging, draggedPoint]);
+
     useEffect(() => {
         // TODO: API 연동 시 이미지 경로 수정
         const image = new Image();
@@ -188,7 +194,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                 ctx.strokeStyle = POINT_COLOR;
                 ctx.lineWidth = 2 / scale;
                 ctx.stroke();
-
+                // 영역 색칠
                 ctx.fillStyle = `${POINT_COLOR}60`;
                 ctx.fill();
             }
@@ -275,6 +281,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
         const y = e.clientY - rect.top;
 
         if (e.button === 1 || e.shiftKey) {
+            // 마우스 휠 or Shift key 클릭 -> 확대/축소
             setIsPanning(true);
             setPanStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
             return;
@@ -282,8 +289,19 @@ export default function EditImage({ onDataChange }: EditImageProps) {
 
         const point = findPointAtPosition(x, y);
         if (point) {
-            setIsDragging(true);
-            setDraggedPoint(point);
+            if (e.ctrlKey) {
+                setDraggedPoint(null); // ?
+                // 점 hover + ctrl key 클릭 -> 선택한 점 삭제
+                setMaskPoly(prev =>
+                    prev.map((polygon, pIndex) => pIndex === point.polygonIndex
+                        ? polygon.filter((_, idx) => idx !== point.pointIndex)
+                        : polygon
+                    )
+                )
+            } else {
+                setIsDragging(true);
+                setDraggedPoint(point);
+            }
         }
     };
 
@@ -329,6 +347,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
         // 마우스를 뗐을 때 실행되는 함수
         if (isDragging && draggedPoint) {
             const pointKey = `${draggedPoint.polygonIndex}-${draggedPoint.pointIndex}`;
+            console.log(pointKey);
             setEditedPoints(prev => new Set(prev).add(pointKey));
         }
         setIsDragging(false);
@@ -415,7 +434,8 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                         onClick={handleResetZoom}
                     />
                     <span className="text-base text-medium-gray ml-4">
-                        Shift + 드래그 또는 마우스 휠로 확대/축소
+                        <p>Shift + 드래그 또는 마우스 휠로 확대/축소</p>
+                        <p>Ctrl + 점 클릭 시 삭제</p>
                     </span>
                 </div>
 

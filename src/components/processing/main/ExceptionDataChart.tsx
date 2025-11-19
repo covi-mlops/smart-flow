@@ -6,7 +6,7 @@ export function ExceptionDataChart({ data }: { data: ExceptionDataPoint[] }) {
   const chartHeight = 260;
 
   return (
-    <div className="border-[4px] border-gray-300 p-4 bg-white">
+    <div className="border-[4px] border-light-gray p-4 bg-white">
       <h3 className="text-xl text-black font-black mb-6">
         생산라인 별 일일 컨택트 핀 예외 데이터 현황
       </h3>

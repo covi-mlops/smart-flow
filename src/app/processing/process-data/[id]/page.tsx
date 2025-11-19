@@ -1,16 +1,17 @@
 'use client';
 
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
 import SemiHeader from "@/components/common/SemiHeader";
 import Layout from "@/components/layout/Layout";
-import { useParams, useRouter } from "next/navigation";
-import { MOCK_DATA } from "../page";
-import { useEffect, useState } from "react";
-import { ProcessDataItem } from "@/types/processing/process-data";
 import HistogramChart from "@/components/processing/process-data/HistogramChart";
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
-import Image from "next/image";
 import Button from "@/components/processing/process-data/Button";
+import { MOCK_DATA } from "../page";
+import { ProcessDataItem } from "@/types/processing/process-data";
 
 export default function ProcessDataDetailPage() {
     const params = useParams();
@@ -170,49 +171,49 @@ export default function ProcessDataDetailPage() {
 
                 <div className="flex flex-col p-6">
                     <div className="flex flex-row items-center bg-white border-t-2 border-light-gray">
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px]">
-                            <h2 className="text-lg font-bold text-black">검사 항목</h2>
+                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                            <h2 className="text-lg text-black">검사 항목</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4">
+                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             <p>{data?.product}</p>
                         </div>
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px]">
-                            <h2 className="text-lg font-bold text-black">ROLL 번호</h2>
+                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                            <h2 className="text-lg text-black">ROLL 번호</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4">
+                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             {/* TODO: 명세 확인 후 수정 */}
                             <p>20250502_001_001</p>
                         </div>
                     </div>
 
                     <div className="flex flex-row items-center bg-white border-y-2 border-light-gray">
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px]">
-                            <h2 className="text-lg font-bold text-black">생산일자</h2>
+                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                            <h2 className="text-lg text-black">생산일자</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4">
+                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             <p>{data?.productionDate}</p>
                         </div>
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px]">
-                            <h2 className="text-lg font-bold text-black">생산라인</h2>
+                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                            <h2 className="text-lg text-black">생산라인</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4">
+                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             <p>{data?.productionLine}</p>
                         </div>
                     </div>
 
                     <div className="flex flex-row items-center bg-white border-b-2 border-light-gray">
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px]">
-                            <h2 className="text-lg font-bold text-black">AI 검사일자</h2>
+                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                            <h2 className="text-lg text-black">AI 검사일자</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4">
+                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             {/* TODO: 명세 확인 후 수정 */}
                             <p>2025.05.20 15:03:30</p>
                         </div>
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px]">
-                            <h2 className="text-lg font-bold text-black">AI 검사 결과</h2>
+                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                            <h2 className="text-lg text-black">AI 검사 결과</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4">
-                            <p>{data?.inspectionResult}</p>
+                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                            <p className={`${data?.inspectionResult === "불량" ? "text-point-red" : "text-medium-gray"}`}>{data?.inspectionResult}</p>
                         </div>
                     </div>
                 </div>
@@ -352,6 +353,7 @@ export default function ProcessDataDetailPage() {
                                         type="checkbox"
                                         checked={bitmapOn}
                                         onChange={(e) => setBitmapOn(!bitmapOn)}
+                                        // TODO: 비트맵 이미지를 어떻게 표시할 건지 !!!!!!!!!!!
                                         // onClick={(e) => setBitmapOn(!bitmapOn)}
                                         className="w-8 h-8 cursor-pointer accent-point-blue"
                                     />
@@ -367,6 +369,7 @@ export default function ProcessDataDetailPage() {
                                     ? <p className="text-medium-gray text-xl">이미지를 선택해주세요</p>
                                     : (
                                         // TODO: API 연동 시 실제 이미지 id, 이미지 객체랑 연결
+                                        // TODO: 비트맵 이미지 조건부 렌더링
                                         <div className="flex flex-col items-center gap-12">
                                             <p className="text-xl text-black font-bold">이미지 View</p>
                                             <Image

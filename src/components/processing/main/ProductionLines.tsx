@@ -1,5 +1,8 @@
 import type { ProductionLineStatus } from "@/types/processing/types";
+import Button from "../process-data/Button";
+import { useState } from "react";
 // 목데이터
+// TODO: API 연동 작업 시 수정
 const productionLines: ProductionLineStatus[] = [
   {
     id: "1",
@@ -19,12 +22,29 @@ const productionLines: ProductionLineStatus[] = [
     normalCount: 0,
     defectCount: 0,
   },
+  {
+    id: "3",
+    name: "생산라인3",
+    isRunning: false,
+    productName: "contactpin_1",
+    rollsProduced: 32,
+    normalCount: 31,
+    defectCount: 1,
+  },
+  {
+    id: "4",
+    name: "생산라인4",
+    isRunning: false,
+    productName: "contactpin_2",
+    rollsProduced: 0,
+    normalCount: 0,
+    defectCount: 0,
+  },
 ];
 // 하나의 생산라인 정보
 function ProductionLineCard({ line }: { line: ProductionLineStatus }) {
-  // TODO: API 연동하면서 생산라인 개수 많아지면 좌우 버튼 추가
   return (
-    <div className="border-[4px] border-light-gray p-6 bg-white">
+    <div className="w-[600px] border-[4px] border-light-gray p-6 bg-white">
       <div className="flex flex-row items-center justify-center gap-3 mb-4">
         <h3 className="text-xl text-black font-semibold">{line.name}</h3>
         <div
@@ -43,15 +63,34 @@ function ProductionLineCard({ line }: { line: ProductionLineStatus }) {
 }
 // 생산라인 가동 현황 컴포넌트
 export function ProductionLines() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(Math.ceil(productionLines.length / 2));
+
   return (
-    <section className="bg-light-gray/30 border-b-[4px] border-light-gray w-full p-6">
+    <section className="bg-light-gray/30 border-b-[4px] border-light-gray w-full h-[310px] p-6">
       <h2 className="text-3xl text-black font-bold mb-6">생산라인 가동 현황</h2>
-      <div className="grid grid-cols-2 gap-6">
-        {
-          productionLines.map((line) => (
-            <ProductionLineCard key={line.id} line={line} />
-          ))
-        }
+      <div className="flex flex-row gap-4 justify-between items-end">
+        <Button
+          type="simple"
+          title="<"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          className="h-[192px]"
+        />
+        <div className="flex flex-row gap-6">
+          {
+            productionLines.slice((currentPage - 1) * 2, currentPage * 2).map((line) => (
+              <ProductionLineCard key={line.id} line={line} />
+            ))
+          }
+        </div>
+        <Button
+          type="simple"
+          title=">"
+          disabled={currentPage === totalPage}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className="h-[192px]"
+        />
       </div>
     </section>
   );

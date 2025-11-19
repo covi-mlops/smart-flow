@@ -2,10 +2,11 @@
 
 import { useState, FormEvent, lazy, Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
 import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import { SignupFormData } from "@/types/signup/types";
-import Image from "next/image";
 import { isValidBranchName, isValidHeadqurter, isValidPw, isValidPwConfirm, isValidUsername } from "@/utils/regEx";
 
 const BiInfo = lazy(() => import('react-icons/bi').then(module => ({
@@ -16,7 +17,7 @@ export default function EditInfoPage() {
     const router = useRouter();
 
     const [formData, setFormData] = useState<SignupFormData>({
-        /* TODO: API 연결 시 수정 필요 */
+        /* TODO: API 연결 시 수정 */
         username: "KIMKIYONG",
         password: "1234",
         passwordConfirm: "1234",
@@ -207,8 +208,9 @@ export default function EditInfoPage() {
                     <Button
                         type="submit"
                         variant="primary"
+                        // TODO: API 연동 시 하나라도 정보 변경 시에만 활성화되도록 적용
                         // disabled={!isPassPw || !isPassPwConfirm || !isPassHeadquarter || !isPassBranchName}
-                        className="cursor-pointer"
+                        className="cursor-pointer hover:bg-medium-gray/80"
                         onClick={() => setIsSignupButtonClick(true)}
                     >
                         변경

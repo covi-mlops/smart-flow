@@ -63,7 +63,7 @@ export function Picker({ value, title, type, className = "", onChange, options =
     return (
         <div
             ref={dropdownRef}
-            className={`relative ${title ? "min-w-[160px]" : "min-w-[100px]"} border-[2px] border-light-gray rounded-xl p-2 bg-white flex flex-col justify-center items-start cursor-pointer ${title ? "h-14" : "h-12"} ${className}`}
+            className={`relative ${title ? "min-w-[160px]" : "min-w-[100px]"} border-[2px] border-light-gray rounded-xl p-2 bg-white flex flex-col justify-center items-start cursor-pointer h-[56px] ${className}`}
             onClick={handleClick}
         >
             {

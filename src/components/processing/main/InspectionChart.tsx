@@ -19,7 +19,7 @@ export function InspectionChart({
   const chartHeight = 300;
 
   return (
-    <div className="border-[4px] border-light-gray p-6 bg-white m-6">
+    <div className="border-[4px] border-light-gray p-6 bg-white mx-6 mb-6">
       <div className="flex items-start justify-between mb-6">
         <h3 className="text-xl text-black font-bold">생산일자 별 데이터 검수 현황</h3>
         <div className="flex gap-4">

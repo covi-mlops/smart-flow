@@ -2,10 +2,11 @@
 
 import { useState, FormEvent, lazy, Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
 import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import { SignupFormData } from "@/types/signup/types";
-import Image from "next/image";
 import { isValidBranchName, isValidHeadqurter, isValidPw, isValidPwConfirm, isValidUsername } from "@/utils/regEx";
 
 const BiInfo = lazy(() => import('react-icons/bi').then(module => ({

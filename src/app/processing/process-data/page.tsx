@@ -1,12 +1,13 @@
 "use client";
 
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import Layout from "@/components/layout/Layout";
 import { Picker } from "@/components/common/Picker";
 import { ProcessDataItem, FilterOptions } from "@/types/processing/process-data";
 import Button from "@/components/processing/process-data/Button";
 import Pagination from "@/components/common/Pagination";
-import { useRouter } from "next/navigation";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
     default: module.HiArrowUp
@@ -14,6 +15,10 @@ const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
 
 const HiArrowDown = lazy(() => import('react-icons/hi').then(module => ({
     default: module.HiArrowDown
+})));
+
+const BiDown = lazy(() => import('react-icons/bi').then(module => ({
+    default: module.BiChevronDown
 })));
 // 목데이터
 // TODO: API 연동 시 변경 
@@ -261,33 +266,6 @@ export const MOCK_DATA: ProcessDataItem[] = [
         inspectionResult: "정상",
         aiModel: "covi_seq_00001"
     },
-    {
-        id: 28,
-        productionDate: "2025.11.13\n14:40:25",
-        productionLine: "생산라인1",
-        product: "contactpin_1",
-        defectRate: { percentage: "0.11", defectCount: 57, totalCount: 52124 },
-        inspectionResult: "정상",
-        aiModel: "covi_seq_00001"
-    },
-    {
-        id: 29,
-        productionDate: "2025.11.12\n14:40:25",
-        productionLine: "생산라인1",
-        product: "contactpin_2",
-        defectRate: { percentage: "0.15", defectCount: 82, totalCount: 55000 },
-        inspectionResult: "정상",
-        aiModel: "covi_seq_00001"
-    },
-    {
-        id: 30,
-        productionDate: "2025.11.11\n14:40:25",
-        productionLine: "생산라인2",
-        product: "contactpin_2",
-        defectRate: { percentage: "2.50", defectCount: 1375, totalCount: 55000 },
-        inspectionResult: "불량",
-        aiModel: "covi_seq_00001"
-    },
 ];
 
 export default function ProcessDataPage() {
@@ -313,7 +291,9 @@ export default function ProcessDataPage() {
     };
 
     const handleSelectAll = () => {
-        const allIds = MOCK_DATA.map(item => item.id);
+        const allIds = MOCK_DATA
+            .slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage))
+            .map(item => item.id);
         setSelectedItems(allIds);
     };
 
@@ -335,7 +315,6 @@ export default function ProcessDataPage() {
 
     const handleDeleteSelected = () => {
         // TODO: API 연동 - 선택한 항목이 목록에서 삭제되도록 적용
-        console.log("Delete selected items:", selectedItems);
     };
 
     useEffect(() => {
@@ -457,12 +436,14 @@ export default function ProcessDataPage() {
                         <Button
                             type="selectAll"
                             title="모두 선택"
+                            disabled={selectedItems.length === 10}
                             onClick={handleSelectAll}
                         />
 
                         <Button
                             type="default"
                             title="모두 해제"
+                            disabled={selectedItems.length === 0}
                             onClick={handleDeselectAll}
                         />
                     </div>
@@ -474,8 +455,8 @@ export default function ProcessDataPage() {
                         disabled={selectedItems.length === 0}
                     />
                 </div>
-
-                <div className="bg-white border-y-2 border-light-gray overflow-hidden">
+                {/* TODO: 표 컴포넌트화 고려해보기 */}
+                <div className="bg-white border-y-2 border-light-gray overflow-hidden h-[784px]">
                     <table className="w-full">
                         <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
                             <tr>
@@ -495,6 +476,7 @@ export default function ProcessDataPage() {
                                                 : <HiArrowUp size={20} className="text-point-blue" />
                                         }
                                         <span className="font-bold">생산 일자</span>
+                                        <BiDown size={26} />
                                     </div>
                                 </th>
                                 <th className="py-3 font-bold">생산라인</th>
