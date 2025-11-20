@@ -75,7 +75,7 @@ export function ProductionLines() {
           title="<"
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
-          className="h-[192px]"
+          className="h-[192px] w-[60px]"
         />
         <div className="flex flex-row gap-6">
           {
@@ -89,7 +89,7 @@ export function ProductionLines() {
           title=">"
           disabled={currentPage === totalPage}
           onClick={() => setCurrentPage(currentPage + 1)}
-          className="h-[192px]"
+          className="h-[192px] w-[60px]"
         />
       </div>
     </section>

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
-import { polygon } from "framer-motion/client";
 // 목데이터
 // TODO: API 연동 시 수정
 const INITIAL_MASK_POLY = [
@@ -100,19 +99,15 @@ export default function EditImage({ onDataChange }: EditImageProps) {
     const [offset, setOffset] = useState({ x: 0, y: 0 }); // 이미지 상의 중심 좌표
     const [isPanning, setIsPanning] = useState(false); // 사용자가 위치 변경 중인지의 여부
     const [panStart, setPanStart] = useState({ x: 0, y: 0 }); // 드래그 시작점을 기준으로 화면 이동 계산 시 사용되는 좌표 정보
+    const [areaSet, setAreaSet] = useState<CanvasRenderingContext2D[]>([]); // 인식된 영역들의 집합
 
-    const POINT_RADIUS = 5;
+    const POINT_RADIUS = 8;
     const POINT_COLOR = "#00B71B";
     const EDITED_POINT_COLOR = "#C8000B";
     const POINT_HIT_RADIUS = 8;
     const MIN_SCALE = 0.6; // 60%까지 축소 가능
     const MAX_SCALE = 6; // 600%까지 확대 가능
     const ZOOM_STEP = 0.2; // 20% 간격으로 축소/확대
-
-    // useEffect(() => {
-    //     // debug
-    //     console.log(draggedPoint);
-    // }, [isDragging, draggedPoint]);
 
     useEffect(() => {
         // TODO: API 연동 시 이미지 경로 수정
@@ -198,6 +193,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                 ctx.fillStyle = `${POINT_COLOR}60`;
                 ctx.fill();
             }
+            // setAreaSet([...areaSet, ctx]);
 
             polygon.forEach((point, pointIndex) => {
                 const [x, y] = point;
@@ -212,7 +208,9 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                 ctx.lineWidth = 1 / scale;
                 ctx.stroke();
             });
+
         });
+        // console.log(areaSet)
 
         const centerX = imgX + image.width / 2;
         const centerY = imgY + image.height / 2;
@@ -277,8 +275,8 @@ export default function EditImage({ onDataChange }: EditImageProps) {
 
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = e.clientX - rect.left; // 화면 내 x 좌표
+        const y = e.clientY - rect.top; // 화면 내 y 좌표
 
         if (e.button === 1 || e.shiftKey) {
             // 마우스 휠 or Shift key 클릭 -> 확대/축소
@@ -290,8 +288,10 @@ export default function EditImage({ onDataChange }: EditImageProps) {
         const point = findPointAtPosition(x, y);
         if (point) {
             if (e.ctrlKey) {
-                setDraggedPoint(null); // ?
                 // 점 hover + ctrl key 클릭 -> 선택한 점 삭제
+                if (editedPoints.has(`${point.polygonIndex}-${point.pointIndex}`)) {
+                    editedPoints.delete(`${point.polygonIndex}-${point.pointIndex}`);
+                }
                 setMaskPoly(prev =>
                     prev.map((polygon, pIndex) => pIndex === point.polygonIndex
                         ? polygon.filter((_, idx) => idx !== point.pointIndex)
@@ -349,6 +349,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
             const pointKey = `${draggedPoint.polygonIndex}-${draggedPoint.pointIndex}`;
             console.log(pointKey);
             setEditedPoints(prev => new Set(prev).add(pointKey));
+            console.log(editedPoints)
         }
         setIsDragging(false);
         setDraggedPoint(null);
@@ -410,13 +411,14 @@ export default function EditImage({ onDataChange }: EditImageProps) {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between gap-3 bg-white border-[4px] border-light-gray p-4">
-                <div className="flex items-center gap-3">
+            <div className="flex w-full items-center justify-between gap-3 bg-white border-[4px] border-light-gray p-4">
+                <div className="flex flex-row items-center gap-3">
                     <Button
                         type="simple"
                         title="-"
                         disabled={scale <= MIN_SCALE}
                         onClick={handleZoomOut}
+                        className="w-[56px]"
                     />
                     <span className="text-xl font-bold text-black min-w-[80px] text-center">
                         {Math.round(scale * 100)}%
@@ -426,6 +428,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                         title="+"
                         disabled={scale >= MAX_SCALE}
                         onClick={handleZoomIn}
+                        className="w-[56px]"
                     />
                     <Button
                         type="default"
@@ -464,21 +467,32 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                 </div>
             </div>
 
-            <div
-                ref={containerRef}
-                className="flex items-center justify-center border-[4px] border-light-gray bg-soft-white overflow-hidden"
-                style={{ height: "800px" }}
-                onWheel={(e) => e.preventDefault()}
-            >
-                <canvas
-                    ref={canvasRef}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseLeave}
-                    onWheel={handleWheel}
-                    className={isPanning || isDragging ? "cursor-grabbing" : "cursor-crosshair"}
-                />
+            <div className="flex flex-col gap-4">
+                <div
+                    ref={containerRef}
+                    className="w-full flex items-center justify-center border-[4px] border-light-gray bg-soft-white overflow-hidden"
+                    style={{ height: "1000px" }}
+                    onWheel={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }}
+                >
+                    <canvas
+                        ref={canvasRef}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseLeave}
+                        onWheel={handleWheel}
+                        className={isPanning || isDragging ? "cursor-grabbing" : "cursor-crosshair"}
+                    />
+                </div>
+
+                <div className="h-[250px] border-[4px] border-light-gray flex flex-col items-center">
+                    {
+                        // TODO: 영역 띄우기 
+                    }
+                </div>
             </div>
         </div>
     );
