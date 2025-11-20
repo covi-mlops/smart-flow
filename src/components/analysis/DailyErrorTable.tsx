@@ -5,16 +5,16 @@ import Pagination from "../common/Pagination";
 import { MOCK_DATA } from "@/app/processing/process-data/page";
 
 export default function DailyErrorTable() {
-    const [itemsPerPage, setItemsPerPage] = useState<string>('3');
+    const [itemsPerPage, setItemsPerPage] = useState<string>('1');
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentTab, setCurrentTab] = useState(1);
     const [sortConfig, setSortConfig] = useState<string>('desc');
 
     return (
         <div className="border-[4px] border-light-gray p-6 bg-white">
-            <div className="flex flex-col items-start justify-between">
-                <h3 className="text-xl text-black font-bold mb-6">일일 불량 ROLL 알림</h3>
-
-                <div className="bg-white border-y-2 border-light-gray overflow-hidden w-full h-full">
+            <h3 className="items-start text-xl text-black font-bold mb-6">일일 불량 ROLL 알림</h3>
+            <div className="flex flex-col items-center justify-between">
+                <div className="bg-white items-center border-y-2 border-light-gray overflow-hidden w-full h-full">
                     <table className="w-full">
                         <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
                             <tr>
@@ -64,8 +64,11 @@ export default function DailyErrorTable() {
                 <Pagination
                     total={MOCK_DATA.length}
                     page={currentPage}
-                    limit={Number(itemsPerPage)}
+                    // limit={Number(itemsPerPage)}
+                    limit={1}
+                    tab={currentTab}
                     setPage={setCurrentPage}
+                    setTab={setCurrentTab}
                 />
             </div>
         </div>
