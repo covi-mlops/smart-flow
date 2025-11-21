@@ -1,5 +1,5 @@
 import DailyErrorTable from "@/components/analysis/DailyErrorTable";
-import { DailyRollCostChart } from "@/components/analysis/DailyRollCostChart";
+import { DailyRollRateChart } from "@/components/analysis/DailyRollRateChart";
 import ProductionHistory from "@/components/analysis/ProductionHistory";
 import Layout from "@/components/layout/Layout";
 import { ProductionLines } from "@/components/processing/main/ProductionLines";
@@ -19,7 +19,7 @@ export default function MainPage() {
                 <ProductionLines />
 
                 <div className="grid grid-cols-2 p-6 gap-6">
-                    <DailyRollCostChart data={dailyData} />
+                    <DailyRollRateChart data={dailyData} />
                     <DailyErrorTable />
                 </div>
 

@@ -22,6 +22,7 @@ export default function ProcessDataDetailPage() {
     const [selectedImageNumber, setSelectedImageNumber] = useState<number>();
     const [itemsPerPage, setItemsPerPage] = useState<string>('10');
     const [currentPage, setCurrentPage] = useState(1);
+    const [tab, setTab] = useState(1);
 
     const [filters, setFilters] = useState<{
         inspectionResult: string,
@@ -312,7 +313,9 @@ export default function ProcessDataDetailPage() {
                             total={tableData.length}
                             page={currentPage}
                             limit={(Number(itemsPerPage))}
+                            tab={tab}
                             setPage={setCurrentPage}
+                            setTab={setTab}
                         />
                     </div>
 

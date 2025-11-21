@@ -3,7 +3,7 @@
 import { DailyRollCostPoint } from "@/types/analysis/types";
 import { motion } from "framer-motion";
 
-export function DailyRollCostChart({ data }: { data: DailyRollCostPoint[] }) {
+export function DailyRollRateChart({ data }: { data: DailyRollCostPoint[] }) {
     const maxValue = Math.max(...data.map((d) => d.normalCount + d.defectCount));
 
     const chartHeight = 260;
@@ -11,12 +11,12 @@ export function DailyRollCostChart({ data }: { data: DailyRollCostPoint[] }) {
     return (
         <div className="border-[4px] border-light-gray p-6 bg-white">
             <div className="flex items-start justify-between mb-6">
-                <h3 className="text-xl text-black font-bold">생산일자 별 데이터 검수 현황</h3>
+                <h3 className="text-xl text-black font-bold">생산라인 별 일일 ROLL 양불 비율</h3>
             </div>
-
+            {/* TODO: 실제 데이터 들어오면 비율로 변경하기 */}
             <div className="relative mb-3" style={{ height: chartHeight }}>
                 <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-around text-sm text-medium-gray">
-                    {data.map((d) => <span>{d.productionLine}</span>)}
+                    {data.map((d, idx) => <span key={idx}>{d.productionLine}</span>)}
                 </div>
                 <div className="w-[544px] z-30 ml-16 h-full flex flex-col justify-around border-l border-light-gray gap-4 py-2">
                     {

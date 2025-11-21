@@ -284,7 +284,7 @@ export default function ProcessDataPage() {
     const [isOpenTab, setIsOpenTab] = useState<boolean>(false);
     const [itemsPerPage, setItemsPerPage] = useState<string>('10');
     const [currentPage, setCurrentPage] = useState(1);
-    const [currentTab, setCurrentTab] = useState(1);
+    const [tab, setTab] = useState(1);
     const [sortConfig, setSortConfig] = useState<string>('desc');
 
     const handleFilterChange = (key: keyof FilterOptions, value: string) => {
@@ -573,8 +573,9 @@ export default function ProcessDataPage() {
                         total={MOCK_DATA.length}
                         page={currentPage}
                         limit={Number(itemsPerPage)}
-                        tab={currentTab}
+                        tab={tab}
                         setPage={setCurrentPage}
+                        setTab={setTab}
                     />
                 }
             </div>

@@ -17,10 +17,10 @@ export default function DailyErrorTable() {
                     <table className="w-full">
                         <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
                             <tr>
-                                <th className="w-[170px] py-3 font-bold">생산일자</th>
-                                <th className="w-[170px] py-3 font-bold">생산라인</th>
-                                <th className="w-[170px] py-3 font-bold">생산 항목</th>
-                                <th className="w-[170px] py-3 font-bold">불량률</th>
+                                <th className="w-[150px] py-2 font-bold">생산일자</th>
+                                <th className="w-[160px] py-2 font-bold">생산라인</th>
+                                <th className="w-[160px] py-2 font-bold">생산 항목</th>
+                                <th className="w-[160px] py-2 font-bold">불량률</th>
                             </tr>
                         </thead>
 
@@ -30,16 +30,16 @@ export default function DailyErrorTable() {
                                     MOCK_DATA.slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage)).map((item) => (
                                         <tr
                                             key={item.id}
-                                            className="text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
+                                            className="text-base border-b border-light-gray text-center"
                                         >
-                                            <td className="px-4 py-3 whitespace-pre-line">
+                                            <td className="py-3 whitespace-pre-line">
                                                 {item.productionDate}
                                             </td>
-                                            <td className="px-4 py-3 whitespace-pre-line">
+                                            <td className="py-3 whitespace-pre-line">
                                                 {item.productionLine}
                                             </td>
-                                            <td className="px-4 py-3">{item.product}</td>
-                                            <td className="px-4 py-3">
+                                            <td className="py-3">{item.product}</td>
+                                            <td className="py-3">
                                                 {item.defectRate.percentage}%<br />
                                                 ({item.defectRate.defectCount}/{item.defectRate.totalCount})
                                             </td>
