@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
+import BasicButton from "@/components/common/BasicButton";
 import { SignupFormData } from "@/types/signup/types";
 import { isValidBranchName, isValidHeadqurter, isValidPw, isValidPwConfirm, isValidUsername } from "@/utils/regEx";
 
@@ -225,21 +225,21 @@ export default function SignupPage() {
         </form>
 
         <div className="flex flex-row w-full gap-6">
-          <Button
+          <BasicButton
             type="submit"
             variant="default"
             onClick={() => router.back()}
           >
             뒤로 가기
-          </Button>
-          <Button
+          </BasicButton>
+          <BasicButton
             type="submit"
             variant="primary"
             disabled={!isPassUsername || !isPassPw || !isPassPwConfirm || !isPassHeadquarter || !isPassBranchName}
             onClick={() => setIsSignupButtonClick(true)}
           >
             계정 생성
-          </Button>
+          </BasicButton>
         </div>
       </div>
     </div>

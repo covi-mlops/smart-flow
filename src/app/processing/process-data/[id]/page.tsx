@@ -9,7 +9,7 @@ import Layout from "@/components/layout/Layout";
 import HistogramChart from "@/components/processing/process-data/HistogramChart";
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
-import Button from "@/components/processing/process-data/Button";
+import MultipleButton from "@/components/common/MultipleButton";
 import { MOCK_DATA } from "../page";
 import { ProcessDataItem } from "@/types/processing/process-data";
 
@@ -198,7 +198,7 @@ export default function ProcessDataDetailPage() {
                             <h2 className="text-lg text-black">생산라인</h2>
                         </div>
                         <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            <p>{data?.productionLine}</p>
+                            <p>{data?.production_name}</p>
                         </div>
                     </div>
 
@@ -388,7 +388,7 @@ export default function ProcessDataDetailPage() {
                             }
                         </div>
 
-                        <Button
+                        <MultipleButton
                             type="default"
                             title="이미지 편집하기"
                             disabled={selectedImageNumber === undefined}

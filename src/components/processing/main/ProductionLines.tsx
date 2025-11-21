@@ -1,7 +1,7 @@
 'use client';
 
 import type { ProductionLineStatus } from "@/types/processing/types";
-import Button from "../process-data/Button";
+import MultipleButton from "../../common/MultipleButton";
 import { useState } from "react";
 // 목데이터
 // TODO: API 연동 작업 시 수정
@@ -72,7 +72,7 @@ export function ProductionLines() {
     <section className="bg-light-gray/30 border-b-[4px] border-light-gray w-full h-[310px] p-6">
       <h2 className="text-3xl text-black font-bold mb-6">생산라인 가동 현황</h2>
       <div className="flex flex-row gap-4 justify-between items-end">
-        <Button
+        <MultipleButton
           type="simple"
           title="<"
           disabled={currentPage === 1}
@@ -86,7 +86,7 @@ export function ProductionLines() {
             ))
           }
         </div>
-        <Button
+        <MultipleButton
           type="simple"
           title=">"
           disabled={currentPage === totalPage}

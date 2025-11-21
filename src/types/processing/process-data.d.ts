@@ -1,7 +1,7 @@
 export interface ProcessDataItem {
     id: number;
+    production_name: string;
     productionDate: string;
-    productionLine: string;
     product: string;
     defectRate: {
         percentage: string;
@@ -11,12 +11,13 @@ export interface ProcessDataItem {
     inspectionResult: "정상" | "불량";
     aiModel: string;
 }
-// 데이터 가공 페이지 표
+// 데이터 필터링 옵션
+// API 명세와 일치 (진행 중)
 export interface FilterOptions {
-    product: string;
-    startDate: string;
-    endDate: string;
-    productionLine: string;
-    inspectionResult: string;
-    aiModel: string;
+    production_name: string;
+    production_line: string;
+    start_created_at: string;
+    end_created_at: string;
+    is_abnormal: string;
+    applied_model: string;
 }

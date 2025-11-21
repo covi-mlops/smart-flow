@@ -36,7 +36,7 @@ export default function DailyErrorTable() {
                                                 {item.productionDate}
                                             </td>
                                             <td className="py-3 whitespace-pre-line">
-                                                {item.productionLine}
+                                                {item.production_name}
                                             </td>
                                             <td className="py-3">{item.product}</td>
                                             <td className="py-3">

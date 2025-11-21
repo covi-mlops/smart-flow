@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Button from "./Button";
+import MultipleButton from "../../common/MultipleButton";
 // 목데이터
 // TODO: API 연동 시 수정
 const INITIAL_MASK_POLY = [
@@ -579,7 +579,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
         <div className="flex flex-col gap-4">
             <div className="flex w-full items-center justify-between gap-3 bg-white border-[4px] border-light-gray p-4">
                 <div className="flex flex-row items-center gap-3">
-                    <Button
+                    <MultipleButton
                         type="simple"
                         title="-"
                         disabled={scale <= MIN_SCALE}
@@ -589,28 +589,28 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                     <span className="text-xl font-bold text-black min-w-[80px] text-center">
                         {Math.round(scale * 100)}%
                     </span>
-                    <Button
+                    <MultipleButton
                         type="simple"
                         title="+"
                         disabled={scale >= MAX_SCALE}
                         onClick={handleZoomIn}
                         className="w-[56px]"
                     />
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="초기화"
                         disabled={false}
                         onClick={handleResetZoom}
                     />
                     <div className="h-8 w-[1px] bg-medium-gray mx-2" />
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="취소"
                         disabled={history.length === 0}
                         onClick={handleUndo}
                         className="w-[64px]"
                     />
-                    <Button
+                    <MultipleButton
                         type="warning"
                         title="전체 취소"
                         disabled={false}
@@ -624,21 +624,21 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="← 왼쪽"
                         disabled={false}
                         onClick={handleMoveToLeft}
                         className="w-[100px]"
                     />
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="중앙"
                         disabled={false}
                         onClick={handleMoveToCenter}
                         className="w-[80px]"
                     />
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="오른쪽 →"
                         disabled={false}
@@ -674,7 +674,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                         <h3 className="text-xl font-bold text-black">영역 목록</h3>
                         {
                             selectedPolygonIndex !== null && (
-                                <Button
+                                <MultipleButton
                                     type="danger"
                                     title="선택된 영역 삭제"
                                     disabled={false}

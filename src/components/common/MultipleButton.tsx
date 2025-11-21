@@ -6,7 +6,7 @@ interface ButtonProps {
     onClick: () => void;
 }
 
-export default function Button({ type, title, disabled, className = "", onClick, ...props }: ButtonProps) {
+export default function MultipleButton({ type, title, disabled, className = "", onClick, ...props }: ButtonProps) {
     return (
         <button
             className={

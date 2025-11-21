@@ -1,13 +1,14 @@
 'use client';
 
+import { useRouter } from "next/navigation";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+
 import { MOCK_DATA } from "@/app/processing/process-data/page";
 import Pagination from "@/components/common/Pagination";
 import { Picker } from "@/components/common/Picker";
 import Layout from "@/components/layout/Layout";
-import Button from "@/components/processing/process-data/Button";
+import MultipleButton from "@/components/common/MultipleButton";
 import { FilterOptions } from "@/types/processing/process-data";
-import { useRouter } from "next/navigation";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
     default: module.HiArrowUp
@@ -25,12 +26,12 @@ export default function ResultPage() {
     const router = useRouter();
 
     const [filters, setFilters] = useState<FilterOptions>({
-        product: "전체",
-        startDate: "2025-05-21",
-        endDate: "2025-05-21",
-        productionLine: "전체",
-        inspectionResult: "전체",
-        aiModel: "전체"
+        production_name: "전체",
+        start_created_at: "2025-05-21",
+        end_created_at: "2025-05-21",
+        production_line: "전체",
+        is_abnormal: "전체",
+        applied_model: "전체"
     });
     const modalRef = useRef<HTMLDivElement>(null);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -132,46 +133,46 @@ export default function ResultPage() {
                         <Picker
                             type="select"
                             title="생산품목"
-                            value={filters.product}
-                            onChange={(value) => handleFilterChange("product", value)}
+                            value={filters.production_name}
+                            onChange={(value) => handleFilterChange("production_name", value)}
                             options={productOptions}
                         />
 
                         <Picker
                             type="date"
                             title="생산 시작 일자"
-                            value={filters.startDate}
-                            onChange={(value) => handleFilterChange("startDate", value)}
+                            value={filters.start_created_at}
+                            onChange={(value) => handleFilterChange("start_created_at", value)}
                         />
 
                         <Picker
                             type="date"
                             title="생산 종료 일자"
-                            value={filters.endDate}
-                            onChange={(value) => handleFilterChange("endDate", value)}
+                            value={filters.end_created_at}
+                            onChange={(value) => handleFilterChange("end_created_at", value)}
                         />
 
                         <Picker
                             type="select"
                             title="생산라인"
-                            value={filters.productionLine}
-                            onChange={(value) => handleFilterChange("productionLine", value)}
+                            value={filters.production_line}
+                            onChange={(value) => handleFilterChange("production_line", value)}
                             options={lineOptions}
                         />
 
                         <Picker
                             type="select"
                             title="AI 검사 결과"
-                            value={filters.inspectionResult}
-                            onChange={(value) => handleFilterChange("inspectionResult", value)}
+                            value={filters.is_abnormal}
+                            onChange={(value) => handleFilterChange("is_abnormal", value)}
                             options={resultOptions}
                         />
 
                         <Picker
                             type="select"
                             title="AI 모델"
-                            value={filters.aiModel}
-                            onChange={(value) => handleFilterChange("aiModel", value)}
+                            value={filters.applied_model}
+                            onChange={(value) => handleFilterChange("applied_model", value)}
                             options={modelOptions}
                         />
                     </div>
@@ -187,14 +188,14 @@ export default function ResultPage() {
                             options={itemsPerPageOptions}
                         />
 
-                        <Button
+                        <MultipleButton
                             type="selectAll"
                             title="모두 선택"
                             disabled={selectedItems.length === 10}
                             onClick={handleSelectAll}
                         />
 
-                        <Button
+                        <MultipleButton
                             type="default"
                             title="모두 해제"
                             disabled={selectedItems.length === 0}
@@ -202,7 +203,7 @@ export default function ResultPage() {
                         />
                     </div>
 
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="선택한 항목 삭제"
                         onClick={handleDeleteSelected}
@@ -264,7 +265,7 @@ export default function ResultPage() {
                                                 {item.productionDate}
                                             </td>
                                             <td className="px-4 py-3 whitespace-pre-line">
-                                                {item.productionLine}
+                                                {item.production_name}
                                             </td>
                                             <td className="px-4 py-3">{item.product}</td>
                                             <td className="px-4 py-3">

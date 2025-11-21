@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
+import BasicButton from "@/components/common/BasicButton";
 import { LoginFormData } from "@/types/login/types";
 
 const BiInfo = lazy(() => import('react-icons/bi').then(module => ({
@@ -86,7 +86,7 @@ export default function LoginPage() {
               )
           }
 
-          <Button
+          <BasicButton
             type="submit"
             variant="primary"
             disabled={formData.userId === "" || formData.password === ""}
@@ -94,18 +94,18 @@ export default function LoginPage() {
             onClick={() => setIsClickButton(true)}
           >
             로그인
-          </Button>
+          </BasicButton>
         </form>
 
         <div className="w-full border-t border-light-gray" />
 
-        <Button
+        <BasicButton
           variant="secondary"
           className="rounded-none"
           onClick={handleSignupButtonClick}
         >
           회원가입
-        </Button>
+        </BasicButton>
       </div>
     </div>
   );

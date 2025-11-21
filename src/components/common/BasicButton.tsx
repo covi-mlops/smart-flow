@@ -5,7 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
 }
 
-export default function Button({
+export default function BasicButton({
   children,
   variant = "default",
   disabled = false,

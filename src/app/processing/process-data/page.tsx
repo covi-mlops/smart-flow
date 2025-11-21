@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import { Picker } from "@/components/common/Picker";
 import { ProcessDataItem, FilterOptions } from "@/types/processing/process-data";
-import Button from "@/components/processing/process-data/Button";
+import MultipleButton from "@/components/common/MultipleButton";
 import Pagination from "@/components/common/Pagination";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
@@ -26,7 +26,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 1,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "100", defectCount: 124, totalCount: 124 },
         inspectionResult: "불량",
@@ -35,7 +35,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 2,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "0", defectCount: 0, totalCount: 55 },
         inspectionResult: "정상",
@@ -44,7 +44,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 3,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_1",
         defectRate: { percentage: "0.11", defectCount: 57, totalCount: 52124 },
         inspectionResult: "정상",
@@ -53,7 +53,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 4,
         productionDate: "2025.11.12\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_2",
         defectRate: { percentage: "0.15", defectCount: 82, totalCount: 55000 },
         inspectionResult: "정상",
@@ -62,7 +62,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 5,
         productionDate: "2025.11.11\n14:40:25",
-        productionLine: "생산라인2",
+        production_name: "생산라인2",
         product: "contactpin_2",
         defectRate: { percentage: "2.50", defectCount: 1375, totalCount: 55000 },
         inspectionResult: "불량",
@@ -71,7 +71,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 6,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "100", defectCount: 124, totalCount: 124 },
         inspectionResult: "불량",
@@ -80,7 +80,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 7,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "0", defectCount: 0, totalCount: 55 },
         inspectionResult: "정상",
@@ -89,7 +89,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 8,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_1",
         defectRate: { percentage: "0.11", defectCount: 57, totalCount: 52124 },
         inspectionResult: "정상",
@@ -98,7 +98,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 9,
         productionDate: "2025.11.12\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_2",
         defectRate: { percentage: "0.15", defectCount: 82, totalCount: 55000 },
         inspectionResult: "정상",
@@ -107,7 +107,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 10,
         productionDate: "2025.11.11\n14:40:25",
-        productionLine: "생산라인2",
+        production_name: "생산라인2",
         product: "contactpin_2",
         defectRate: { percentage: "2.50", defectCount: 1375, totalCount: 55000 },
         inspectionResult: "불량",
@@ -116,7 +116,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 11,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "100", defectCount: 124, totalCount: 124 },
         inspectionResult: "불량",
@@ -125,7 +125,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 12,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "0", defectCount: 0, totalCount: 55 },
         inspectionResult: "정상",
@@ -134,7 +134,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 13,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_1",
         defectRate: { percentage: "0.11", defectCount: 57, totalCount: 52124 },
         inspectionResult: "정상",
@@ -143,7 +143,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 14,
         productionDate: "2025.11.12\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_2",
         defectRate: { percentage: "0.15", defectCount: 82, totalCount: 55000 },
         inspectionResult: "정상",
@@ -152,7 +152,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 15,
         productionDate: "2025.11.11\n14:40:25",
-        productionLine: "생산라인2",
+        production_name: "생산라인2",
         product: "contactpin_2",
         defectRate: { percentage: "2.50", defectCount: 1375, totalCount: 55000 },
         inspectionResult: "불량",
@@ -161,7 +161,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 16,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "100", defectCount: 124, totalCount: 124 },
         inspectionResult: "불량",
@@ -170,7 +170,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 17,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "0", defectCount: 0, totalCount: 55 },
         inspectionResult: "정상",
@@ -179,7 +179,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 18,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_1",
         defectRate: { percentage: "0.11", defectCount: 57, totalCount: 52124 },
         inspectionResult: "정상",
@@ -188,7 +188,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 19,
         productionDate: "2025.11.12\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_2",
         defectRate: { percentage: "0.15", defectCount: 82, totalCount: 55000 },
         inspectionResult: "정상",
@@ -197,7 +197,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 20,
         productionDate: "2025.11.11\n14:40:25",
-        productionLine: "생산라인2",
+        production_name: "생산라인2",
         product: "contactpin_2",
         defectRate: { percentage: "2.50", defectCount: 1375, totalCount: 55000 },
         inspectionResult: "불량",
@@ -206,7 +206,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 21,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "100", defectCount: 124, totalCount: 124 },
         inspectionResult: "불량",
@@ -215,7 +215,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 22,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "0", defectCount: 0, totalCount: 55 },
         inspectionResult: "정상",
@@ -224,7 +224,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 23,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_1",
         defectRate: { percentage: "0.11", defectCount: 57, totalCount: 52124 },
         inspectionResult: "정상",
@@ -233,7 +233,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 24,
         productionDate: "2025.11.12\n14:40:25",
-        productionLine: "생산라인1",
+        production_name: "생산라인1",
         product: "contactpin_2",
         defectRate: { percentage: "0.15", defectCount: 82, totalCount: 55000 },
         inspectionResult: "정상",
@@ -242,7 +242,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 25,
         productionDate: "2025.11.11\n14:40:25",
-        productionLine: "생산라인2",
+        production_name: "생산라인2",
         product: "contactpin_2",
         defectRate: { percentage: "2.50", defectCount: 1375, totalCount: 55000 },
         inspectionResult: "불량",
@@ -251,7 +251,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 26,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "100", defectCount: 124, totalCount: 124 },
         inspectionResult: "불량",
@@ -260,7 +260,7 @@ export const MOCK_DATA: ProcessDataItem[] = [
     {
         id: 27,
         productionDate: "2025.11.13\n14:40:25",
-        productionLine: "사용자\n업로드",
+        production_name: "사용자\n업로드",
         product: "contactpin_1",
         defectRate: { percentage: "0", defectCount: 0, totalCount: 55 },
         inspectionResult: "정상",
@@ -272,12 +272,12 @@ export default function ProcessDataPage() {
     const router = useRouter();
 
     const [filters, setFilters] = useState<FilterOptions>({
-        product: "전체",
-        startDate: "2025-05-21",
-        endDate: "2025-05-21",
-        productionLine: "전체",
-        inspectionResult: "전체",
-        aiModel: "전체"
+        production_name: "전체",
+        start_created_at: "2025-05-21",
+        end_created_at: "2025-05-21",
+        production_line: "전체",
+        is_abnormal: "전체",
+        applied_model: "전체"
     });
     const modalRef = useRef<HTMLDivElement>(null);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -379,7 +379,7 @@ export default function ProcessDataPage() {
                         <Picker
                             type="select"
                             title="생산품목"
-                            value={filters.product}
+                            value={filters.production_name}
                             onChange={(value) => handleFilterChange("product", value)}
                             options={productOptions}
                         />
@@ -387,21 +387,21 @@ export default function ProcessDataPage() {
                         <Picker
                             type="date"
                             title="생산 시작 일자"
-                            value={filters.startDate}
+                            value={filters.start_created_at}
                             onChange={(value) => handleFilterChange("startDate", value)}
                         />
 
                         <Picker
                             type="date"
                             title="생산 종료 일자"
-                            value={filters.endDate}
+                            value={filters.end_created_at}
                             onChange={(value) => handleFilterChange("endDate", value)}
                         />
 
                         <Picker
                             type="select"
                             title="생산라인"
-                            value={filters.productionLine}
+                            value={filters.production_line}
                             onChange={(value) => handleFilterChange("productionLine", value)}
                             options={lineOptions}
                         />
@@ -409,7 +409,7 @@ export default function ProcessDataPage() {
                         <Picker
                             type="select"
                             title="AI 검사 결과"
-                            value={filters.inspectionResult}
+                            value={filters.is_abnormal}
                             onChange={(value) => handleFilterChange("inspectionResult", value)}
                             options={resultOptions}
                         />
@@ -417,7 +417,7 @@ export default function ProcessDataPage() {
                         <Picker
                             type="select"
                             title="AI 모델"
-                            value={filters.aiModel}
+                            value={filters.applied_model}
                             onChange={(value) => handleFilterChange("aiModel", value)}
                             options={modelOptions}
                         />
@@ -434,14 +434,14 @@ export default function ProcessDataPage() {
                             options={itemsPerPageOptions}
                         />
 
-                        <Button
+                        <MultipleButton
                             type="selectAll"
                             title="모두 선택"
                             disabled={selectedItems.length === 10}
                             onClick={handleSelectAll}
                         />
 
-                        <Button
+                        <MultipleButton
                             type="default"
                             title="모두 해제"
                             disabled={selectedItems.length === 0}
@@ -449,7 +449,7 @@ export default function ProcessDataPage() {
                         />
                     </div>
 
-                    <Button
+                    <MultipleButton
                         type="default"
                         title="선택한 항목 삭제"
                         onClick={handleDeleteSelected}
@@ -511,7 +511,7 @@ export default function ProcessDataPage() {
                                                 {item.productionDate}
                                             </td>
                                             <td className="px-4 py-3 whitespace-pre-line">
-                                                {item.productionLine}
+                                                {item.production_name}
                                             </td>
                                             <td className="px-4 py-3">{item.product}</td>
                                             <td className="px-4 py-3">

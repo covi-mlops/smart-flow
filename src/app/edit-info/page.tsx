@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
+import BasicButton from "@/components/common/BasicButton";
 import { SignupFormData } from "@/types/signup/types";
 import { isValidBranchName, isValidHeadqurter, isValidPw, isValidPwConfirm, isValidUsername } from "@/utils/regEx";
 
@@ -205,7 +205,7 @@ export default function EditInfoPage() {
                 </form>
 
                 <div className="flex flex-row w-full gap-6">
-                    <Button
+                    <BasicButton
                         type="submit"
                         variant="primary"
                         // TODO: API 연동 시 하나라도 정보 변경 시에만 활성화되도록 적용
@@ -214,14 +214,14 @@ export default function EditInfoPage() {
                         onClick={() => setIsSignupButtonClick(true)}
                     >
                         변경
-                    </Button>
-                    <Button
+                    </BasicButton>
+                    <BasicButton
                         type="submit"
                         variant="default"
                         onClick={() => router.back()}
                     >
                         취소
-                    </Button>
+                    </BasicButton>
                 </div>
             </div>
         </div>
