@@ -1,13 +1,13 @@
+// 분석 플랫폼 - 일일 불량 ROLL 알림 API와 변수명 일치 -> 엔터 전까지
 export interface ProcessDataItem {
     id: number;
-    production_name: string;
-    productionDate: string;
-    product: string;
-    defectRate: {
-        percentage: string;
-        defectCount: number;
-        totalCount: number;
-    };
+    production_line: string;
+    mold_no: string;
+    defective_count: number;
+    normal_count: number;
+    defect_rate: number;
+    created_at: string;
+
     inspectionResult: "정상" | "불량";
     aiModel: string;
 }

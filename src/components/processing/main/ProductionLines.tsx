@@ -1,42 +1,42 @@
 'use client';
 
-import type { ProductionLineStatus } from "@/types/processing/types";
+import type { ProductionLineItem } from "@/types/processing/types";
 import MultipleButton from "../../common/MultipleButton";
 import { useState } from "react";
 // 목데이터
 // TODO: API 연동 작업 시 수정
-const productionLines: ProductionLineStatus[] = [
+const productionLines: ProductionLineItem[] = [
   {
-    id: "1",
+    id: 1,
     name: "생산라인1",
-    isRunning: true,
+    status: "activated",
     productName: "contactpin_1",
     rollsProduced: 32,
     normalCount: 31,
     defectCount: 1,
   },
   {
-    id: "2",
+    id: 2,
     name: "생산라인2",
-    isRunning: false,
+    status: "activated",
     productName: "contactpin_2",
     rollsProduced: 0,
     normalCount: 0,
     defectCount: 0,
   },
   {
-    id: "3",
+    id: 3,
     name: "생산라인3",
-    isRunning: false,
+    status: "activated",
     productName: "contactpin_1",
     rollsProduced: 32,
     normalCount: 31,
     defectCount: 1,
   },
   {
-    id: "4",
+    id: 4,
     name: "생산라인4",
-    isRunning: false,
+    status: "unactivated",
     productName: "contactpin_2",
     rollsProduced: 0,
     normalCount: 0,
@@ -44,13 +44,15 @@ const productionLines: ProductionLineStatus[] = [
   },
 ];
 // 하나의 생산라인 정보
-function ProductionLineCard({ line }: { line: ProductionLineStatus }) {
+function ProductionLineCard({ line }: { line: ProductionLineItem }) {
   return (
     <div className="w-[600px] border-[4px] border-light-gray p-6 bg-white">
       <div className="flex flex-row items-center justify-center gap-3 mb-4">
         <h3 className="text-xl text-black font-semibold">{line.name}</h3>
         <div
-          className={`w-4 h-4 rounded-full ${line.isRunning ? "bg-point-green" : "bg-point-red"}`}
+          className={`w-4 h-4 rounded-full ${
+            line.status === "activated" ? "bg-point-green" : "bg-point-red"
+          }`}
         />
       </div>
       <div className="flex flex-col items-center gap-2 text-medium-gray">
