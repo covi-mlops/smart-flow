@@ -14,6 +14,7 @@ const productionLines: ProductionLineItem[] = [
     latest_history: {
       id: 1,
       status: "collecting",
+      production_name: "contactpin_1",
       created_at: "2025-11-21T14:01:02.690613Z",
       total_count: 32,
       normal_count: 31,
@@ -28,6 +29,7 @@ const productionLines: ProductionLineItem[] = [
     latest_history: {
       id: 1,
       status: "collecting",
+      production_name: "contactpin_2",
       created_at: "2025-11-21T14:01:02.690613Z",
       total_count: 100,
       normal_count: 89,
@@ -42,6 +44,7 @@ const productionLines: ProductionLineItem[] = [
     latest_history: {
       id: 1,
       status: "collecting",
+      production_name: "contactpin_3",
       created_at: "2025-11-21T14:01:02.690613Z",
       total_count: 50,
       normal_count: 44,
@@ -56,6 +59,7 @@ const productionLines: ProductionLineItem[] = [
     latest_history: {
       id: 1,
       status: "collecting",
+      production_name: "contactpin_4",
       created_at: "2025-11-21T14:01:02.690613Z",
       total_count: 0,
       normal_count: 0,
@@ -76,9 +80,9 @@ function ProductionLineCard({ line }: { line: ProductionLineItem }) {
       </div>
       <div className="flex flex-col items-center gap-2 text-medium-gray">
         <p className="text-lg font-bold">{line.name}</p>
-        <p>ROLL {line.latest_history.total_count}개 생산</p>
+        <p>ROLL {line.latest_history?.total_count}개 생산</p>
         <p>
-          양품 {line.latest_history.normal_count}개 | 불량 {line.latest_history.defective_count}개
+          양품 {line.latest_history?.normal_count}개 | 불량 {line.latest_history?.defective_count}개
         </p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-// API: 일일 불량 ROLL 알림 - 개별 아이템
+// API: 비정상 생산 이력 조회 - 개별 아이템
 export interface ProcessDataItem {
     id: number;
     production_line: string;
@@ -8,13 +8,13 @@ export interface ProcessDataItem {
     defect_rate: number;
     created_at: string;
 }
-// API: 일일 불량 ROLL 알림
+// API: 비정상 생산 이력 조회
 export interface DailyAbnormalRollResponse {
     status: "SUCCESS" | "FAIL";
     data: {
         count: number;
-        next: string | null; // TODO:string 형태 확인해야 함
-        previous: string | null; // TODO: string 형태 확인해야 함
+        next: string | null; // "/api/productions/..."
+        previous: string | null; // "/api/productions/..."
         result: ProcessDataItem[];
     }
 }

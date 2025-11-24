@@ -1,3 +1,4 @@
+// 생산 현황 히스토리 기간 조건
 export type PeriodType = 'daily' | 'weekly' | 'monthly' | 'annually';
 
 export interface DailyRollCostPoint {
@@ -14,7 +15,6 @@ export interface RollCountCardStatus {
     defectCount: number; // 불량 개수
 }
 
-
 export interface ProductionTrendDataPoint {
     date: string;
     value: number;
@@ -24,6 +24,7 @@ export interface ProductionLineChartData {
     productName: string;
     data: ProductionTrendDataPoint[];
 }
+// ----------
 // 시작/종료 날짜
 export interface DateRange {
     start: string;
@@ -62,7 +63,7 @@ interface Items {
     production_name: string;
     total: number;
 }
-// API: 라인 생산 통계 
+// API: 라인 생산 통계 - 개별 데이터
 export interface LineProductionStatisticsData {
     branch: {
         id: number;
@@ -79,4 +80,32 @@ export interface LineProductionStatisticsData {
     rollCounts: RollCountCardStatus[];
     productionTrend: ProductionLineChartData[];
     defectTrend: ProductionLineChartData[];
+}
+// API: 라인 생산 통계
+export interface LineProductionStatisticsRequest {
+    date: string; // 2025-11-24
+    period: string; // daily, weekly, monthly, annually
+}
+
+export interface LineProductionStatisticsResponse {
+    status: "SUCCESS" | "FAIL";
+    data: LineProductionStatisticsData;
+}
+// ----------
+// API: 생산 라인 이름 조회
+export interface ProductionLineNameResponse {
+    status: "SUCCESS" | "FAIL";
+    data: {
+        items: string[];
+        total: number;
+    }
+}
+// ----------
+// API: 생산 품목 리스트 조회
+export interface ProductionItemNameResponse {
+    status: "SUCCESS" | "FAIL";
+    data: {
+        items: string[];
+        total: number;
+    }
 }
