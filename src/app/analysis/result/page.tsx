@@ -219,7 +219,7 @@ export default function ResultPage() {
           />
         </div>
         {/* TODO: 표 컴포넌트화 고려해보기 */}
-        <div className="bg-white border-y-2 border-light-gray overflow-hidden h-[784px]">
+        <div className="bg-white border-y-2 border-light-gray overflow-hidden h-full">
           <table className="w-full">
             <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
               <tr>
@@ -251,92 +251,96 @@ export default function ResultPage() {
             </thead>
 
             <tbody>
-              {MOCK_DATA.length !== 0 ? (
-                MOCK_DATA.slice(
-                  (currentPage - 1) * Number(itemsPerPage),
-                  currentPage * Number(itemsPerPage)
-                ).map((item) => (
-                  <tr
-                    key={item.id}
-                    className="text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
-                    onClick={() =>
-                      router.push(`/processing/process-data/${item.id}`)
-                    }
-                  >
-                    <td className="p-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(item.id)}
-                        onChange={() => handleToggleItem(item.id)}
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-8 h-8 cursor-pointer accent-point-blue"
-                      />
-                    </td>
-                    <td className="px-4 py-3">{item.id}</td>
-                    <td className="px-4 py-3 whitespace-pre-line">
-                      {item.created_at}
-                    </td>
-                    <td className="px-4 py-3 whitespace-pre-line">
-                      {item.production_line}
-                    </td>
-                    <td className="px-4 py-3">{item.mold_no}</td>
-                    <td className="px-4 py-3">
-                      {item.defect_rate}%<br />(
-                      {item.defective_count}/
-                      {item.defective_count + item.normal_count})
-                    </td>
-                    {/* TODO: API 명세 보고 해야 함 */}
-                    <td
-                    // className={`px-4 py-3 font-bold ${item.inspectionResult === "불량"
-                    //   ? "text-point-red"
-                    //   : ""
-                    //   }`}
+              {
+                MOCK_DATA.length !== 0 ? (
+                  MOCK_DATA.slice(
+                    (currentPage - 1) * Number(itemsPerPage),
+                    currentPage * Number(itemsPerPage)
+                  ).map((item) => (
+                    <tr
+                      key={item.id}
+                      className="text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
+                      onClick={() =>
+                        router.push(`/analysis/result/${item.id}`)
+                      }
                     >
-                      {/* {item.inspectionResult} */}
-                    </td>
-                    <td className="px-4 py-3">
-                      {/* {item.aiModel} */}
+                      <td className="p-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(item.id)}
+                          onChange={() => handleToggleItem(item.id)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="w-8 h-8 cursor-pointer accent-point-blue"
+                        />
+                      </td>
+                      <td className="px-4 py-3">{item.id}</td>
+                      <td className="px-4 py-3 whitespace-pre-line">
+                        {item.created_at}
+                      </td>
+                      <td className="px-4 py-3 whitespace-pre-line">
+                        {item.production_line.name}
+                      </td>
+                      <td className="px-4 py-3">{item.mold_no}</td>
+                      <td className="px-4 py-3">
+                        {item.defect_rate}%<br />(
+                        {item.defective_count}/
+                        {item.defective_count + item.normal_count})
+                      </td>
+                      {/* TODO: API 명세 보고 해야 함 */}
+                      <td
+                        className={`px-4 py-3 font-bold ${item.is_abnormal
+                          ? "text-point-red"
+                          : ""
+                          }`}
+                      >
+                        {item.is_abnormal ? "불량" : "정상"}
+                      </td>
+                      <td className="px-4 py-3">
+                        {item.applied_model !== "null" ? item.applied_model : ""}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      className="py-40 text-center font-bold text-lg text-medium-gray"
+                    >
+                      조회되는 생산 데이터가 없습니다.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={8}
-                    className="py-40 text-center font-bold text-lg text-medium-gray"
-                  >
-                    조회되는 생산 데이터가 없습니다.
-                  </td>
-                </tr>
-              )}
+                )
+              }
             </tbody>
           </table>
 
-          {isOpenTab && (
-            <div
-              ref={modalRef}
-              className="absolute w-[140px] top-[410px] left-[420px] right-0 mt-1 bg-white border border-light-gray rounded shadow-lg z-50 max-h-60 overflow-y-auto"
-            >
+          {
+            isOpenTab && (
               <div
-                className="flex flex-row gap-6 px-4 py-2 border border-light-gray hover:bg-light-gray/20 cursor-pointer text-sm"
-                onClick={() => handleSort("desc")}
+                ref={modalRef}
+                className="absolute w-[140px] top-[410px] left-[420px] right-0 mt-1 bg-white border border-light-gray rounded shadow-lg z-50 max-h-60 overflow-y-auto"
               >
-                <Suspense>
-                  <HiArrowDown size={18} />
-                </Suspense>
-                <p>최신 순</p>
+                <div
+                  className="flex flex-row gap-6 px-4 py-2 border border-light-gray hover:bg-light-gray/20 cursor-pointer text-sm"
+                  onClick={() => handleSort("desc")}
+                >
+                  <Suspense>
+                    <HiArrowDown size={18} />
+                  </Suspense>
+                  <p>최신 순</p>
+                </div>
+                <div
+                  className="flex flex-row gap-6 px-4 py-2 border border-light-gray hover:bg-light-gray/20 cursor-pointer text-sm"
+                  onClick={() => handleSort("asc")}
+                >
+                  <Suspense>
+                    <HiArrowUp size={18} />
+                  </Suspense>
+                  <p>오래된 순</p>
+                </div>
               </div>
-              <div
-                className="flex flex-row gap-6 px-4 py-2 border border-light-gray hover:bg-light-gray/20 cursor-pointer text-sm"
-                onClick={() => handleSort("asc")}
-              >
-                <Suspense>
-                  <HiArrowUp size={18} />
-                </Suspense>
-                <p>오래된 순</p>
-              </div>
-            </div>
-          )}
+            )
+          }
         </div>
 
         {MOCK_DATA.length !== 0 && (

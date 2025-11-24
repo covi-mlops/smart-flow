@@ -601,6 +601,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                         title="초기화"
                         disabled={false}
                         onClick={handleResetZoom}
+                        className="min-w-[80px]"
                     />
                     <div className="h-8 w-[1px] bg-medium-gray mx-2" />
                     <MultipleButton
@@ -615,11 +616,21 @@ export default function EditImage({ onDataChange }: EditImageProps) {
                         title="전체 취소"
                         disabled={false}
                         onClick={handleCancelAll}
+                        className="min-w-[100px]"
                     />
                     <span className="text-base text-medium-gray ml-4">
-                        <p>클릭: 점 추가 | 드래그: 점 이동</p>
-                        <p>Shift + 드래그: 화면 이동 | 마우스 휠: 확대/축소</p>
-                        <p>Ctrl + 점 클릭: 점 삭제 | Alt + 클릭: 영역 선택</p>
+                        <div className="flex flex-row gap-2">
+                            <p className="w-[180px]">점 추가: 클릭</p>
+                            <p className="w-[180px]">점 이동: 드래그</p>
+                        </div>
+                        <div className="flex flex-row gap-2">
+                            <p className="w-[180px]">화면 이동: Shift + 드래그</p>
+                            <p className="w-[180px]">확대/축소: 마우스 휠 조절</p>
+                        </div>
+                        <div className="flex flex-row gap-2">
+                            <p className="w-[180px]">점 삭제: Ctrl + 점 클릭</p>
+                            <p className="w-[180px]">영역 선택: Alt + 클릭</p>
+                        </div>
                     </span>
                 </div>
 

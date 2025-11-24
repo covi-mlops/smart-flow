@@ -10,14 +10,14 @@ import HistogramChart from "@/components/processing/process-data/HistogramChart"
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
 import MultipleButton from "@/components/common/MultipleButton";
-import { ProcessDataItem } from "@/types/processing/process-data";
 import { MOCK_DATA } from "@/mock/processing/mock";
+import { ProductionHistoryItem } from "@/types/common/types";
 
 export default function ProcessDataDetailPage() {
   const params = useParams();
   const id = params.id;
   const router = useRouter();
-  const [data, setData] = useState<ProcessDataItem>();
+  const [data, setData] = useState<ProductionHistoryItem>();
   const [bitmapOn, setBitmapOn] = useState<boolean>(false);
   const [selectedImageNumber, setSelectedImageNumber] = useState<number>();
   const [itemsPerPage, setItemsPerPage] = useState<string>('10');
@@ -198,7 +198,7 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">생산라인</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              <p>{data?.production_line}</p>
+              <p>{data?.production_line.name}</p>
             </div>
           </div>
 
@@ -273,52 +273,56 @@ export default function ProcessDataDetailPage() {
                 </thead>
 
                 <tbody>
-                  {tableData.length !== 0 ? (
-                    tableData
-                      .slice(
-                        (currentPage - 1) * Number(itemsPerPage),
-                        currentPage * Number(itemsPerPage)
-                      )
-                      .map((item) => (
-                        <tr
-                          key={item.id}
-                          className="h-[55px] text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
-                          onClick={() => setSelectedImageNumber(item.id)}
+                  {
+                    tableData.length !== 0 ? (
+                      tableData
+                        .slice(
+                          (currentPage - 1) * Number(itemsPerPage),
+                          currentPage * Number(itemsPerPage)
+                        )
+                        .map((item) => (
+                          <tr
+                            key={item.id}
+                            className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageNumber === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
+                            onClick={() => setSelectedImageNumber(item.id)}
+                          >
+                            <td className="px-4 py-3">{item.id}</td>
+                            <td className="px-4 py-3">{item.image_name}</td>
+                            <td className={`px-4 py-3 font-bold ${item.ai_result === "불량" ? "text-point-red" : selectedImageNumber === item.id ? "text-white" : "text-medium-gray"} `}>{item.ai_result}</td>
+                            <td className="px-4 py-3">{item.is_process}</td>
+                          </tr>
+                        ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={8}
+                          className="py-40 text-center font-bold text-lg text-medium-gray"
                         >
-                          <td className="px-4 py-3">{item.id}</td>
-                          <td className="px-4 py-3">{item.image_name}</td>
-                          <td className="px-4 py-3">{item.ai_result}</td>
-                          <td className="px-4 py-3">{item.is_process}</td>
-                        </tr>
-                      ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={8}
-                        className="py-40 text-center font-bold text-lg text-medium-gray"
-                      >
-                        조회되는 데이터가 없습니다.
-                      </td>
-                    </tr>
-                  )}
+                          조회되는 데이터가 없습니다.
+                        </td>
+                      </tr>
+                    )
+                  }
 
-                  {Array.from({
-                    length: Math.max(
-                      0,
-                      Number(itemsPerPage) -
-                      tableData.slice(
-                        (currentPage - 1) * Number(itemsPerPage),
-                        currentPage * Number(itemsPerPage)
-                      ).length
-                    ),
-                  }).map((_, i) => (
-                    <tr
-                      key={`empty-${i}`}
-                      className="h-[55px] border-b border-light-gray"
-                    >
-                      <td colSpan={8}></td>
-                    </tr>
-                  ))}
+                  {
+                    Array.from({
+                      length: Math.max(
+                        0,
+                        Number(itemsPerPage) -
+                        tableData.slice(
+                          (currentPage - 1) * Number(itemsPerPage),
+                          currentPage * Number(itemsPerPage)
+                        ).length
+                      ),
+                    }).map((_, i) => (
+                      <tr
+                        key={`empty-${i}`}
+                        className="h-[55px] border-b border-light-gray"
+                      >
+                        <td colSpan={8}></td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
               </table>
             </div>

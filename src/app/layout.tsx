@@ -26,7 +26,7 @@ export default function RootLayout({
       <body
         className={`${nanumSquare.className} flex flex-col min-h-screen`}
       >
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col bg-white text-black dark:bg-white dark:text-black">
           {children}
         </main>
         <Footer />

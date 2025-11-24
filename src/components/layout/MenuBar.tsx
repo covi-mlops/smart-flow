@@ -11,8 +11,8 @@ export default function MenuBar() {
     const isSelectedPlatform = (platformName: string) => pathname.includes(platformName);
 
     return (
-        <div className="min-w-[242px] flex flex-col items-center justify-between bg-white border-r-[4px] border-point-red w-[242px] py-[44px]">
-            <div>
+        <div className="min-w-[242px] flex flex-col items-center justify-end bg-white border-r-[4px] border-point-red w-[242px] py-[44px]">
+            <div className="fixed top-[140px] pt-[44px]">
                 {
                     // 분석 플랫폼
                     isSelectedPlatform('/analysis') && (
@@ -74,7 +74,7 @@ export default function MenuBar() {
                                 onClick={() => router.push('/learning/models')}
                             />
                             <Button
-                                title="인공지능 모델"
+                                title="생산라인 관리"
                                 isActive={isSelectedPlatform('/learning/management')}
                                 disabled={isSelectedPlatform('/learning/management')}
                                 onClick={() => router.push('/learning/management')}
