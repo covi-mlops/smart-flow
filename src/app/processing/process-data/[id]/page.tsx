@@ -214,13 +214,14 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">AI 검사 결과</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+              {/* TODO: 명세 확인 후 수정 */}
               <p
-                className={`${data?.inspectionResult === "불량"
-                  ? "text-point-red"
-                  : "text-medium-gray"
-                  }`}
+              // className={`${data?.inspectionResult === "불량"
+              //   ? "text-point-red"
+              //   : "text-medium-gray"
+              //   }`}
               >
-                {data?.inspectionResult}
+                {/* {data?.inspectionResult} */}
               </p>
             </div>
           </div>

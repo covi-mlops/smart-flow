@@ -1,11 +1,75 @@
-import { PeriodData, PeriodType } from "@/types/analysis/types";
+import { LineProductionStatisticsData, PeriodType } from "@/types/analysis/types";
 
-export const PERIOD_MOCK_DATA: Record<PeriodType, PeriodData> = {
-    Daily: {
-        dateRange: {
-            startDate: "2025.11.20",
-            endDate: "2025.11.20",
+export const PERIOD_MOCK_DATA: LineProductionStatisticsData[] = [
+    {
+        branch: {
+            id: 1,
+            name: "본사",
         },
+        period: "daily",
+        range: {
+            start: "2025.11.20",
+            end: "2025.11.20",
+        },
+        line_statistics: [
+            {
+                production_line: {
+                    id: 1,
+                    name: "1호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.11.20",
+                        total: 32,
+                        normal: 31,
+                        defective: 1,
+                        defect_rate: 3.1,
+                    },
+                ],
+            },
+            {
+                production_line: {
+                    id: 2,
+                    name: "2호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.11.20",
+                        total: 0,
+                        normal: 0,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                ],
+            },
+        ],
+        production_name_statistics: [
+            {
+                production_name: "contactpin_1",
+                total: 32,
+                normal: 31,
+                defective: 1,
+                defect_rate: 3.1,
+            },
+            {
+                production_name: "contactpin_2",
+                total: 0,
+                normal: 0,
+                defective: 0,
+                defect_rate: 0,
+            },
+        ],
+        line_list: [
+            { id: 1, name: "1호기" },
+            { id: 2, name: "2호기" },
+        ],
+        items: [
+            { production_name: "contactpin_1", total: 32 },
+            { production_name: "contactpin_2", total: 0 },
+        ],
+        total: 32,
         rollCounts: [
             {
                 id: "1",
@@ -115,11 +179,103 @@ export const PERIOD_MOCK_DATA: Record<PeriodType, PeriodData> = {
             },
         ],
     },
-    Weekly: {
-        dateRange: {
-            startDate: "2025.11.17",
-            endDate: "2025.11.20",
+    {
+        branch: {
+            id: 1,
+            name: "본사",
         },
+        period: "weekly",
+        range: {
+            start: "2025.11.17",
+            end: "2025.11.20",
+        },
+        line_statistics: [
+            {
+                production_line: {
+                    id: 1,
+                    name: "1호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.11.17",
+                        total: 60,
+                        normal: 59,
+                        defective: 1,
+                        defect_rate: 1.7,
+                    },
+                    {
+                        label: "2025.11.18",
+                        total: 55,
+                        normal: 55,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                    {
+                        label: "2025.11.19",
+                        total: 37,
+                        normal: 36,
+                        defective: 1,
+                        defect_rate: 2.7,
+                    },
+                ],
+            },
+            {
+                production_line: {
+                    id: 2,
+                    name: "2호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.11.17",
+                        total: 40,
+                        normal: 40,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                    {
+                        label: "2025.11.18",
+                        total: 60,
+                        normal: 59,
+                        defective: 1,
+                        defect_rate: 1.7,
+                    },
+                    {
+                        label: "2025.11.19",
+                        total: 33,
+                        normal: 33,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                ],
+            },
+        ],
+        production_name_statistics: [
+            {
+                production_name: "contactpin_1",
+                total: 152,
+                normal: 150,
+                defective: 2,
+                defect_rate: 1.3,
+            },
+            {
+                production_name: "contactpin_2",
+                total: 100,
+                normal: 99,
+                defective: 1,
+                defect_rate: 1.0,
+            },
+        ],
+        line_list: [
+            { id: 1, name: "1호기" },
+            { id: 2, name: "2호기" },
+        ],
+        items: [
+            { production_name: "contactpin_1", total: 152 },
+            { production_name: "contactpin_2", total: 100 },
+        ],
+        total: 252,
         rollCounts: [
             {
                 id: "1",
@@ -173,11 +329,131 @@ export const PERIOD_MOCK_DATA: Record<PeriodType, PeriodData> = {
             },
         ],
     },
-    Monthly: {
-        dateRange: {
-            startDate: "2025.11.01",
-            endDate: "2025.11.20",
+    {
+        branch: {
+            id: 1,
+            name: "본사",
         },
+        period: "monthly",
+        range: {
+            start: "2025.11.01",
+            end: "2025.11.20",
+        },
+        line_statistics: [
+            {
+                production_line: {
+                    id: 1,
+                    name: "1호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.11.01",
+                        total: 95,
+                        normal: 95,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                    {
+                        label: "2025.11.06",
+                        total: 80,
+                        normal: 79,
+                        defective: 1,
+                        defect_rate: 1.3,
+                    },
+                    {
+                        label: "2025.11.11",
+                        total: 75,
+                        normal: 73,
+                        defective: 2,
+                        defect_rate: 2.7,
+                    },
+                    {
+                        label: "2025.11.16",
+                        total: 85,
+                        normal: 80,
+                        defective: 5,
+                        defect_rate: 5.9,
+                    },
+                    {
+                        label: "2025.11.21",
+                        total: 50,
+                        normal: 49,
+                        defective: 1,
+                        defect_rate: 2.0,
+                    },
+                ],
+            },
+            {
+                production_line: {
+                    id: 2,
+                    name: "2호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.11.01",
+                        total: 95,
+                        normal: 95,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                    {
+                        label: "2025.11.06",
+                        total: 10,
+                        normal: 8,
+                        defective: 2,
+                        defect_rate: 20.0,
+                    },
+                    {
+                        label: "2025.11.11",
+                        total: 75,
+                        normal: 71,
+                        defective: 4,
+                        defect_rate: 5.3,
+                    },
+                    {
+                        label: "2025.11.16",
+                        total: 85,
+                        normal: 79,
+                        defective: 6,
+                        defect_rate: 7.1,
+                    },
+                    {
+                        label: "2025.11.21",
+                        total: 30,
+                        normal: 28,
+                        defective: 2,
+                        defect_rate: 6.7,
+                    },
+                ],
+            },
+        ],
+        production_name_statistics: [
+            {
+                production_name: "contactpin_1",
+                total: 924,
+                normal: 920,
+                defective: 4,
+                defect_rate: 0.4,
+            },
+            {
+                production_name: "contactpin_2",
+                total: 1011,
+                normal: 1000,
+                defective: 11,
+                defect_rate: 1.1,
+            },
+        ],
+        line_list: [
+            { id: 1, name: "1호기" },
+            { id: 2, name: "2호기" },
+        ],
+        items: [
+            { production_name: "contactpin_1", total: 924 },
+            { production_name: "contactpin_2", total: 1011 },
+        ],
+        total: 1935,
         rollCounts: [
             {
                 id: "1",
@@ -239,11 +515,131 @@ export const PERIOD_MOCK_DATA: Record<PeriodType, PeriodData> = {
             },
         ],
     },
-    Annual: {
-        dateRange: {
-            startDate: "2025.01.01",
-            endDate: "2025.11.20",
+    {
+        branch: {
+            id: 1,
+            name: "본사",
         },
+        period: "annually",
+        range: {
+            start: "2025.01.01",
+            end: "2025.11.20",
+        },
+        line_statistics: [
+            {
+                production_line: {
+                    id: 1,
+                    name: "1호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.01",
+                        total: 450,
+                        normal: 448,
+                        defective: 2,
+                        defect_rate: 0.4,
+                    },
+                    {
+                        label: "2025.02",
+                        total: 420,
+                        normal: 418,
+                        defective: 2,
+                        defect_rate: 0.5,
+                    },
+                    {
+                        label: "2025.03",
+                        total: 480,
+                        normal: 479,
+                        defective: 1,
+                        defect_rate: 0.2,
+                    },
+                    {
+                        label: "2025.04",
+                        total: 440,
+                        normal: 440,
+                        defective: 0,
+                        defect_rate: 0,
+                    },
+                    {
+                        label: "2025.05",
+                        total: 460,
+                        normal: 459,
+                        defective: 1,
+                        defect_rate: 0.2,
+                    },
+                ],
+            },
+            {
+                production_line: {
+                    id: 2,
+                    name: "2호기",
+                    status: "activated",
+                },
+                statistics: [
+                    {
+                        label: "2025.01",
+                        total: 520,
+                        normal: 517,
+                        defective: 3,
+                        defect_rate: 0.6,
+                    },
+                    {
+                        label: "2025.02",
+                        total: 490,
+                        normal: 486,
+                        defective: 4,
+                        defect_rate: 0.8,
+                    },
+                    {
+                        label: "2025.03",
+                        total: 510,
+                        normal: 507,
+                        defective: 3,
+                        defect_rate: 0.6,
+                    },
+                    {
+                        label: "2025.04",
+                        total: 500,
+                        normal: 497,
+                        defective: 3,
+                        defect_rate: 0.6,
+                    },
+                    {
+                        label: "2025.05",
+                        total: 530,
+                        normal: 527,
+                        defective: 3,
+                        defect_rate: 0.6,
+                    },
+                ],
+            },
+        ],
+        production_name_statistics: [
+            {
+                production_name: "contactpin_1",
+                total: 4928,
+                normal: 4921,
+                defective: 7,
+                defect_rate: 0.1,
+            },
+            {
+                production_name: "contactpin_2",
+                total: 5726,
+                normal: 5710,
+                defective: 16,
+                defect_rate: 0.3,
+            },
+        ],
+        line_list: [
+            { id: 1, name: "1호기" },
+            { id: 2, name: "2호기" },
+        ],
+        items: [
+            { production_name: "contactpin_1", total: 4928 },
+            { production_name: "contactpin_2", total: 5726 },
+        ],
+        total: 10654,
         rollCounts: [
             {
                 id: "1",
@@ -305,4 +701,4 @@ export const PERIOD_MOCK_DATA: Record<PeriodType, PeriodData> = {
             },
         ],
     },
-};
+];

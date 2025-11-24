@@ -8,39 +8,59 @@ import { useState } from "react";
 const productionLines: ProductionLineItem[] = [
   {
     id: 1,
+    branch: 1,
     name: "생산라인1",
     status: "activated",
-    productName: "contactpin_1",
-    rollsProduced: 32,
-    normalCount: 31,
-    defectCount: 1,
+    latest_history: {
+      id: 1,
+      status: "collecting",
+      created_at: "2025-11-21T14:01:02.690613Z",
+      total_count: 32,
+      normal_count: 31,
+      defective_count: 1,
+    }
   },
   {
     id: 2,
+    branch: 1,
     name: "생산라인2",
     status: "activated",
-    productName: "contactpin_2",
-    rollsProduced: 0,
-    normalCount: 0,
-    defectCount: 0,
+    latest_history: {
+      id: 1,
+      status: "collecting",
+      created_at: "2025-11-21T14:01:02.690613Z",
+      total_count: 100,
+      normal_count: 89,
+      defective_count: 11,
+    }
   },
   {
     id: 3,
+    branch: 1,
     name: "생산라인3",
     status: "activated",
-    productName: "contactpin_1",
-    rollsProduced: 32,
-    normalCount: 31,
-    defectCount: 1,
+    latest_history: {
+      id: 1,
+      status: "collecting",
+      created_at: "2025-11-21T14:01:02.690613Z",
+      total_count: 50,
+      normal_count: 44,
+      defective_count: 6,
+    }
   },
   {
     id: 4,
+    branch: 1,
     name: "생산라인4",
-    status: "unactivated",
-    productName: "contactpin_2",
-    rollsProduced: 0,
-    normalCount: 0,
-    defectCount: 0,
+    status: "stop",
+    latest_history: {
+      id: 1,
+      status: "collecting",
+      created_at: "2025-11-21T14:01:02.690613Z",
+      total_count: 0,
+      normal_count: 0,
+      defective_count: 0,
+    }
   },
 ];
 // 하나의 생산라인 정보
@@ -55,10 +75,10 @@ function ProductionLineCard({ line }: { line: ProductionLineItem }) {
         />
       </div>
       <div className="flex flex-col items-center gap-2 text-medium-gray">
-        <p className="text-lg font-bold">{line.productName}</p>
-        <p>ROLL {line.rollsProduced}개 생산</p>
+        <p className="text-lg font-bold">{line.name}</p>
+        <p>ROLL {line.latest_history.total_count}개 생산</p>
         <p>
-          양품 {line.normalCount}개 | 불량 {line.defectCount}개
+          양품 {line.latest_history.normal_count}개 | 불량 {line.latest_history.defective_count}개
         </p>
       </div>
     </div>

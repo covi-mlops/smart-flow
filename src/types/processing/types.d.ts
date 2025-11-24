@@ -1,19 +1,28 @@
 // 생산라인 카드
-// 사업소 소속 생산라인 조회 API와 맞췄으나 확인 필요
+// API: 생산 라인 목록 조회 - 개별 생산라인
 export interface ProductionLineItem {
   id: number;
-  branch?: number; // 넌 뭐니 (?)
+  branch: number; // 사업소 id
   name: string; // 생산라인 이름
-  status: string; // 가동 여부 
-  thumnail_url?: string; // 썸네일 이미지 (?)
-  created_at?: string; // 생산 시작 일자 (?)
-  updated_at?: string; // 업데이트 날짜 (?)
-
-  productName: string; // 생산 품목
-  rollsProduced: number; // 생산 개수
-  normalCount: number; // 정상 개수
-  defectCount: number; // 불량 개수
+  status: "activated" | "maintenance" | "stop"; // 가동 여부 
+  latest_history: {
+    id: number;
+    status: "collecting" | "classifying" | "completed" | "error"; // 사용X 
+    created_at: string;
+    total_count: number;
+    normal_count: number;
+    defective_count: number;
+  }
 }
+// API: 생산 라인 목록 조회
+export interface ProductionLineResponse {
+  status: string;
+  data: {
+    items: ProductionLineItem[];
+    total: number;
+  }
+}
+
 // 생산라인 별 일일 컨택트 핀 정상/불량 데이터 현황 그래프
 export interface DailyDataPoint {
   productionLine: string;

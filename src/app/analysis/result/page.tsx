@@ -285,15 +285,18 @@ export default function ResultPage() {
                       {item.defective_count}/
                       {item.defective_count + item.normal_count})
                     </td>
+                    {/* TODO: API 명세 보고 해야 함 */}
                     <td
-                      className={`px-4 py-3 font-bold ${item.inspectionResult === "불량"
-                        ? "text-point-red"
-                        : ""
-                        }`}
+                    // className={`px-4 py-3 font-bold ${item.inspectionResult === "불량"
+                    //   ? "text-point-red"
+                    //   : ""
+                    //   }`}
                     >
-                      {item.inspectionResult}
+                      {/* {item.inspectionResult} */}
                     </td>
-                    <td className="px-4 py-3">{item.aiModel}</td>
+                    <td className="px-4 py-3">
+                      {/* {item.aiModel} */}
+                    </td>
                   </tr>
                 ))
               ) : (

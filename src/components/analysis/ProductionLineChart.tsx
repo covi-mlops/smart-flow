@@ -49,7 +49,7 @@ export default function ProductionLineChart({ title, data, maxValue }: Productio
     const yAxisLabels = [0, calculatedMaxValue / 2, calculatedMaxValue];
 
     return (
-        <div className="border-[2px] border-light-gray p-6 bg-white">
+        <div className="w-full border-[2px] border-light-gray p-6 bg-white">
             <h3 className="text-lg text-black font-bold mb-4">{title}</h3>
 
             <svg width={chartWidth} height={chartHeight} className="overflow-visible">
@@ -140,7 +140,7 @@ export default function ProductionLineChart({ title, data, maxValue }: Productio
                 }
             </svg>
 
-            <div className="flex justify-center gap-4 mt-4 text-sm">
+            <div className="flex justify-center gap-4 mt-4 text-sm max-w-[730px]">
                 {
                     data.map((line, idx) => (
                         <div key={idx} className="flex items-center gap-2">

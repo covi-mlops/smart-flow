@@ -11,15 +11,15 @@ import Pagination from "@/components/common/Pagination";
 import { MOCK_DATA } from "@/mock/processing/mock";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
-    default: module.HiArrowUp
+  default: module.HiArrowUp
 })));
 
 const HiArrowDown = lazy(() => import('react-icons/hi').then(module => ({
-    default: module.HiArrowDown
+  default: module.HiArrowDown
 })));
 
 const BiDown = lazy(() => import('react-icons/bi').then(module => ({
-    default: module.BiChevronDown
+  default: module.BiChevronDown
 })));
 
 export default function ProcessDataPage() {
@@ -283,14 +283,17 @@ export default function ProcessDataPage() {
                       {item.defective_count}/{item.defective_count + item.normal_count}
                       )
                     </td>
+                    {/* TODO: API 명세 보고 해야 함 */}
                     <td
-                      className={`px-4 py-3 font-bold ${
-                        item.inspectionResult === "불량" ? "text-point-red" : ""
-                      }`}
+                    // className={`px-4 py-3 font-bold ${
+                    //   item.inspectionResult === "불량" ? "text-point-red" : ""
+                    // }`}
                     >
-                      {item.inspectionResult}
+                      {/* {item.inspectionResult} */}
                     </td>
-                    <td className="px-4 py-3">{item.aiModel}</td>
+                    <td className="px-4 py-3">
+                      {/* {item.aiModel} */}
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -333,16 +336,18 @@ export default function ProcessDataPage() {
           )}
         </div>
 
-        {MOCK_DATA.length !== 0 && (
-          <Pagination
-            total={MOCK_DATA.length}
-            page={currentPage}
-            limit={Number(itemsPerPage)}
-            tab={tab}
-            setPage={setCurrentPage}
-            setTab={setTab}
-          />
-        )}
+        {
+          MOCK_DATA.length !== 0 && (
+            <Pagination
+              total={MOCK_DATA.length}
+              page={currentPage}
+              limit={Number(itemsPerPage)}
+              tab={tab}
+              setPage={setCurrentPage}
+              setTab={setTab}
+            />
+          )
+        }
       </div>
     </Layout>
   );

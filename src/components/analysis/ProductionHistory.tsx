@@ -8,7 +8,7 @@ import ProductionLineChart from "./ProductionLineChart";
 
 function RollCountCard({ line }: { line: RollCountCardStatus }) {
     return (
-        <div className="w-[600px] border-[4px] border-light-gray p-6 bg-white">
+        <div className="w-full border-[4px] border-light-gray p-6 bg-white">
             <div className="flex flex-row items-center justify-center gap-3 mb-4">
                 <h3 className="text-xl text-black font-bold">{line.productName}</h3>
             </div>
@@ -23,10 +23,10 @@ function RollCountCard({ line }: { line: RollCountCardStatus }) {
 }
 
 export default function ProductionHistory() {
-    const [period, setPeriod] = useState<PeriodType>('Daily');
+    const [period, setPeriod] = useState<PeriodType>('daily');
     const [currentPage, setCurrentPage] = useState(1);
 
-    const currentData = PERIOD_MOCK_DATA[period];
+    const currentData = PERIOD_MOCK_DATA.filter((mock) => mock.period === period);
 
     const handlePeriodChange = (newPeriod: PeriodType) => {
         setPeriod(newPeriod);
@@ -39,20 +39,20 @@ export default function ProductionHistory() {
                 <h2 className="text-3xl text-black font-bold">생산 현황 히스토리</h2>
                 <div className="flex flex-row gap-4 items-center">
                     <div className="px-6 py-3 bg-white border-2 border-light-gray rounded-full text-black font-semibold">
-                        {currentData.dateRange.startDate}
+                        {currentData[0].range.start}
                     </div>
                     <span className="text-2xl text-medium-gray">—</span>
                     <div className="px-6 py-3 bg-white border-2 border-light-gray rounded-full text-black font-semibold">
-                        {currentData.dateRange.endDate}
+                        {currentData[0].range.end}
                     </div>
                 </div>
             </div>
 
             <div className="flex flex-row justify-between">
-                <Button title="Daily" isActive={period === "Daily"} onClick={() => handlePeriodChange("Daily")} />
-                <Button title="Weekly" isActive={period === "Weekly"} onClick={() => handlePeriodChange("Weekly")} />
-                <Button title="Monthly" isActive={period === "Monthly"} onClick={() => handlePeriodChange("Monthly")} />
-                <Button title="Annual" isActive={period === "Annual"} onClick={() => handlePeriodChange("Annual")} />
+                <Button title="Daily" isActive={period === "daily"} onClick={() => handlePeriodChange("daily")} />
+                <Button title="Weekly" isActive={period === "weekly"} onClick={() => handlePeriodChange("weekly")} />
+                <Button title="Monthly" isActive={period === "monthly"} onClick={() => handlePeriodChange("monthly")} />
+                <Button title="Annually" isActive={period === "annually"} onClick={() => handlePeriodChange("annually")} />
             </div>
 
             <div className="flex flex-col p-6 border-[4px] border-light-gray">
@@ -61,34 +61,34 @@ export default function ProductionHistory() {
                 </div>
                 <div className="flex flex-row gap-6 items-center justify-between">
                     {
-                        currentData.rollCounts.slice((currentPage - 1) * 2, currentPage * 2).map((line) => (
+                        currentData[0].rollCounts.slice((currentPage - 1) * 2, currentPage * 2).map((line) => (
                             <RollCountCard key={line.id} line={line} />
                         ))
                     }
                 </div>
             </div>
 
-            <div className="border-[2px] border-light-gray">
+            <div className="min-w-[628px] border-[2px] border-light-gray">
                 <div className="grid grid-cols-2">
                     <ProductionLineChart
                         title="생산 품목 별 ROLL 총 생산 현황"
-                        data={currentData.productionTrend}
-                        maxValue={period === 'Daily' ? 26 : 100}
+                        data={currentData[0].productionTrend}
+                        maxValue={period === 'daily' ? 26 : 100}
                     />
                     <ProductionLineChart
                         title="생산라인 별 ROLL 총 생산 현황"
-                        data={currentData.productionTrend}
-                        maxValue={period === 'Daily' ? 26 : 100}
+                        data={currentData[0].productionTrend}
+                        maxValue={period === 'daily' ? 26 : 100}
                     />
                     <ProductionLineChart
                         title="생산 품목 별 ROLL 불량품 생산 현황"
-                        data={currentData.defectTrend}
-                        maxValue={period === 'Daily' ? 2 : 10}
+                        data={currentData[0].defectTrend}
+                        maxValue={period === 'daily' ? 2 : 10}
                     />
                     <ProductionLineChart
                         title="생산라인 별 ROLL 불량품 생산 현황"
-                        data={currentData.defectTrend}
-                        maxValue={period === 'Daily' ? 2 : 10}
+                        data={currentData[0].defectTrend}
+                        maxValue={period === 'daily' ? 2 : 10}
                     />
                 </div>
             </div>

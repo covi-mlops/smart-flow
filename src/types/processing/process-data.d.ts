@@ -1,4 +1,4 @@
-// 분석 플랫폼 - 일일 불량 ROLL 알림 API와 변수명 일치 -> 엔터 전까지
+// API: 일일 불량 ROLL 알림 - 개별 아이템
 export interface ProcessDataItem {
     id: number;
     production_line: string;
@@ -7,9 +7,16 @@ export interface ProcessDataItem {
     normal_count: number;
     defect_rate: number;
     created_at: string;
-
-    inspectionResult: "정상" | "불량";
-    aiModel: string;
+}
+// API: 일일 불량 ROLL 알림
+export interface DailyAbnormalRollResponse {
+    status: "SUCCESS" | "FAIL";
+    data: {
+        count: number;
+        next: string | null; // TODO:string 형태 확인해야 함
+        previous: string | null; // TODO: string 형태 확인해야 함
+        result: ProcessDataItem[];
+    }
 }
 // 데이터 필터링 옵션
 // API 명세와 일치 (진행 중)
