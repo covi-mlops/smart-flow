@@ -11,7 +11,7 @@ export default function MenuBar() {
     const isSelectedPlatform = (platformName: string) => pathname.includes(platformName);
 
     return (
-        <div className="min-w-[242px] flex flex-col items-center justify-between bg-white border-r-[4px] border-point-red w-[242px] min-h-screen py-[44px]">
+        <div className="min-w-[242px] flex flex-col items-center justify-between bg-white border-r-[4px] border-point-red w-[242px] py-[44px]">
             <div>
                 {
                     // 분석 플랫폼

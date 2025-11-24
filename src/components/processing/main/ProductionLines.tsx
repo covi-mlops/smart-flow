@@ -50,9 +50,8 @@ function ProductionLineCard({ line }: { line: ProductionLineItem }) {
       <div className="flex flex-row items-center justify-center gap-3 mb-4">
         <h3 className="text-xl text-black font-semibold">{line.name}</h3>
         <div
-          className={`w-4 h-4 rounded-full ${
-            line.status === "activated" ? "bg-point-green" : "bg-point-red"
-          }`}
+          className={`w-4 h-4 rounded-full ${line.status === "activated" ? "bg-point-green" : "bg-point-red"
+            }`}
         />
       </div>
       <div className="flex flex-col items-center gap-2 text-medium-gray">
@@ -71,7 +70,7 @@ export function ProductionLines() {
   const [totalPage, setTotalPage] = useState(Math.ceil(productionLines.length / 2));
 
   return (
-    <section className="bg-light-gray/30 border-b-[4px] border-light-gray w-full h-[310px] p-6">
+    <section className="bg-soft-white border-b-[4px] border-light-gray w-full h-[310px] p-6">
       <h2 className="text-3xl text-black font-bold mb-6">생산라인 가동 현황</h2>
       <div className="flex flex-row gap-4 justify-between items-end">
         <MultipleButton
@@ -79,7 +78,7 @@ export function ProductionLines() {
           title="<"
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
-          className="h-[192px] w-[60px]"
+          className="h-[192px] w-[60px] text-2xl"
         />
         <div className="flex flex-row gap-6">
           {
@@ -93,7 +92,7 @@ export function ProductionLines() {
           title=">"
           disabled={currentPage === totalPage}
           onClick={() => setCurrentPage(currentPage + 1)}
-          className="h-[192px] w-[60px]"
+          className="h-[192px] w-[60px] text-2xl"
         />
       </div>
     </section>

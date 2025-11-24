@@ -15,9 +15,10 @@ export default function MainPage() {
 
     return (
         <Layout headerTitle="AI 컨택트 핀 분석 플랫폼">
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-1 fixed top-[140px] left-[242px] w-[calc(100%-242px)] z-50">
                 <ProductionLines />
-
+            </div>
+            <div className="flex flex-col flex-1 pt-[310px]">
                 <div className="grid grid-cols-2 p-6 gap-6">
                     <DailyRollRateChart data={dailyData} />
                     <DailyErrorTable />

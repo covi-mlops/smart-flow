@@ -8,13 +8,17 @@ interface ButtonProps {
 export default function Button({ title, isActive = true, disabled, onClick }: ButtonProps) {
     const baseStyles = "w-[185px] h-[69px] text-2xl border-4 shadow-lg";
     const variantStyles = {
-        active: "border-medium-gray bg-light-gray/60 font-bold text-white text-stroke-1",
+        active: "border-none bg-point-blue font-bold text-white",
         disabled: "border-light-gray bg-white text-medium-gray font-medium hover:bg-light-gray hover:text-white",
     }
 
     return (
         <button
-            className={`${baseStyles} ${isActive ? variantStyles['active'] : variantStyles['disabled']} ${disabled ? "" : "cursor-pointer"}`}
+            className={
+                `${baseStyles} 
+                ${isActive ? variantStyles['active'] : variantStyles['disabled']} 
+                ${disabled ? "" : "cursor-pointer"}
+                `}
             disabled={disabled}
             onClick={onClick}
         >

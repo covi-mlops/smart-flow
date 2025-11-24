@@ -21,9 +21,9 @@ export default function Header({ title }: HeaderProps) {
         <div className="bg-white text-black border-b-[4px] border-point-red w-full h-[140px] px-[30px]">
             <div className="flex flex-row items-center justify-between gap-5">
                 <Image
-                    src="/assets/nexten_logo_B.png"
+                    src="/assets/nexten_logo_b.png"
                     alt="nexten logo"
-                    className="min-w-[188px] py-[20px] whitespace-nowrap"
+                    className="min-w-[188px] py-[20px]"
                     width={200}
                     height={95}
                     priority
