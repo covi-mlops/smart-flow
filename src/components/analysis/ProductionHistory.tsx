@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import { PeriodType, LineList } from "@/types/analysis/types";
-import { PERIOD_MOCK_DATA } from "./mockData";
+import { PERIOD_MOCK_DATA } from "../../mock/analysis/mock";
 import ProductionLineChart from "./ProductionLineChart";
 import ProductionItemChart from "./ProductionItemChart";
 

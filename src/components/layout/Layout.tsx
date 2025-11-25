@@ -15,9 +15,6 @@ export default function Layout({ headerTitle, children }: LayoutProps) {
                 <Header title={headerTitle} />
             </div>
             <div className="flex-1 flex flex-row pt-[140px]">
-                {/* <div className="h-full">
-                    <MenuBar />
-                </div> */}
                 <MenuBar />
                 <div className="w-full overflow-hidden overflow-y-auto">
                     {children}
