@@ -1,8 +1,8 @@
 'use client';
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import NextImage from "next/image";
 
 import SemiHeader from "@/components/common/SemiHeader";
 import Layout from "@/components/layout/Layout";
@@ -12,11 +12,13 @@ import Pagination from "@/components/common/Pagination";
 import MultipleButton from "@/components/common/MultipleButton";
 import { MOCK_DATA } from "@/mock/processing/mock";
 import { ProductionHistoryItem } from "@/types/common/types";
+import { INITIAL_MASK_POLY } from "@/components/processing/process-data/EditImage";
 
 export default function ProcessDataDetailPage() {
   const params = useParams();
   const id = params.id;
   const router = useRouter();
+  const canvasRef = useRef<HTMLCanvasElement>(null); // 비트맵 이미지용 ref 객체
   const [data, setData] = useState<ProductionHistoryItem>();
   const [bitmapOn, setBitmapOn] = useState<boolean>(false);
   const [selectedImageNumber, setSelectedImageNumber] = useState<number>();
@@ -51,7 +53,6 @@ export default function ProcessDataDetailPage() {
     { label: "Contact Pin", value: "Contact Pin" }
   ];
 
-  // 목데이터
   interface tableDataItem {
     id: number;
     image_name: string;
@@ -155,6 +156,52 @@ export default function ProcessDataDetailPage() {
   const handleFilterChange = (key: keyof { inspectionResult: string, isProcess: string, label: string }, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
+  // TODO: API 연동 시 수정
+  const handleBitmapImage = () => {
+    if (!canvasRef.current) {
+      return;
+    }
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return;
+    }
+
+    const image = new Image();
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      // TODO: INITIAL_MASK_POLY -> 라벨 데이터로 변경
+      INITIAL_MASK_POLY.forEach((polygon) => {
+        if (polygon.length > 0) {
+          ctx.beginPath();
+          ctx.moveTo(polygon[0][0], polygon[0][1]);
+
+          for (let i = 1; i < polygon.length; i++) {
+            ctx.lineTo(polygon[i][0], polygon[i][1]);
+          }
+
+          ctx.closePath();
+
+          ctx.lineJoin = 'round';
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = "#00B71B60";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.fillStyle = "#00B71B60";
+          ctx.fill();
+        }
+      });
+    };
+
+    image.src = "/assets/contactpin_ex_image.png";
+  };
 
   useEffect(() => {
     const selected_data = MOCK_DATA.filter((item) => item.id === Number(id) && item)
@@ -162,8 +209,10 @@ export default function ProcessDataDetailPage() {
   }, []);
 
   useEffect(() => {
-    console.log(selectedImageNumber);
-  }, [selectedImageNumber]);
+    if (bitmapOn) {
+      handleBitmapImage();
+    }
+  }, [bitmapOn, selectedImageNumber]);
 
   return (
     <Layout headerTitle="데이터 가공">
@@ -182,7 +231,6 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">ROLL 번호</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              {/* TODO: 명세 확인 후 수정 */}
               <p>20250502_001_001</p>
             </div>
           </div>
@@ -207,21 +255,20 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">AI 검사일자</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              {/* TODO: 명세 확인 후 수정 */}
+              {/* TODO: API 명세 나오면 수정 */}
               <p>2025.05.20 15:03:30</p>
             </div>
             <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
               <h2 className="text-lg text-black">AI 검사 결과</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              {/* TODO: 명세 확인 후 수정 */}
               <p
-              // className={`${data?.inspectionResult === "불량"
-              //   ? "text-point-red"
-              //   : "text-medium-gray"
-              //   }`}
+                className={`${data?.is_abnormal
+                  ? "text-point-red"
+                  : "text-medium-gray"
+                  }`}
               >
-                {/* {data?.inspectionResult} */}
+                {data?.is_abnormal ? "불량" : "정상"}
               </p>
             </div>
           </div>
@@ -288,7 +335,9 @@ export default function ProcessDataDetailPage() {
                           >
                             <td className="px-4 py-3">{item.id}</td>
                             <td className="px-4 py-3">{item.image_name}</td>
-                            <td className={`px-4 py-3 font-bold ${item.ai_result === "불량" ? "text-point-red" : selectedImageNumber === item.id ? "text-white" : "text-medium-gray"} `}>{item.ai_result}</td>
+                            <td className={`px-4 py-3 font-bold ${item.ai_result === "불량" ? "text-point-red" : selectedImageNumber === item.id ? "text-white" : "text-medium-gray"} `}>
+                              {item.ai_result}
+                            </td>
                             <td className="px-4 py-3">{item.is_process}</td>
                           </tr>
                         ))
@@ -344,7 +393,6 @@ export default function ProcessDataDetailPage() {
                   <h2 className="text-lg font-bold text-black">가공 타입</h2>
                 </div>
                 <div className="flex flex-row items-center justify-center w-full gap-3 px-4">
-                  {/* TODO: API 형태 보고 수정 */}
                   <p>Polygon</p>
                 </div>
               </div>
@@ -372,10 +420,9 @@ export default function ProcessDataDetailPage() {
                 <div className="flex flex-row items-center justify-center w-full gap-3 px-4">
                   <input
                     type="checkbox"
+                    disabled={selectedImageNumber === undefined}
                     checked={bitmapOn}
-                    onChange={(e) => setBitmapOn(!bitmapOn)}
-                    // TODO: 비트맵 이미지를 어떻게 표시할 건지 !!!!!!!!!!!
-                    // onClick={(e) => setBitmapOn(!bitmapOn)}
+                    onChange={() => setBitmapOn(!bitmapOn)}
                     className="w-8 h-8 cursor-pointer accent-point-blue"
                   />
                 </div>
@@ -383,25 +430,33 @@ export default function ProcessDataDetailPage() {
             </div>
 
             <div className="h-[510px] border-[4px] border-light-gray bg-soft-white flex items-center justify-center p-6">
-              {selectedImageNumber === undefined ? (
-                <p className="text-medium-gray text-xl">
-                  이미지를 선택해주세요
-                </p>
-              ) : (
-                // TODO: API 연동 시 실제 이미지 id, 이미지 객체랑 연결
-                // TODO: 비트맵 이미지 조건부 렌더링
-                <div className="flex flex-col items-center gap-12">
-                  <p className="text-xl text-black font-bold">이미지 View</p>
-                  <Image
-                    src="/assets/contactpin_ex_image.png"
-                    alt="nexten logo"
-                    width={440}
-                    height={330}
-                    priority
-                    fetchPriority="high"
-                  />
-                </div>
-              )}
+              {
+                selectedImageNumber === undefined ? (
+                  <p className="text-medium-gray text-xl">
+                    이미지를 선택해주세요
+                  </p>
+                ) : (
+                  <div className="flex flex-col items-center gap-12">
+                    <p className="text-xl text-black font-bold">이미지 View</p>
+                    {
+                      bitmapOn ? (
+                        <canvas
+                          ref={canvasRef}
+                          className="max-w-full max-h-[330px] object-contain"
+                        />
+                      )
+                        : <NextImage
+                          src="/assets/contactpin_ex_image.png"
+                          alt="contact pin image"
+                          width={440}
+                          height={330}
+                          priority
+                          fetchPriority="high"
+                        />
+                    }
+                  </div>
+                )
+              }
             </div>
 
             <MultipleButton
@@ -415,7 +470,7 @@ export default function ProcessDataDetailPage() {
             />
           </div>
         </div>
-      </div>
-    </Layout>
+      </div >
+    </Layout >
   );
 }

@@ -1,21 +1,21 @@
 'use client';
 
-import { LineStatisticsItem } from "@/types/analysis/types";
+import { ProductionNameItem } from "@/types/analysis/types";
 import { motion } from "framer-motion";
 
-interface ProductionLineChartProps {
+interface ProductionItemChartProps {
     title: string;
-    data: LineStatisticsItem[];
+    data: ProductionNameItem[];
     dataType?: 'total' | 'normal' | 'defective';
 }
 
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"];
 
-export default function ProductionLineChart({
+export default function ProductionItemChart({
     title,
     data,
     dataType = 'total',
-}: ProductionLineChartProps) {
+}: ProductionItemChartProps) {
     const chartHeight = 300;
     const chartWidth = 650;
     const paddingLeft = 40;
@@ -154,7 +154,7 @@ export default function ProductionLineChart({
                                 className="w-3 h-3"
                                 style={{ backgroundColor: COLORS[idx % COLORS.length] }}
                             />
-                            <span>{line.production_line.name}</span>
+                            <span>{line.production_name}</span>
                         </div>
                     ))
                 }

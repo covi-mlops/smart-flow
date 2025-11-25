@@ -7,61 +7,56 @@ import { Picker } from "@/components/common/Picker";
 import UploadModal from "@/components/analysis/upload/UploadModal";
 import UploadDropZone from "@/components/analysis/upload/UploadDropZone";
 import UploadDataTable from "@/components/analysis/upload/UploadDataTable";
-import { ModalType, UploadData } from "@/types/analysis/upload";
+import { ModalType, UploadData, UploadedDataItem } from "@/types/analysis/upload";
 
 export default function UploadPage() {
     const [selectedItem, setSelectedItem] = useState('선택해주세요');
     const [isUploading, setIsUploading] = useState(false);
     const [modalType, setModalType] = useState<ModalType>(null);
     const [isNotify, setIsNotify] = useState<boolean>(false); // 경고 여부
-    const [uploadData, setUploadData] = useState<UploadData[]>([
-        // 목데이터
-        // TODO: API 연결 시 변경
+    const [uploadData, setUploadData] = useState<UploadedDataItem[]>([
         {
-            uploadDate: '2025.11.13 14:40:25',
-            inspectionItem: 'contactpin_1',
-            inspectionData: {
-                count: 1,
-                name: '20251113_001_001_01250.png'
-            },
-            isFolder: false,
+            id: 1,
+            created_at: '2025.11.13 14:40:25',
+            production_name: 'contactpin_1',
+            is_uploaded: '20251113_001_001_01250.png',
+            file_count: 1,
         },
         {
-            uploadDate: '2025.11.13 14:40:25',
-            inspectionItem: 'contactpin_1',
-            inspectionData: {
-                count: 2104,
-                name: "20251103 contact pin data",
-            },
-            isFolder: true,
+            id: 2,
+            created_at: '2025.11.13 14:40:25',
+            production_name: 'contactpin_1',
+            is_uploaded: 'contactpin_folder',
+            file_count: 1,
         },
         {
-            uploadDate: '2025.11.13 14:40:25',
-            inspectionItem: 'contactpin_1',
-            inspectionData: {
-                count: 356,
-                name: 'test_data'
-            },
-            isFolder: true,
+            id: 3,
+            created_at: '2025.11.13 14:40:25',
+            production_name: 'contactpin_1',
+            is_uploaded: 'test',
+            file_count: 5,
         },
         {
-            uploadDate: '2025.11.12 14:40:25',
-            inspectionItem: 'contactpin_2',
-            inspectionData: {
-                count: 1,
-                name: '20251112_001_001_225.png',
-            },
-            isFolder: false,
+            id: 4,
+            created_at: '2025.11.12 14:40:25',
+            production_name: 'contactpin_2',
+            is_uploaded: '20251112_001_002_11111.png',
+            file_count: 1,
         },
         {
-            uploadDate: '2025.11.11 14:40:25',
-            inspectionItem: 'contactpin_2',
-            inspectionData: {
-                count: 1,
-                name: '20251112_001_002_333.png',
-            },
-            isFolder: false,
-        }
+            id: 5,
+            created_at: '2025.11.11 14:40:25',
+            production_name: 'contactpin_2',
+            is_uploaded: '20251111_002_001_fdgds.png',
+            file_count: 1,
+        },
+        {
+            id: 6,
+            created_at: '2025.11.11 14:40:25',
+            production_name: 'contactpin_2',
+            is_uploaded: '20251111_002_001_33333.png',
+            file_count: 1,
+        },
     ]);
     // 업로드할 이미지의 검사 항목
     const inspectionOptions = [
@@ -81,16 +76,12 @@ export default function UploadPage() {
         const now = new Date();
         const dateString = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-        const newData: UploadData = {
-            uploadDate: dateString,
-            inspectionItem: selectedItem,
-            inspectionData: {
-                count: files.length,
-                name: folderName !== ''
-                    ? folderName
-                    : files[0].name
-            },
-            isFolder: folderName !== '' ? true : false
+        const newData: UploadedDataItem = {
+            id: uploadData.length + 1,
+            production_name: selectedItem,
+            is_uploaded: folderName !== '' ? folderName : files[0].name,
+            file_count: files.length,
+            created_at: dateString,
         };
 
         setUploadData(prev => [newData, ...prev]);

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import MultipleButton from "../../common/MultipleButton";
 // 목데이터
 // TODO: API 연동 시 수정
-const INITIAL_MASK_POLY = [
+export const INITIAL_MASK_POLY: number[][][] = [
     [
         // 아래 핀
         [122, 335], [120, 337], [121, 338], [119, 340], [102, 340],

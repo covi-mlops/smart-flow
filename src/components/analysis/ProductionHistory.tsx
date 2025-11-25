@@ -1,21 +1,22 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
-import { RollCountCardStatus, PeriodType } from "@/types/analysis/types";
+import { PeriodType, LineList } from "@/types/analysis/types";
 import { PERIOD_MOCK_DATA } from "./mockData";
 import ProductionLineChart from "./ProductionLineChart";
+import ProductionItemChart from "./ProductionItemChart";
 
-function RollCountCard({ line }: { line: RollCountCardStatus }) {
+function RollCountCard({ line }: { line: LineList }) {
     return (
         <div className="w-full border-[4px] border-light-gray p-6 bg-white">
             <div className="flex flex-row items-center justify-center gap-3 mb-4">
-                <h3 className="text-xl text-black font-bold">{line.productName}</h3>
+                <h3 className="text-xl text-black font-bold">{line.name}</h3>
             </div>
             <div className="flex flex-col items-center gap-2 text-medium-gray">
-                <p>ROLL {line.rollsProduced}개 생산</p>
+                <p>ROLL {line.total_count}개 생산</p>
                 <p>
-                    양품 {line.normalCount}개 | 불량 {line.defectCount}개
+                    양품 {line.normal_count}개 | 불량 {line.defective_count}개
                 </p>
             </div>
         </div>
@@ -26,12 +27,16 @@ export default function ProductionHistory() {
     const [period, setPeriod] = useState<PeriodType>('daily');
     const [currentPage, setCurrentPage] = useState(1);
 
-    const currentData = PERIOD_MOCK_DATA.filter((mock) => mock.period === period);
+    const [currentData, setCurrentData] = useState(PERIOD_MOCK_DATA.filter((mock) => mock.period === period));
 
     const handlePeriodChange = (newPeriod: PeriodType) => {
         setPeriod(newPeriod);
         setCurrentPage(1);
     };
+
+    useEffect(() => {
+        setCurrentData(PERIOD_MOCK_DATA.filter((mock) => mock.period === period));
+    }, [period]);
 
     return (
         <div className="flex flex-col p-6 gap-6">
@@ -61,34 +66,36 @@ export default function ProductionHistory() {
                 </div>
                 <div className="flex flex-row gap-6 items-center justify-between">
                     {
-                        currentData[0].rollCounts.slice((currentPage - 1) * 2, currentPage * 2).map((line) => (
-                            <RollCountCard key={line.id} line={line} />
-                        ))
+                        currentData[0].line_list
+                            .slice((currentPage - 1) * 2, currentPage * 2)
+                            .map((line) => (
+                                <RollCountCard key={line.id} line={line} />
+                            ))
                     }
                 </div>
             </div>
 
             <div className="min-w-[628px] border-[2px] border-light-gray">
                 <div className="grid grid-cols-2">
-                    <ProductionLineChart
+                    <ProductionItemChart
                         title="생산 품목 별 ROLL 총 생산 현황"
-                        data={currentData[0].productionTrend}
-                        maxValue={period === 'daily' ? 26 : 100}
+                        data={currentData[0].production_name_statistics}
+                        dataType="total"
                     />
                     <ProductionLineChart
                         title="생산라인 별 ROLL 총 생산 현황"
-                        data={currentData[0].productionTrend}
-                        maxValue={period === 'daily' ? 26 : 100}
+                        data={currentData[0].line_statistics}
+                        dataType="total"
                     />
-                    <ProductionLineChart
+                    <ProductionItemChart
                         title="생산 품목 별 ROLL 불량품 생산 현황"
-                        data={currentData[0].defectTrend}
-                        maxValue={period === 'daily' ? 2 : 10}
+                        data={currentData[0].production_name_statistics}
+                        dataType="defective"
                     />
                     <ProductionLineChart
                         title="생산라인 별 ROLL 불량품 생산 현황"
-                        data={currentData[0].defectTrend}
-                        maxValue={period === 'daily' ? 2 : 10}
+                        data={currentData[0].line_statistics}
+                        dataType="defective"
                     />
                 </div>
             </div>

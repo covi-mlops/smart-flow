@@ -1,11 +1,11 @@
 import { useState, useMemo } from "react";
 
-import { UploadData } from "@/types/analysis/upload";
+import { UploadedDataItem } from "@/types/analysis/upload";
 import Pagination from "@/components/common/Pagination";
 import { BsFillFolderFill, BsImages } from "react-icons/bs";
 
 interface UploadDataTableProps {
-    data: UploadData[];
+    data: UploadedDataItem[];
 }
 
 export default function UploadDataTable({ data }: UploadDataTableProps) {
@@ -54,18 +54,18 @@ export default function UploadDataTable({ data }: UploadDataTableProps) {
                                             {(tab - 1) + (page - 1) * limit + idx + 1}
                                         </td>
                                         <td className="py-4 px-4">
-                                            {item.uploadDate}
+                                            {item.created_at}
                                         </td>
                                         <td className="py-4 px-4">
-                                            {item.inspectionItem}
+                                            {item.production_name}
                                         </td>
                                         <td className="flex flex-col items-center py-4 px-4 whitespace-pre-line">
-                                            <p>{item.inspectionData.count}건</p>
+                                            <p>{item.file_count}건</p>
                                             <div className="flex flex-row gap-2 items-center">
                                                 {
-                                                    item.isFolder ? <BsFillFolderFill /> : <BsImages />
+                                                    item.is_uploaded.endsWith('.png') || item.is_uploaded.endsWith('.bmp') ? <BsImages /> : <BsFillFolderFill />
                                                 }
-                                                <p>{item.inspectionData.name}</p>
+                                                <p>{item.is_uploaded}</p>
                                             </div>
                                         </td>
                                     </tr>
