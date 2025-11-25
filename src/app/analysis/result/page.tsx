@@ -9,6 +9,7 @@ import Layout from "@/components/layout/Layout";
 import MultipleButton from "@/components/common/MultipleButton";
 import { FilterOptions } from "@/types/processing/process-data";
 import { MOCK_DATA } from "@/mock/processing/mock";
+import { ProductionHistoryItem } from "@/types/common/types";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
   default: module.HiArrowUp
@@ -24,6 +25,7 @@ const BiDown = lazy(() => import('react-icons/bi').then(module => ({
 
 export default function ResultPage() {
   const router = useRouter();
+  const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
 
   const [filters, setFilters] = useState<FilterOptions>({
     production_name: "전체",
@@ -34,6 +36,7 @@ export default function ResultPage() {
     applied_model: "전체"
   });
   const modalRef = useRef<HTMLDivElement>(null);
+  const [currentData, setCurrentData] = useState<ProductionHistoryItem[]>(MOCK_DATA);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isOpenTab, setIsOpenTab] = useState<boolean>(false);
   const [itemsPerPage, setItemsPerPage] = useState<string>('10');
@@ -46,7 +49,7 @@ export default function ResultPage() {
   };
 
   const handleSelectAll = () => {
-    const allIds = MOCK_DATA
+    const allIds = currentData
       .slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage))
       .map(item => item.id);
     setSelectedItems(allIds);
@@ -65,11 +68,11 @@ export default function ResultPage() {
   const handleSort = (value: string) => {
     setSortConfig(value);
     setIsOpenTab(false);
-    // TODO: API 연동 - 데이터 정렬 순서 변경
   };
 
   const handleDeleteSelected = () => {
-    // TODO: API 연동 - 선택한 항목이 목록에서 삭제되도록 적용
+    setCurrentData(currentData.filter((data) => !selectedItems.includes(data.id)));
+    setSelectedItems([]);
   };
 
   useEffect(() => {
@@ -91,6 +94,15 @@ export default function ResultPage() {
   useEffect(() => {
     setSelectedItems([]);
   }, [currentPage]);
+
+  useEffect(() => {
+    if (isInitialRenderRef.current) {
+      isInitialRenderRef.current = false;
+      return;
+    }
+
+    setCurrentData((prev) => [...prev].reverse());
+  }, [sortConfig]);
 
   const productOptions = [
     { label: "전체", value: "전체" },
@@ -221,23 +233,25 @@ export default function ResultPage() {
         {/* TODO: 표 컴포넌트화 고려해보기 */}
         <div className="bg-white border-y-2 border-light-gray overflow-hidden h-full">
           <table className="w-full">
-            <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
+            <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-base xl:text-lg font-bold text-black">
               <tr>
                 <th className="py-3 w-16">선택</th>
                 <th className="py-3 w-16">No</th>
                 <th
-                  className="py-3 cursor-pointer"
+                  className="py-3 w-[300px] cursor-pointer"
                   onClick={() => setIsOpenTab(!isOpenTab)}
                 >
                   <div
                     ref={modalRef}
                     className="flex items-center justify-center gap-3"
                   >
-                    {sortConfig === "desc" ? (
-                      <HiArrowDown size={20} className="text-point-blue" />
-                    ) : (
-                      <HiArrowUp size={20} className="text-point-blue" />
-                    )}
+                    {
+                      sortConfig === "desc" ? (
+                        <HiArrowDown size={20} className="text-point-blue" />
+                      ) : (
+                        <HiArrowUp size={20} className="text-point-blue" />
+                      )
+                    }
                     <span className="font-bold">생산 일자</span>
                     <BiDown size={26} />
                   </div>
@@ -252,14 +266,14 @@ export default function ResultPage() {
 
             <tbody>
               {
-                MOCK_DATA.length !== 0 ? (
-                  MOCK_DATA.slice(
+                currentData.length !== 0 ? (
+                  currentData.slice(
                     (currentPage - 1) * Number(itemsPerPage),
                     currentPage * Number(itemsPerPage)
-                  ).map((item) => (
+                  ).map((item, idx) => (
                     <tr
                       key={item.id}
-                      className="text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
+                      className="h-[73px] text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
                       onClick={() =>
                         router.push(`/analysis/result/${item.id}`)
                       }
@@ -273,7 +287,7 @@ export default function ResultPage() {
                           className="w-8 h-8 cursor-pointer accent-point-blue"
                         />
                       </td>
-                      <td className="px-4 py-3">{item.id}</td>
+                      <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                       <td className="px-4 py-3 whitespace-pre-line">
                         {item.created_at}
                       </td>
@@ -286,7 +300,6 @@ export default function ResultPage() {
                         {item.defective_count}/
                         {item.defective_count + item.normal_count})
                       </td>
-                      {/* TODO: API 명세 보고 해야 함 */}
                       <td
                         className={`px-4 py-3 font-bold ${item.is_abnormal
                           ? "text-point-red"
@@ -296,7 +309,8 @@ export default function ResultPage() {
                         {item.is_abnormal ? "불량" : "정상"}
                       </td>
                       <td className="px-4 py-3">
-                        {item.applied_model !== "null" ? item.applied_model : ""}
+                        {/* TODO: 목데이터라서 API 연동 시 수정해야 함 */}
+                        {item.applied_model !== null ? item.applied_model : "covi_seg_00001"}
                       </td>
                     </tr>
                   ))
@@ -311,6 +325,26 @@ export default function ResultPage() {
                   </tr>
                 )
               }
+
+              {
+                Array.from({
+                  length: Math.max(
+                    0,
+                    Number(itemsPerPage) -
+                    currentData.slice(
+                      (currentPage - 1) * Number(itemsPerPage),
+                      currentPage * Number(itemsPerPage)
+                    ).length
+                  ),
+                }).map((_, i) => (
+                  <tr
+                    key={`empty-${i}`}
+                    className="h-[73px] border-b border-light-gray"
+                  >
+                    <td colSpan={8}></td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
 
@@ -318,7 +352,7 @@ export default function ResultPage() {
             isOpenTab && (
               <div
                 ref={modalRef}
-                className="absolute w-[140px] top-[410px] left-[420px] right-0 mt-1 bg-white border border-light-gray rounded shadow-lg z-50 max-h-60 overflow-y-auto"
+                className="absolute w-[150px] top-[410px] left-[460px] right-0 mt-1 bg-white border border-light-gray rounded shadow-lg z-50 max-h-60 overflow-y-auto"
               >
                 <div
                   className="flex flex-row gap-6 px-4 py-2 border border-light-gray hover:bg-light-gray/20 cursor-pointer text-sm"
@@ -343,16 +377,18 @@ export default function ResultPage() {
           }
         </div>
 
-        {MOCK_DATA.length !== 0 && (
-          <Pagination
-            total={MOCK_DATA.length}
-            page={currentPage}
-            limit={Number(itemsPerPage)}
-            tab={tab}
-            setPage={setCurrentPage}
-            setTab={setTab}
-          />
-        )}
+        {
+          currentData.length !== 0 && (
+            <Pagination
+              total={currentData.length}
+              page={currentPage}
+              limit={Number(itemsPerPage)}
+              tab={tab}
+              setPage={setCurrentPage}
+              setTab={setTab}
+            />
+          )
+        }
       </div>
     </Layout>
   );

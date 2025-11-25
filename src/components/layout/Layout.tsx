@@ -10,7 +10,7 @@ interface LayoutProps {
 
 export default function Layout({ headerTitle, children }: LayoutProps) {
     return (
-        <div className="h-full min-h-screen">
+        <div className="h-full">
             <div className="w-full fixed top-0 left-0 flex-1 z-50">
                 <Header title={headerTitle} />
             </div>

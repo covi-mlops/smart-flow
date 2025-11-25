@@ -395,11 +395,17 @@ export default function AnalysisDataDetailPage() {
                                                 priority
                                                 fetchPriority="high"
                                             />
-                                            {/* TODO: 수치 프레임 진행 중 */}
                                             <div
                                                 className="w-[440px] h-[330px] absolute top-0 left-0"
                                             >
-                                                <div className="absolute top-[145px] left-[180px] bg-point-green w-1 h-13" />
+                                                <div className="absolute top-[145px] left-[180px] rounded-xl bg-point-green w-1 h-13" />
+                                                <div className="absolute top-[125px] left-[155px] rounded-xl text-point-green text-sm text-center font-bold w-7 h-5" >Y부</div>
+                                                <div className="absolute top-[150px] right-[73px] rounded-xl bg-point-green w-1 h-13" />
+                                                <div className="absolute top-[165px] right-[80px] rounded-xl text-point-green text-sm text-center font-bold w-7 h-5" >헤드</div>
+                                                <div className="absolute top-[97px] left-[235px] rotate-78 rounded-xl bg-point-green w-1 h-22" />
+                                                <div className="absolute top-[110px] left-[220px] rounded-xl text-point-green text-sm text-center font-bold w-10 h-5" >빗각L</div>
+                                                <div className="absolute bottom-[81px] left-[235px] rotate-102 rounded-xl bg-point-green w-1 h-22" />
+                                                <div className="absolute bottom-[90px] left-[220px] rounded-xl text-point-green text-sm text-center font-bold w-10 h-5" >빗각R</div>
                                             </div>
                                         </div>
                                     </div>

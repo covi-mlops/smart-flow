@@ -51,7 +51,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.11,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.12\n14:40:25",
     },
     {
         id: 4,
@@ -85,7 +85,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 100,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.12\n14:40:25",
     },
     {
         id: 6,
@@ -102,7 +102,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0,
         is_abnormal: false,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.11\n14:40:25",
     },
     {
         id: 7,
@@ -119,7 +119,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.11,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.11\n14:40:25",
     },
     {
         id: 8,
@@ -136,7 +136,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.15,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.12\n14:40:25",
+        created_at: "2025.11.11\n14:40:25",
     },
     {
         id: 9,
@@ -153,7 +153,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 100,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.10\n14:40:25",
     },
     {
         id: 10,
@@ -170,7 +170,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0,
         is_abnormal: false,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.10\n14:40:25",
     },
     {
         id: 11,
@@ -187,7 +187,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.11,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.10\n14:40:25",
     },
     {
         id: 12,
@@ -204,7 +204,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.15,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.12\n14:40:25",
+        created_at: "2025.11.09\n14:40:25",
     },
     {
         id: 13,
@@ -221,7 +221,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 100,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.09\n14:40:25",
     },
     {
         id: 14,
@@ -238,7 +238,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0,
         is_abnormal: false,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.09\n14:40:25",
     },
     {
         id: 15,
@@ -255,7 +255,7 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.11,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.13\n14:40:25",
+        created_at: "2025.11.08\n14:40:25",
     },
     {
         id: 16,
@@ -272,6 +272,6 @@ export const MOCK_DATA: ProductionHistoryItem[] = [
         defect_rate: 0.15,
         is_abnormal: true,
         status: "collecting",
-        created_at: "2025.11.12\n14:40:25",
+        created_at: "2025.11.07\n14:40:25",
     },
 ];
