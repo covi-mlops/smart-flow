@@ -21,7 +21,7 @@ export default function MultipleButton({ type, title, disabled, className = "", 
                                 ? "bg-yellow-500 text-white border-none hover:bg-yellow-600 cursor-pointer"
                                 : type === "danger"
                                     ? "bg-point-red text-white border-none hover:bg-point-red/80 cursor-pointer"
-                                    : "bg-white text-medium-gray border-2 border-medium-gray hover:bg-soft-white cursor-pointer"
+                                    : "flex items-center justify-center bg-white text-medium-gray border-2 border-medium-gray hover:bg-soft-white cursor-pointer"
                 }
                 rounded font-bold shadow-md ${className}`
             }
