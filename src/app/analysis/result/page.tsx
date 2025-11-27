@@ -8,9 +8,9 @@ import { Picker } from "@/components/common/Picker";
 import Layout from "@/components/layout/Layout";
 import MultipleButton from "@/components/common/MultipleButton";
 import { FilterOptions } from "@/types/processing/process-data";
-import { MOCK_DATA } from "@/mock/processing/mock";
-import { ProductionHistoryItem } from "@/types/common/types";
 import { useSortConfigStore } from "@/store/store";
+import { ProductionHistoryEachItem_A } from "@/types/analysis/types";
+import { DETAIL_MOCK_DATA } from "@/mock/analysis/mock";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
   default: module.HiArrowUp
@@ -39,7 +39,7 @@ export default function ResultPage() {
     applied_model: "전체"
   });
   const modalRef = useRef<HTMLDivElement>(null);
-  const [currentData, setCurrentData] = useState<ProductionHistoryItem[]>(MOCK_DATA);
+  const [currentData, setCurrentData] = useState<ProductionHistoryEachItem_A[]>(DETAIL_MOCK_DATA);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isOpenTab, setIsOpenTab] = useState<boolean>(false);
   const [itemsPerPage, setItemsPerPage] = useState<string>('10');
@@ -77,7 +77,7 @@ export default function ResultPage() {
   };
 
   const handleDeleteSelected = () => {
-    setCurrentData(currentData.filter((data) => !selectedItems.includes(data.id)));
+    setCurrentData(prev => prev.filter((data) => !selectedItems.includes(data.id)));
     setSelectedItems([]);
   };
 
@@ -333,7 +333,7 @@ export default function ResultPage() {
                   <tr>
                     <td
                       colSpan={8}
-                      className="py-40 text-center font-bold text-lg text-medium-gray"
+                      className="py-[345px] text-center font-bold text-lg text-medium-gray"
                     >
                       조회되는 생산 데이터가 없습니다.
                     </td>
@@ -342,23 +342,25 @@ export default function ResultPage() {
               }
 
               {
-                Array.from({
-                  length: Math.max(
-                    0,
-                    Number(itemsPerPage) -
-                    currentData.slice(
-                      (currentPage - 1) * Number(itemsPerPage),
-                      currentPage * Number(itemsPerPage)
-                    ).length
-                  ),
-                }).map((_, i) => (
-                  <tr
-                    key={`empty-${i}`}
-                    className="h-[73px] border-b border-light-gray"
-                  >
-                    <td colSpan={8}></td>
-                  </tr>
-                ))
+                currentData.length !== 0
+                  ? Array.from({
+                    length: Math.max(
+                      0,
+                      Number(itemsPerPage) -
+                      currentData.slice(
+                        (currentPage - 1) * Number(itemsPerPage),
+                        currentPage * Number(itemsPerPage)
+                      ).length
+                    ),
+                  }).map((_, i) => (
+                    <tr
+                      key={`empty-${i}`}
+                      className="h-[73px] border-b border-light-gray"
+                    >
+                      <td colSpan={8}></td>
+                    </tr>
+                  ))
+                  : null
               }
             </tbody>
           </table>
@@ -393,16 +395,20 @@ export default function ResultPage() {
         </div>
 
         {
-          currentData.length !== 0 && (
-            <Pagination
-              total={currentData.length}
-              page={currentPage}
-              limit={Number(itemsPerPage)}
-              tab={tab}
-              setPage={setCurrentPage}
-              setTab={setTab}
-            />
-          )
+          currentData.length !== 0
+            ? (
+              <Pagination
+                total={currentData.length}
+                page={currentPage}
+                limit={Number(itemsPerPage)}
+                tab={tab}
+                setPage={setCurrentPage}
+                setTab={setTab}
+              />
+            )
+            : (
+              <div className="w-full h-[64px]" />
+            )
         }
       </div>
     </Layout>
