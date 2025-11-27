@@ -9,12 +9,12 @@ import Layout from "@/components/layout/Layout";
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
 import { DETAIL_MOCK_DATA } from "@/mock/analysis/mock";
-import { ProductionHistoryEachItem } from "@/types/analysis/types";
+import { ProductionHistoryEachItem_A } from "@/types/analysis/types";
 
 export default function AnalysisDataDetailPage() {
     const params = useParams();
     const id = params.id;
-    const [data, setData] = useState<ProductionHistoryEachItem>();
+    const [data, setData] = useState<ProductionHistoryEachItem_A>();
     const [selectedImageNumber, setSelectedImageNumber] = useState<number>();
     const [itemsPerPage, setItemsPerPage] = useState<string>('10');
     const [currentPage, setCurrentPage] = useState(1);
@@ -280,7 +280,7 @@ export default function AnalysisDataDetailPage() {
                         </div>
 
                         <div className="flex flex-row justify-end font-bold text-black">
-                            <p>전체: {data?.total_count ? data?.total_count : 0}건</p>
+                            <p>전체: {data ? data.datasets.length : 0}건</p>
                         </div>
 
                         <div className="bg-white border-y-2 border-light-gray overflow-hidden">

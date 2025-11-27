@@ -144,7 +144,7 @@ interface DatasetItem {
     }
 }
 
-export interface ProductionHistoryEachItem {
+export interface ProductionHistoryEachItem_A {
     id: number;
     production_name: string;
     mold_no: string;
@@ -181,11 +181,11 @@ export interface ProductionHistoryEachItem {
     datasets: DatasetItem[];
 }
 
-export interface ProductionHistoryEachItemRequest {
+export interface ProductionHistoryEachItemRequest_A {
     id: number;
 }
 
-export interface ProductionHistoryEachItemResponse {
+export interface ProductionHistoryEachItemResponse_A {
     status: "SUCCESS" | "FAIL";
-    data: ProductionHistoryEachItem;
+    data: ProductionHistoryEachItem_A;
 }

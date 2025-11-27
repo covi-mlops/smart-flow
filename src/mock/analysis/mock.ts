@@ -1,4 +1,4 @@
-import { LineProductionStatisticsData, ProcessDataItem, ProductionHistoryEachItem } from "@/types/analysis/types";
+import { LineProductionStatisticsData, ProcessDataItem, ProductionHistoryEachItem_A } from "@/types/analysis/types";
 
 export const PERIOD_MOCK_DATA: LineProductionStatisticsData[] = [
     {
@@ -1233,7 +1233,7 @@ export const ABNORMAL_ROLL_MOCK_DATA: ProcessDataItem[] = [
     },
 ];
 
-export const DETAIL_MOCK_DATA: ProductionHistoryEachItem[] = [
+export const DETAIL_MOCK_DATA: ProductionHistoryEachItem_A[] = [
     {
         id: 1,
         production_name: "APB2909B-KAG-R2-S",
@@ -1270,7 +1270,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem[] = [
         },
         datasets: [
             {
-                id: '1',
+                id: "6926b4b1a528a6567031d34c",
                 dataset_id: "Image19700101_1005560148474_aug_1",
                 classification_result: "불량",
                 refined_at: "2025-11-21T07:39:54.661000",
@@ -1283,7 +1283,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem[] = [
                 }
             },
             {
-                id: '2',
+                id: "6926b4b167a6a8616c442092",
                 dataset_id: "Image19700101_1002160146631",
                 classification_result: "불량",
                 refined_at: null,
@@ -1296,7 +1296,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem[] = [
                 }
             },
             {
-                id: '3',
+                id: "6926b4b1a528a6567031d34c",
                 dataset_id: "Image19700101_1005560148474_aug_1",
                 classification_result: "정상",
                 refined_at: "2025-11-21T07:39:54.661000",
@@ -1309,7 +1309,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem[] = [
                 }
             },
             {
-                id: '4',
+                id: "6926b4b167a6a8616c442092",
                 dataset_id: "Image19700101_1002160146631",
                 classification_result: "불량",
                 refined_at: null,

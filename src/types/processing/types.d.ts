@@ -15,6 +15,7 @@ export interface ProductionLineItem {
     defective_count: number;
   } | null;
 }
+// ----------
 // API: 생산 라인 목록 조회
 export interface ProductionLineResponse {
   status: "SUCCESS" | "FAIL";
