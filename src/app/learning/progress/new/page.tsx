@@ -8,18 +8,7 @@ import { Picker } from "@/components/common/Picker";
 import MultipleButton from "@/components/common/MultipleButton";
 import { MOCK_DATA } from "@/mock/processing/mock";
 import Pagination from "@/components/common/Pagination";
-
-interface SelectedDataItem {
-    id: number;
-    created_at: string;
-    production_line_name: string;
-    mold_no: string;
-    defect_rate: number;
-    ai_result: string;
-    normal_count: number;
-    defective_count: number;
-    ai_exception_count: number;
-}
+import { ProductionHistoryEachItem_P } from "@/types/processing/process-data";
 
 export default function NewAILearningPage() {
     const router = useRouter();
@@ -38,7 +27,7 @@ export default function NewAILearningPage() {
 
     const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
     const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-    const [learningData, setLearningData] = useState<SelectedDataItem[]>([]);
+    const [learningData, setLearningData] = useState<ProductionHistoryEachItem_P[]>([]);
 
     const productionLineNameOptions = [
         { label: "전체", value: "전체" }
@@ -88,21 +77,10 @@ export default function NewAILearningPage() {
 
     const handleAddToLearningData = () => {
         const selectedItems = MOCK_DATA.filter(item => selectedRows.has(item.id));
-        const newLearningData = selectedItems.map(item => ({
-            id: item.id,
-            created_at: item.created_at,
-            production_line_name: item.production_line.name,
-            mold_no: item.mold_no,
-            defect_rate: item.defect_rate,
-            ai_result: item.is_abnormal ? "불량" : "정상",
-            normal_count: item.normal_count,
-            defective_count: item.defective_count,
-            ai_exception_count: Math.floor(item.total_count * 0.001)
-        }));
 
         setLearningData(prev => {
             const existingIds = new Set(prev.map(item => item.id));
-            const filteredNew = newLearningData.filter(item => !existingIds.has(item.id));
+            const filteredNew = selectedItems.filter(item => !existingIds.has(item.id));
             return [...prev, ...filteredNew];
         });
 
@@ -119,11 +97,11 @@ export default function NewAILearningPage() {
     };
 
     const totalDataCount = learningData.reduce((sum, item) =>
-        sum + item.normal_count + item.defective_count + item.ai_exception_count, 0
+        sum + item.normal_count + item.defective_count + item.exception_count, 0
     );
     const totalNormalCount = learningData.reduce((sum, item) => sum + item.normal_count, 0);
     const totalDefectiveCount = learningData.reduce((sum, item) => sum + item.defective_count, 0);
-    const totalAiExceptionCount = learningData.reduce((sum, item) => sum + item.ai_exception_count, 0);
+    const totalAiExceptionCount = learningData.reduce((sum, item) => sum + item.exception_count, 0);
 
     const currentData = MOCK_DATA.slice(
         (currentPage - 1) * itemsPerPage,
@@ -380,23 +358,23 @@ export default function NewAILearningPage() {
                                 <tbody>
                                     {
                                         learningData.length > 0 ? (
-                                            learningData.map((item) => (
+                                            learningData.map((item, idx) => (
                                                 <tr
                                                     key={item.id}
                                                     className="h-[60px] text-center border-b border-light-gray"
                                                 >
-                                                    <td className="text-base">{item.id}</td>
+                                                    <td className="text-base">{idx + 1}</td>
                                                     <td className="text-base">{item.created_at}</td>
-                                                    <td className="text-base">{item.production_line_name}</td>
+                                                    <td className="text-base">{item.production_line.name}</td>
                                                     <td className="text-base">{item.mold_no}</td>
                                                     <td className="text-base">
                                                         {item.defect_rate}%<br />
                                                         <span className="text-sm text-medium-gray">
-                                                            ({item.defective_count.toLocaleString()}/{(item.normal_count + item.defective_count + item.ai_exception_count).toLocaleString()})
+                                                            ({item.defective_count.toLocaleString()}/{(item.normal_count + item.defective_count + item.exception_count).toLocaleString()})
                                                         </span>
                                                     </td>
-                                                    <td className={`text-base font-bold ${item.ai_result === "불량" ? "text-point-red" : "text-medium-gray"}`}>
-                                                        {item.ai_result}
+                                                    <td className={`text-base font-bold ${item.is_abnormal ? "text-point-red" : "text-medium-gray"}`}>
+                                                        {item.is_abnormal ? "불량" : "정상"}
                                                     </td>
                                                     <td className="flex items-center justify-center">
                                                         <MultipleButton

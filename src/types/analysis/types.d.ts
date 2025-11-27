@@ -185,7 +185,14 @@ export interface ProductionHistoryEachItemRequest_A {
     id: number;
 }
 
+export interface ProductionHistoryEachItemData_A {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: ProductionHistoryEachItem_A;
+}
+
 export interface ProductionHistoryEachItemResponse_A {
     status: "SUCCESS" | "FAIL";
-    data: ProductionHistoryEachItem_A;
+    data: ProductionHistoryEachItemData_A;
 }

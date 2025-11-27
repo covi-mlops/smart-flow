@@ -1,3 +1,5 @@
+'use client';
+
 import { lazy, Suspense, useRef, useState, useEffect } from "react"
 
 interface PickerOption {

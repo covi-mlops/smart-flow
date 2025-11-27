@@ -57,10 +57,10 @@ export default function ProgressPage() {
                                         >
                                             <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                                             <td className="px-4 py-3 whitespace-pre-line">
-                                                {item.detect_item_name}
+                                                {item.server_type}
                                             </td>
                                             <td className="px-4 py-3 whitespace-pre-line">
-                                                {item.count.toLocaleString()}
+                                                {item.dataset_count.toLocaleString()}
                                             </td>
                                             <td className={
                                                 `px-4 py-3 font-bold

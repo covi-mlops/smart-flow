@@ -20,6 +20,7 @@ export interface ProductionHistoryEachItem_P {
     total_count: number;
     normal_count: number;
     defective_count: number;
+    exception_count: number; // TODO: 추후 명세 확인 후 수정
     defect_rate: number;
     created_at: string; // 생산 일자
     is_abnormal: boolean; // 불량 여부
@@ -35,7 +36,6 @@ export interface ProductionHistoryEachItemResponse_P {
     data: ProductionHistoryEachItem_P;
 }
 // 데이터 필터링 옵션
-// API 명세와 일치 (진행 중)
 export interface FilterOptions {
     production_name: string;
     production_line: string;

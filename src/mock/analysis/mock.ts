@@ -1249,7 +1249,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem_A[] = [
         defective_count: 124,
         defect_rate: 100,
         created_at: "2025.11.13\n14:40:25",
-        is_abnormal: false,
+        is_abnormal: true,
         inspection_parameters: {
             head: {
                 min: 0.74,
@@ -1527,7 +1527,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem_A[] = [
         defective_count: 124,
         defect_rate: 100,
         created_at: "2025.11.13\n14:40:25",
-        is_abnormal: false,
+        is_abnormal: true,
         inspection_parameters: {
             head: {
                 min: 0.94,
@@ -1590,7 +1590,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem_A[] = [
         defective_count: 124,
         defect_rate: 100,
         created_at: "2025.11.13\n14:40:25",
-        is_abnormal: false,
+        is_abnormal: true,
         inspection_parameters: {
             head: {
                 min: 0.94,
@@ -1653,7 +1653,7 @@ export const DETAIL_MOCK_DATA: ProductionHistoryEachItem_A[] = [
         defective_count: 124,
         defect_rate: 100,
         created_at: "2025.11.13\n14:40:25",
-        is_abnormal: false,
+        is_abnormal: true,
         inspection_parameters: {
             head: {
                 min: 0.94,

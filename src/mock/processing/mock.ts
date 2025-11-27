@@ -15,6 +15,7 @@ export const MOCK_DATA: ProductionHistoryEachItem_P[] = [
         total_count: 124,
         normal_count: 0,
         defective_count: 124,
+        exception_count: 0,
         defect_rate: 100,
         created_at: "2025.11.13\n14:40:25",
         is_abnormal: true,
@@ -76,6 +77,7 @@ export const MOCK_DATA: ProductionHistoryEachItem_P[] = [
         total_count: 124,
         normal_count: 0,
         defective_count: 124,
+        exception_count: 0,
         defect_rate: 100,
         created_at: "2025.11.12\n14:40:25",
         is_abnormal: true,
@@ -109,9 +111,10 @@ export const MOCK_DATA: ProductionHistoryEachItem_P[] = [
         total_count: 124,
         normal_count: 0,
         defective_count: 124,
+        exception_count: 0,
         defect_rate: 100,
         created_at: "2025.11.11\n14:40:25",
-        is_abnormal: true,
+        is_abnormal: false,
         datasets: [
             {
                 id: "6926a342fa879c75cf4f16c4",
@@ -142,6 +145,7 @@ export const MOCK_DATA: ProductionHistoryEachItem_P[] = [
         total_count: 124,
         normal_count: 0,
         defective_count: 124,
+        exception_count: 0,
         defect_rate: 100,
         created_at: "2025.11.10\n14:40:25",
         is_abnormal: true,
@@ -175,9 +179,78 @@ export const MOCK_DATA: ProductionHistoryEachItem_P[] = [
         total_count: 124,
         normal_count: 0,
         defective_count: 124,
+        exception_count: 0,
         defect_rate: 100,
         created_at: "2025.11.09\n14:40:25",
         is_abnormal: true,
+        datasets: [
+            {
+                id: "6926a342fa879c75cf4f16c4",
+                classification_result: "불량",
+                refined_at: "2025-11-21T06:50:42.102000",
+                created_at: "2025-11-21T06:50:42.102000",
+                mask_poly: 290
+            },
+            {
+                id: "6926a3413ba262755fa7ca7d",
+                classification_result: "정상",
+                refined_at: null,
+                created_at: "2025-11-21T06:50:41.983000",
+                mask_poly: 297
+            }
+        ]
+    },
+    {
+        id: 6,
+        production_name: "APB4444B-KAG-R2-S",
+        mold_no: "contactpin_1",
+        production_line: {
+            id: 1,
+            name: "생산라인1",
+        },
+        applied_model: null,
+        first_image_created_at: "2025.11.13\n14:40:25",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        exception_count: 0,
+        defect_rate: 100,
+        created_at: "2025.11.09\n14:40:25",
+        is_abnormal: true,
+        datasets: [
+            {
+                id: "6926a342fa879c75cf4f16c4",
+                classification_result: "불량",
+                refined_at: "2025-11-21T06:50:42.102000",
+                created_at: "2025-11-21T06:50:42.102000",
+                mask_poly: 290
+            },
+            {
+                id: "6926a3413ba262755fa7ca7d",
+                classification_result: "정상",
+                refined_at: null,
+                created_at: "2025-11-21T06:50:41.983000",
+                mask_poly: 297
+            }
+        ]
+    },
+    {
+        id: 7,
+        production_name: "APB4444B-KAG-R2-S",
+        mold_no: "contactpin_1",
+        production_line: {
+            id: 1,
+            name: "생산라인1",
+        },
+        applied_model: null,
+        first_image_created_at: "2025.11.13\n14:40:25",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        exception_count: 0,
+        defect_rate: 100,
+        created_at: "2025.11.09\n14:40:25",
+        is_abnormal: false,
         datasets: [
             {
                 id: "6926a342fa879c75cf4f16c4",
