@@ -4,14 +4,14 @@ import MultipleButton from "@/components/common/MultipleButton";
 import Pagination from "@/components/common/Pagination";
 import Layout from "@/components/layout/Layout";
 import { LIST_MOCK_DATA } from "@/mock/learning/mock";
-import { LearningDataItem } from "@/types/learning/types";
+import { ResultsItem } from "@/types/learning/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ProgressPage() {
     const router = useRouter();
 
-    const [data, setData] = useState<LearningDataItem[]>(LIST_MOCK_DATA);
+    const [data, setData] = useState<ResultsItem[]>(LIST_MOCK_DATA);
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [tab, setTab] = useState(1);
@@ -51,9 +51,9 @@ export default function ProgressPage() {
                                         <tr
                                             key={item.id}
                                             className="h-[73px] text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
-                                            onClick={() =>
-                                                router.push(`/learning/progress/${item.id}`)
-                                            }
+                                        // onClick={() =>
+                                        //     router.push(`/learning/progress/${item.id}`)
+                                        // }
                                         >
                                             <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                                             <td className="px-4 py-3 whitespace-pre-line">
@@ -66,20 +66,20 @@ export default function ProgressPage() {
                                                 `px-4 py-3 font-bold
                                                 ${item.status === "ready"
                                                     ? "text-point-green"
-                                                    : item.status === "progress"
+                                                    : item.status === "processing"
                                                         ? "text-point-blue"
                                                         : "text-medium-gray"}
                                             `}>
                                                 {
                                                     item.status === "ready"
                                                         ? "준비 완료"
-                                                        : item.status === "progress"
+                                                        : item.status === "processing"
                                                             ? "진행 중"
                                                             : "완료"
                                                 }
                                             </td>
                                             <td>
-                                                {item.status === "ready" ? "ㅡ" : item.start_at}
+                                                {item.status === "ready" ? "ㅡ" : item.process_done_at}
                                             </td>
                                         </tr>
                                     ))
