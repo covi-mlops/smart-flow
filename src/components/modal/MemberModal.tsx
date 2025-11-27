@@ -1,5 +1,5 @@
-import { useMemberModalStore } from "@/store/store";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import { BsPerson } from "react-icons/bs";
 import { FaPowerOff } from "react-icons/fa6";
 
@@ -21,7 +21,7 @@ export default function MemberModal({ onClose }: MemberModalProps) {
         // TODO: 로그아웃 구현 시 로직 추가
     };
 
-    return (
+    return createPortal(
         <div
             className="fixed inset-0 z-50 flex items-start justify-end pt-25 mt-2 mr-[30px]"
             onClick={handleBackdropClick}
@@ -35,8 +35,8 @@ export default function MemberModal({ onClose }: MemberModalProps) {
                         router.push('/edit-info');
                     }}
                 >
-                    <BsPerson size={24} />
-                    <p>내 정보 변경</p>
+                    <BsPerson size={24} className="dark:text-black" />
+                    <p className="dark:text-black">내 정보 변경</p>
                 </button>
                 <div className="w-full h-1 bg-gray-300 rounded-xl my-2" />
                 <button
@@ -44,10 +44,11 @@ export default function MemberModal({ onClose }: MemberModalProps) {
                     className="h-[50px] flex-shrink-0 flex flex-row gap-2 items-center text-xl cursor-pointer"
                 // onClick={handleLogout}
                 >
-                    <FaPowerOff size={24} />
-                    <p>로그아웃</p>
+                    <FaPowerOff size={24} className="dark:text-black" />
+                    <p className="dark:text-black">로그아웃</p>
                 </button>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

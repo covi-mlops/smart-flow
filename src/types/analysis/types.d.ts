@@ -1,3 +1,10 @@
+/* 상태 관리 */
+export interface SortConfigStore {
+    isDesc: boolean;
+    setDesc: () => void;
+    setAsc: () => void;
+}
+
 // API: 비정상 생산 이력 조회 - 개별 아이템
 export interface ProcessDataItem {
     id: number;
@@ -119,4 +126,66 @@ export interface ProductionItemNameResponse {
         items: string[];
         total: number;
     }
+}
+// ----------
+// API: 생산 이력 상세 조회
+// 생산 이력 단건
+interface DatasetItem {
+    id: string;
+    dataset_id: string;
+    classification_result: string; // AI 결과
+    refined_at: string | null; // 가공 여부
+    created_at: string;
+    attributes: {
+        head: number;
+        neck: number;
+        angl: number;
+        angr: number;
+    }
+}
+
+export interface ProductionHistoryEachItem_A {
+    id: number;
+    production_name: string;
+    mold_no: string;
+    production_line: {
+        id: number;
+        name: string;
+    };
+    applied_model: string | null;
+    first_image_created_at: string; // AI 검사 일자
+    total_count: number;
+    normal_count: number;
+    defective_count: number;
+    defect_rate: number;
+    created_at: string; // 생산 일자
+    inspection_parameters: {
+        head: {
+            min: number;
+            max: number;
+        };
+        neck: {
+            min: number;
+            max: number;
+        };
+        angl: {
+            min: number;
+            max: number;
+        };
+        angr: {
+            min: number;
+            max: number;
+        };
+    };
+    is_abnormal: boolean; // 불량 여부
+    datasets: DatasetItem[];
+}
+
+export interface ProductionHistoryEachItemRequest_A {
+    id: number;
+}
+
+export interface ProductionHistoryEachItemResponse_A {
+    status: "SUCCESS" | "FAIL";
+    data: ProductionHistoryEachItem_A;
 }

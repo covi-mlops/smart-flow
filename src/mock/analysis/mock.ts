@@ -1,4 +1,4 @@
-import { LineProductionStatisticsData, ProcessDataItem } from "@/types/analysis/types";
+import { LineProductionStatisticsData, ProcessDataItem, ProductionHistoryEachItem_A } from "@/types/analysis/types";
 
 export const PERIOD_MOCK_DATA: LineProductionStatisticsData[] = [
     {
@@ -1230,5 +1230,1042 @@ export const ABNORMAL_ROLL_MOCK_DATA: ProcessDataItem[] = [
         normal_count: 40,
         defect_rate: 0.3,
         created_at: "2025-11-16"
+    },
+];
+
+export const DETAIL_MOCK_DATA: ProductionHistoryEachItem_A[] = [
+    {
+        id: 1,
+        production_name: "APB2909B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.74,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.31,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.31,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: "6926b4b1a528a6567031d34c",
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: "6926b4b167a6a8616c442092",
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            },
+            {
+                id: "6926b4b1a528a6567031d34c",
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "정상",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: "6926b4b167a6a8616c442092",
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 2,
+        production_name: "APB8888B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.34,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.19,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.81,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 3,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 4,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 5,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 6,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 7,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 8,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 9,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 10,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 11,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 12,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 13,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 14,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 15,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
+    },
+    {
+        id: 16,
+        production_name: "APB1029B-KAG-R2-S",
+        mold_no: "NX25MC04-01-02",
+        production_line: {
+            id: 1,
+            name: "40T[PM018]"
+        },
+        applied_model: null,
+        first_image_created_at: "2025-11-17T13:48:19+09:00",
+        total_count: 124,
+        normal_count: 0,
+        defective_count: 124,
+        defect_rate: 100,
+        created_at: "2025.11.13\n14:40:25",
+        is_abnormal: false,
+        inspection_parameters: {
+            head: {
+                min: 0.94,
+                max: 0.7599
+            },
+            neck: {
+                min: 0.51,
+                max: 0.2783
+            },
+            angl: {
+                min: 0.39,
+                max: 0.3299
+            },
+            angr: {
+                min: 0.61,
+                max: 0.3299
+            },
+        },
+        datasets: [
+            {
+                id: '1',
+                dataset_id: "Image19700101_1005560148474_aug_1",
+                classification_result: "불량",
+                refined_at: "2025-11-21T07:39:54.661000",
+                created_at: "2025-11-21T07:39:54.661000",
+                attributes: {
+                    head: 0.7584,
+                    neck: 0.2345,
+                    angl: 0.3549,
+                    angr: 0.2964,
+                }
+            },
+            {
+                id: '2',
+                dataset_id: "Image19700101_1002160146631",
+                classification_result: "불량",
+                refined_at: null,
+                created_at: "2025-11-21T07:39:54.640000",
+                attributes: {
+                    head: 0.2354,
+                    neck: 0.2348,
+                    angl: 0.8921,
+                    angr: 0.6727,
+                }
+            }
+        ]
     },
 ];

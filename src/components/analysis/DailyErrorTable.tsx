@@ -27,39 +27,54 @@ export default function DailyErrorTable() {
             </thead>
 
             <tbody>
-              {MOCK_DATA.length !== 0 ? (
-                MOCK_DATA.slice(
-                  (currentPage - 1) * Number(itemsPerPage),
-                  currentPage * Number(itemsPerPage)
-                ).map((item) => (
-                  <tr
-                    key={item.id}
-                    className="text-base border-b border-light-gray text-center"
-                  >
-                    <td className="py-3 whitespace-pre-line">
-                      {item.created_at}
-                    </td>
-                    <td className="py-3 whitespace-pre-line">
-                      {item.production_line.name}
-                    </td>
-                    <td className="py-3">{item.mold_no}</td>
-                    <td className="py-3">
-                      {item.defect_rate}%<br />(
-                      {item.defective_count}/
-                      {item.defective_count + item.normal_count})
+              {
+                MOCK_DATA.length !== 0 ? (
+                  MOCK_DATA.slice(
+                    (currentPage - 1) * Number(itemsPerPage),
+                    currentPage * Number(itemsPerPage)
+                  ).map((item) => (
+                    <tr
+                      key={item.id}
+                      className="h-[73px] text-base border-b border-light-gray text-center"
+                    >
+                      <td className="py-3 whitespace-pre-line">
+                        {item.created_at}
+                      </td>
+                      <td className="py-3 whitespace-pre-line">
+                        {item.production_line.name}
+                      </td>
+                      <td className="py-3">{item.mold_no}</td>
+                      <td className="py-3">
+                        {item.defect_rate}%<br />(
+                        {item.defective_count}/
+                        {item.defective_count + item.normal_count})
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      className="py-40 text-center font-bold text-lg text-medium-gray"
+                    >
+                      조회되는 생산 데이터가 없습니다.
                     </td>
                   </tr>
+                )
+              }
+
+              {
+                Array.from({
+                  length: Math.max(
+                    0,
+                    Number(itemsPerPage) - MOCK_DATA.slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage)).length
+                  )
+                }).map((_, i) => (
+                  <tr key={`empty-${i}`} className="h-[73px] border-b border-light-gray">
+                    <td colSpan={8}></td>
+                  </tr>
                 ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={8}
-                    className="py-40 text-center font-bold text-lg text-medium-gray"
-                  >
-                    조회되는 생산 데이터가 없습니다.
-                  </td>
-                </tr>
-              )}
+              }
             </tbody>
           </table>
         </div>

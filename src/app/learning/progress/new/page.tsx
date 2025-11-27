@@ -115,7 +115,7 @@ export default function NewAILearningPage() {
     };
 
     const handlePrepareTraining = () => {
-        router.push('/learning/progress');
+        router.push('/learning/progress/ready');
     };
 
     const totalDataCount = learningData.reduce((sum, item) =>

@@ -17,7 +17,7 @@ export default function ProductionItemChart({
     dataType = 'total',
 }: ProductionItemChartProps) {
     const chartHeight = 300;
-    const chartWidth = 650;
+    const chartWidth = 800;
     const paddingLeft = 40;
     const paddingRight = 20;
     const paddingTop = 20;
@@ -55,10 +55,10 @@ export default function ProductionItemChart({
     const yAxisLabels = [0, calculatedMaxValue / 2, calculatedMaxValue];
 
     return (
-        <div className="w-full border-[2px] border-light-gray p-6 bg-white">
+        <div className="w-full min-w-[1600px] flex flex-col border-[2px] border-light-gray p-6 bg-white">
             <h3 className="text-lg text-black font-bold mb-4">{title}</h3>
 
-            <svg width={chartWidth} height={chartHeight} className="overflow-visible">
+            <svg width={chartWidth} height={chartHeight} className="overflow-hidden">
                 <line
                     x1={paddingLeft}
                     y1={paddingTop}
@@ -146,7 +146,7 @@ export default function ProductionItemChart({
                 }
             </svg>
 
-            <div className="flex justify-center gap-4 mt-4 text-sm max-w-[730px]">
+            <div className="flex justify-center gap-4 mt-4 text-sm max-w-[800px]">
                 {
                     data.map((line, idx) => (
                         <div key={idx} className="flex items-center gap-2">

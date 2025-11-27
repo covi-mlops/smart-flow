@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, FormEvent, lazy, Suspense } from "react";
+import { useState, FormEvent, lazy, Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import Input from "@/components/common/Input";
 import BasicButton from "@/components/common/BasicButton";
 import { LoginFormData } from "@/types/login/types";
+import { useLoginSuccessStore } from "@/store/store";
+import Modal from "@/components/modal/Modal";
 
 const BiInfo = lazy(() => import('react-icons/bi').then(module => ({
   default: module.BiInfoCircle
@@ -15,7 +17,9 @@ const BiInfo = lazy(() => import('react-icons/bi').then(module => ({
 export default function LoginPage() {
   const router = useRouter();
   const [isClickButton, setIsClickButton] = useState(false);
-  const [isSuccessLogin, setIsSuccessLogin] = useState(false);
+  const [isSuccessLogin, setIsSuccessLogin] = useState(true); // TODO: API 연동하면서 변경
+
+  const { isModalOpen, setIsModalOpen, setIsModalClose } = useLoginSuccessStore();
 
   const [formData, setFormData] = useState<LoginFormData>({
     userId: "",
@@ -33,9 +37,15 @@ export default function LoginPage() {
     router.push("/signup");
   };
 
+  useEffect(() => {
+    if (isClickButton) {
+      setIsModalOpen();
+    }
+  }, [isClickButton]);
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-white">
-      <div className="w-[600px] mx-auto flex flex-col items-center gap-12">
+      <div className="w-[600px] flex flex-col items-center gap-12">
         <Image
           src="/assets/nexten_logo_b.png"
           alt="nexten logo"
@@ -71,9 +81,8 @@ export default function LoginPage() {
           />
 
           {
-            isClickButton
-              ? !isSuccessLogin
-              && (
+            isClickButton && !isSuccessLogin
+              ? (
                 <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
                   <Suspense fallback={<div></div>}>
                     <BiInfo size={30} />
@@ -107,6 +116,16 @@ export default function LoginPage() {
           회원가입
         </BasicButton>
       </div>
+
+      {
+        isModalOpen
+          ? <Modal
+            text="로그인에 성공했습니다."
+            onClick={() => router.push('/analysis/main')}
+            onClose={setIsModalClose}
+          />
+          : null
+      }
     </div>
   );
 }

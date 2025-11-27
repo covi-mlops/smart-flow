@@ -11,20 +11,20 @@ import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
 import MultipleButton from "@/components/common/MultipleButton";
 import { MOCK_DATA } from "@/mock/processing/mock";
-import { ProductionHistoryItem } from "@/types/common/types";
 import { INITIAL_MASK_POLY } from "@/components/processing/process-data/EditImage";
+import { ProductionHistoryEachItem_P } from "@/types/processing/process-data";
 
 export default function ProcessDataDetailPage() {
   const params = useParams();
   const id = params.id;
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null); // 비트맵 이미지용 ref 객체
-  const [data, setData] = useState<ProductionHistoryItem>();
+  const [data, setData] = useState<ProductionHistoryEachItem_P>();
   const [bitmapOn, setBitmapOn] = useState<boolean>(false);
-  const [selectedImageNumber, setSelectedImageNumber] = useState<number>();
+  const [selectedImageNumber, setSelectedImageNumber] = useState<string>();
   const [itemsPerPage, setItemsPerPage] = useState<string>('10');
   const [currentPage, setCurrentPage] = useState(1);
-  const [tab, setTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(1);
 
   const [filters, setFilters] = useState<{
     inspectionResult: string,
@@ -225,13 +225,13 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">검사 항목</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              <p>{data?.mold_no}</p>
+              <p>{data?.production_name}</p>
             </div>
             <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
               <h2 className="text-lg text-black">ROLL 번호</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              <p>20250502_001_001</p>
+              <p>{data?.mold_no}</p>
             </div>
           </div>
 
@@ -255,8 +255,7 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">AI 검사일자</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              {/* TODO: API 명세 나오면 수정 */}
-              <p>2025.05.20 15:03:30</p>
+              <p>{data?.first_image_created_at}</p>
             </div>
             <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
               <h2 className="text-lg text-black">AI 검사 결과</h2>
@@ -305,7 +304,7 @@ export default function ProcessDataDetailPage() {
             </div>
 
             <div className="flex flex-row justify-end font-bold text-black">
-              <p>전체: {data ? data?.defective_count + data?.normal_count : 0}건</p>
+              <p>전체: {data ? data.datasets.length : 0}건</p>
             </div>
 
             <div className="bg-white border-y-2 border-light-gray overflow-hidden">
@@ -318,27 +317,27 @@ export default function ProcessDataDetailPage() {
                     <th className="py-3">가공 여부</th>
                   </tr>
                 </thead>
-
+                {/* TODO: 다시 체크 */}
                 <tbody>
                   {
-                    tableData.length !== 0 ? (
-                      tableData
+                    data?.datasets.length !== 0 ? (
+                      data?.datasets
                         .slice(
                           (currentPage - 1) * Number(itemsPerPage),
                           currentPage * Number(itemsPerPage)
                         )
-                        .map((item) => (
+                        .map((item, idx) => (
                           <tr
                             key={item.id}
                             className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageNumber === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
                             onClick={() => setSelectedImageNumber(item.id)}
                           >
+                            <td className="px-4 py-3">{(currentTab - 1) * 10 + (currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                             <td className="px-4 py-3">{item.id}</td>
-                            <td className="px-4 py-3">{item.image_name}</td>
-                            <td className={`px-4 py-3 font-bold ${item.ai_result === "불량" ? "text-point-red" : selectedImageNumber === item.id ? "text-white" : "text-medium-gray"} `}>
-                              {item.ai_result}
+                            <td className={`px-4 py-3 font-bold ${item.classification_result === "불량" ? "text-point-red" : selectedImageNumber === item.id ? "text-white" : "text-medium-gray"} `}>
+                              {item.classification_result}
                             </td>
-                            <td className="px-4 py-3">{item.is_process}</td>
+                            <td className="px-4 py-3">{item.refined_at !== null ? "O" : "X"}</td>
                           </tr>
                         ))
                     ) : (
@@ -354,11 +353,11 @@ export default function ProcessDataDetailPage() {
                   }
 
                   {
-                    Array.from({
+                    data?.datasets && Array.from({
                       length: Math.max(
                         0,
                         Number(itemsPerPage) -
-                        tableData.slice(
+                        data.datasets.slice(
                           (currentPage - 1) * Number(itemsPerPage),
                           currentPage * Number(itemsPerPage)
                         ).length
@@ -376,14 +375,17 @@ export default function ProcessDataDetailPage() {
               </table>
             </div>
 
-            <Pagination
-              total={tableData.length}
-              page={currentPage}
-              limit={Number(itemsPerPage)}
-              tab={tab}
-              setPage={setCurrentPage}
-              setTab={setTab}
-            />
+            {
+              data
+              && <Pagination
+                total={data?.datasets.length}
+                page={currentPage}
+                limit={Number(itemsPerPage)}
+                tab={currentTab}
+                setPage={setCurrentPage}
+                setTab={setCurrentTab}
+              />
+            }
           </div>
 
           <div className="min-w-[500px] flex flex-col gap-6">

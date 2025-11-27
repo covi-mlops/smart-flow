@@ -1,24 +1,20 @@
 'use client';
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import SemiHeader from "@/components/common/SemiHeader";
 import Layout from "@/components/layout/Layout";
-import HistogramChart from "@/components/processing/process-data/HistogramChart";
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
-import MultipleButton from "@/components/common/MultipleButton";
-import { MOCK_DATA } from "@/mock/processing/mock";
-import { ProductionHistoryItem } from "@/types/common/types";
+import { DETAIL_MOCK_DATA } from "@/mock/analysis/mock";
+import { ProductionHistoryEachItem_A } from "@/types/analysis/types";
 
 export default function AnalysisDataDetailPage() {
     const params = useParams();
     const id = params.id;
-    const router = useRouter();
-    const [data, setData] = useState<ProductionHistoryItem>();
-    const [bitmapOn, setBitmapOn] = useState<boolean>(false);
+    const [data, setData] = useState<ProductionHistoryEachItem_A>();
     const [selectedImageNumber, setSelectedImageNumber] = useState<number>();
     const [itemsPerPage, setItemsPerPage] = useState<string>('10');
     const [currentPage, setCurrentPage] = useState(1);
@@ -46,11 +42,6 @@ export default function AnalysisDataDetailPage() {
         { label: "O", value: "O" },
         { label: "X", value: "X" },
     ];
-
-    const labelOptions = [
-        { label: "Contact Pin", value: "Contact Pin" }
-    ];
-
     // 목데이터
     interface tableDataItem {
         id: number;
@@ -157,9 +148,8 @@ export default function AnalysisDataDetailPage() {
     };
 
     useEffect(() => {
-        const selected_data = MOCK_DATA.filter((item) => item.id === Number(id) && item)
+        const selected_data = DETAIL_MOCK_DATA.filter((item) => item.id === Number(id) && item)
         setData(selected_data[0]);
-        console.log(selected_data[0]);
     }, []);
 
     return (
@@ -172,15 +162,14 @@ export default function AnalysisDataDetailPage() {
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">생산 품목</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            <p>{data?.mold_no}</p>
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                            <p>{data?.production_name}</p>
                         </div>
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">ROLL 번호</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            {/* TODO: 명세 확인 후 수정 */}
-                            <p>20250502_001_001</p>
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                            <p>{data?.mold_no}</p>
                         </div>
                     </div>
 
@@ -188,13 +177,13 @@ export default function AnalysisDataDetailPage() {
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">생산일자</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             <p>{data?.created_at}</p>
                         </div>
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">생산라인</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
                             <p>{data?.production_line.name}</p>
                         </div>
                     </div>
@@ -203,19 +192,14 @@ export default function AnalysisDataDetailPage() {
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">AI 검사일자</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            <p>{data?.created_at}</p>
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                            <p>{data?.first_image_created_at}</p>
                         </div>
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">AI 검사 결과</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            <p
-                                className={`${data?.is_abnormal
-                                    ? "text-point-red"
-                                    : "text-medium-gray"
-                                    }`}
-                            >
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                            <p>
                                 {data?.is_abnormal ? "불량" : "정상"}
                             </p>
                         </div>
@@ -225,13 +209,13 @@ export default function AnalysisDataDetailPage() {
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">AI 모델</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            <p>{data?.created_at}</p>
+                        <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
+                            <p>{data?.applied_model}</p>
                         </div>
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">AI 불량률</h2>
                         </div>
-                        <div className="flex flex-col items-center justify-center w-full px-4 py-[11px] font-bold">
+                        <div className="flex flex-col text-medium-gray items-center justify-center w-full px-4 py-[11px] font-bold">
                             <p>{data?.defect_rate}%</p>
                             <p>({data?.defective_count}/{data?.total_count})</p>
                         </div>
@@ -241,30 +225,30 @@ export default function AnalysisDataDetailPage() {
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">정상 헤드</h2>
                         </div>
-                        <div className="flex flex-row items-center justify-center w-full px-4 py-4 font-bold">
-                            {/* TODO: 값 넣기 */}
-                            <p></p>
+                        <div className="flex flex-col text-medium-gray items-center justify-center w-full px-4 font-bold">
+                            <p>{data?.inspection_parameters.head.min} 이상</p>
+                            <p>{data?.inspection_parameters.head.max} 이하</p>
                         </div>
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                        <div className="flex items-center text-medium-gray justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">정상 Y부</h2>
                         </div>
-                        <div className="flex flex-col items-center justify-center w-full px-4 py-[11px] font-bold">
-                            {/* TODO: 값 넣기 */}
-                            <p></p>
+                        <div className="flex flex-col text-medium-gray items-center justify-center w-full px-4 font-bold">
+                            <p>{data?.inspection_parameters.neck.min} 이상</p>
+                            <p>{data?.inspection_parameters.neck.max} 이하</p>
                         </div>
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                        <div className="flex items-center text-medium-gray justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">정상 빗각L</h2>
                         </div>
-                        <div className="flex flex-col items-center justify-center w-full px-4 py-[11px] font-bold">
-                            {/* TODO: 값 넣기 */}
-                            <p></p>
+                        <div className="flex flex-col text-medium-gray items-center justify-center w-full px-4 font-bold">
+                            <p>{data?.inspection_parameters.angl.min} 이상</p>
+                            <p>{data?.inspection_parameters.angl.max} 이하</p>
                         </div>
-                        <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
+                        <div className="flex items-center text-medium-gray justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">정상 빗각R</h2>
                         </div>
-                        <div className="flex flex-col items-center justify-center w-full px-4 py-[11px] font-bold">
-                            {/* TODO: 값 넣기 */}
-                            <p></p>
+                        <div className="flex flex-col text-medium-gray items-center justify-center w-full px-4 font-bold">
+                            <p>{data?.inspection_parameters.angr.min} 이상</p>
+                            <p>{data?.inspection_parameters.angr.max} 이하</p>
                         </div>
                     </div>
                 </div>
@@ -296,7 +280,7 @@ export default function AnalysisDataDetailPage() {
                         </div>
 
                         <div className="flex flex-row justify-end font-bold text-black">
-                            <p>전체: {data?.total_count ? data?.total_count : 0}건</p>
+                            <p>전체: {data ? data.datasets.length : 0}건</p>
                         </div>
 
                         <div className="bg-white border-y-2 border-light-gray overflow-hidden">
@@ -312,8 +296,8 @@ export default function AnalysisDataDetailPage() {
 
                                 <tbody>
                                     {
-                                        tableData.length !== 0 ? (
-                                            tableData
+                                        data?.datasets.length !== 0 ? (
+                                            data?.datasets
                                                 .slice(
                                                     (currentPage - 1) * Number(itemsPerPage),
                                                     currentPage * Number(itemsPerPage)
@@ -321,13 +305,13 @@ export default function AnalysisDataDetailPage() {
                                                 .map((item) => (
                                                     <tr
                                                         key={item.id}
-                                                        className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageNumber === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
-                                                        onClick={() => setSelectedImageNumber(item.id)}
+                                                        className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageNumber === Number(item.id) ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
+                                                        onClick={() => setSelectedImageNumber(Number(item.id))}
                                                     >
                                                         <td className="px-4 py-3">{item.id}</td>
-                                                        <td className="px-4 py-3">{item.image_name}</td>
-                                                        <td className={`px-4 py-3 font-bold ${item.ai_result === "불량" ? "text-point-red" : selectedImageNumber === item.id ? "text-white" : "text-medium-gray"} `}>{item.ai_result}</td>
-                                                        <td className="px-4 py-3">{item.is_process}</td>
+                                                        <td className="px-4 py-3">{item.dataset_id}</td>
+                                                        <td className={`px-4 py-3 font-bold ${item.classification_result === "불량" ? "text-point-red" : selectedImageNumber === Number(item.id) ? "text-white" : "text-medium-gray"} `}>{item.classification_result}</td>
+                                                        <td className="px-4 py-3">{item.refined_at !== null ? "O" : "X"}</td>
                                                     </tr>
                                                 ))
                                         ) : (
@@ -343,11 +327,11 @@ export default function AnalysisDataDetailPage() {
                                     }
 
                                     {
-                                        Array.from({
+                                        data && Array.from({
                                             length: Math.max(
                                                 0,
                                                 Number(itemsPerPage) -
-                                                tableData.slice(
+                                                data.datasets.slice(
                                                     (currentPage - 1) * Number(itemsPerPage),
                                                     currentPage * Number(itemsPerPage)
                                                 ).length
@@ -419,15 +403,13 @@ export default function AnalysisDataDetailPage() {
                                     <h2 className="text-lg text-black">헤드</h2>
                                 </div>
                                 <div className="flex flex-row items-center justify-center w-full px-4 py-4 font-bold">
-                                    {/* TODO: 값 넣기 */}
-                                    <p></p>
+                                    <p>{data?.datasets.map((d) => Number(d.id) === selectedImageNumber && d.attributes.head)}</p>
                                 </div>
                                 <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                                     <h2 className="text-lg text-black">Y부</h2>
                                 </div>
                                 <div className="flex flex-row items-center justify-center w-full px-4 py-4 font-bold">
-                                    {/* TODO: 값 넣기 */}
-                                    <p></p>
+                                    <p>{data?.datasets.map((d) => Number(d.id) === selectedImageNumber && d.attributes.neck)}</p>
                                 </div>
                             </div>
                             <div className="flex flex-row items-center bg-white border-y-2 border-light-gray">
@@ -435,15 +417,13 @@ export default function AnalysisDataDetailPage() {
                                     <h2 className="text-lg text-black">빗각L</h2>
                                 </div>
                                 <div className="flex flex-row items-center justify-center w-full px-4 py-4 font-bold">
-                                    {/* TODO: 값 넣기 */}
-                                    <p></p>
+                                    <p>{data?.datasets.map((d) => Number(d.id) === selectedImageNumber && d.attributes.angl)}</p>
                                 </div>
                                 <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                                     <h2 className="text-lg text-black">빗각R</h2>
                                 </div>
                                 <div className="flex flex-row items-center justify-center w-full px-4 py-4 font-bold">
-                                    {/* TODO: 값 넣기 */}
-                                    <p></p>
+                                    <p>{data?.datasets.map((d) => Number(d.id) === selectedImageNumber && d.attributes.angr)}</p>
                                 </div>
                             </div>
                         </div>

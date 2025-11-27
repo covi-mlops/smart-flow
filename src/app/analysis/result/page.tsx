@@ -10,6 +10,7 @@ import MultipleButton from "@/components/common/MultipleButton";
 import { FilterOptions } from "@/types/processing/process-data";
 import { MOCK_DATA } from "@/mock/processing/mock";
 import { ProductionHistoryItem } from "@/types/common/types";
+import { useSortConfigStore } from "@/store/store";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
   default: module.HiArrowUp
@@ -27,6 +28,8 @@ export default function ResultPage() {
   const router = useRouter();
   const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
 
+  const { isDesc, setDesc, setAsc } = useSortConfigStore();
+
   const [filters, setFilters] = useState<FilterOptions>({
     production_name: "전체",
     start_created_at: "2025-05-21",
@@ -42,7 +45,6 @@ export default function ResultPage() {
   const [itemsPerPage, setItemsPerPage] = useState<string>('10');
   const [currentPage, setCurrentPage] = useState(1);
   const [tab, setTab] = useState(1);
-  const [sortConfig, setSortConfig] = useState<string>('desc');
 
   const handleFilterChange = (key: keyof FilterOptions, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -66,7 +68,11 @@ export default function ResultPage() {
   };
 
   const handleSort = (value: string) => {
-    setSortConfig(value);
+    if (value === "desc") {
+      setDesc();
+    } else {
+      setAsc();
+    }
     setIsOpenTab(false);
   };
 
@@ -101,8 +107,17 @@ export default function ResultPage() {
       return;
     }
 
-    setCurrentData((prev) => [...prev].reverse());
-  }, [sortConfig]);
+    setCurrentData((prev) => {
+      const sortedData = [...prev].sort((a, b) => {
+        const aDate = new Date(a.created_at).getTime();
+        const bDate = new Date(b.created_at).getTime();
+
+        return isDesc ? bDate - aDate : aDate - bDate;
+      });
+
+      return sortedData;
+    });
+  }, [isDesc]);
 
   const productOptions = [
     { label: "전체", value: "전체" },
@@ -246,7 +261,7 @@ export default function ResultPage() {
                     className="flex items-center justify-center gap-3"
                   >
                     {
-                      sortConfig === "desc" ? (
+                      isDesc ? (
                         <HiArrowDown size={20} className="text-point-blue" />
                       ) : (
                         <HiArrowUp size={20} className="text-point-blue" />
