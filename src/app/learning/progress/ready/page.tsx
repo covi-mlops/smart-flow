@@ -1,7 +1,18 @@
+'use client';
+
+import MultipleButton from "@/components/common/MultipleButton";
+import Pagination from "@/components/common/Pagination";
 import SemiHeader from "@/components/common/SemiHeader";
 import Layout from "@/components/layout/Layout";
+// import { LIST_MOCK_DATA } from "@/mock/learning/mock";
+// import { ResultsItem } from "@/types/learning/types";
+import { useRouter } from "next/navigation";
+// import { useState } from "react";
 
 export default function ReadyAILearningPage() {
+    const router = useRouter();
+    // const [data, setData] = useState<ResultsItem[]>(LIST_MOCK_DATA);
+
     return (
         <Layout headerTitle="AI 모델 학습 플랫폼">
             <div className="w-full flex flex-col">
@@ -54,7 +65,7 @@ export default function ReadyAILearningPage() {
                     </div>
                 </div>
 
-                <div className="bg-white border-y-2 border-light-gray overflow-hidden p-6">
+                <div className="bg-white border-t-2 border-light-gray overflow-hidden p-6">
                     <table className="w-full">
                         <thead className="border-b border-light-gray bg-soft-white">
                             <tr className="h-[56px] text-center text-base font-bold text-black">
@@ -64,50 +75,60 @@ export default function ReadyAILearningPage() {
                                 <th>생산 품목</th>
                                 <th>AI 불량률</th>
                                 <th>AI 검사 결과</th>
-                                <th>선택 해제</th>
+                                <th>데이터 종류</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* {
-                                learningData.length > 0 ? (
-                                    learningData.map((item) => (
-                                        <tr
-                                            key={item.id}
-                                            className="h-[60px] text-center border-b border-light-gray"
-                                        >
-                                            <td className="text-base">{item.id}</td>
-                                            <td className="text-base">{item.created_at}</td>
-                                            <td className="text-base">{item.production_line_name}</td>
-                                            <td className="text-base">{item.mold_no}</td>
-                                            <td className="text-base">
-                                                {item.defect_rate}%<br />
-                                                <span className="text-sm text-medium-gray">
-                                                    ({item.defective_count.toLocaleString()}/{(item.normal_count + item.defective_count + item.ai_exception_count).toLocaleString()})
-                                                </span>
-                                            </td>
-                                            <td className={`text-base font-bold ${item.ai_result === "불량" ? "text-point-red" : "text-medium-gray"}`}>
-                                                {item.ai_result}
-                                            </td>
-                                            <td className="flex items-center justify-center">
-                                                <MultipleButton
-                                                    title="해제"
-                                                    type="default"
-                                                    onClick={() => handleRemoveFromLearningData(item.id)}
-                                                    className="p-2 border border-medium-gray rounded hover:bg-light-gray/30"
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={7} className="py-15 text-center text-lg text-medium-gray">
-                                            선택된 학습 데이터가 없습니다.
-                                        </td>
-                                    </tr>
-                                )
-                            } */}
+                            {/* TODO: 추후 재수정 */}
+                            <tr
+                                key={1}
+                                className="h-[60px] text-center border-b border-light-gray"
+                            >
+                                <td className="text-base">{1}</td>
+                                <td className="text-base">2025.11.13 14:40:25</td>
+                                <td className="text-base">생산라인1</td>
+                                <td className="text-base">contactpin_1</td>
+                                <td className="text-base">
+                                    2%<br />
+                                    <span className="text-sm text-medium-gray">
+                                        (54,950/55,000)
+                                    </span>
+                                </td>
+                                <td className={`text-base font-bold text-point-red`}>
+                                    불량
+                                </td>
+                                <td className="flex flex-col gap-1 items-center justify-center">
+                                    <span>정상 데이터: 54,950</span>
+                                    <span>불량 데이터: 50</span>
+                                    <span>AI 예외 데이터: 0</span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+
+                    <Pagination
+                        total={1}
+                        page={1}
+                        limit={5}
+                        tab={1}
+                        setPage={() => { }}
+                        setTab={() => { }}
+                    />
+                </div>
+
+                <div className="flex flex-row gap-6 items-center justify-center">
+                    <MultipleButton
+                        type="default"
+                        title="데이터 수정"
+                        className="w-[400px] text-xl"
+                        onClick={() => router.back()}
+                    />
+                    <MultipleButton
+                        type="default"
+                        title="학습 시작"
+                        className="w-[400px] text-xl"
+                        onClick={() => router.push('/learning/progress')}
+                    />
                 </div>
             </div>
         </Layout>

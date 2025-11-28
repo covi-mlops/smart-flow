@@ -51,9 +51,12 @@ export default function ProgressPage() {
                                         <tr
                                             key={item.id}
                                             className="h-[73px] text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
-                                        onClick={() =>
-                                            router.push(`/learning/progress/${item.id}`)
-                                        }
+                                            onClick={() => {
+                                                item.status === "ready"
+                                                    ? router.push(`/learning/progress/ready`)
+                                                    : router.push(`/learning/progress/${item.id}`)
+                                            }
+                                            }
                                         >
                                             <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                                             <td className="px-4 py-3 whitespace-pre-line">

@@ -9,6 +9,7 @@ import { FilterOptions, ProductionHistoryEachItem_P } from "@/types/processing/p
 import MultipleButton from "@/components/common/MultipleButton";
 import Pagination from "@/components/common/Pagination";
 import { MOCK_DATA } from "@/mock/processing/mock";
+import { useSortConfigStore } from "@/store/store";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
   default: module.HiArrowUp
@@ -25,6 +26,8 @@ const BiDown = lazy(() => import('react-icons/bi').then(module => ({
 export default function ProcessDataPage() {
   const router = useRouter();
   const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
+
+  const { isDesc, setDesc, setAsc } = useSortConfigStore();
 
   const [filters, setFilters] = useState<FilterOptions>({
     production_name: "전체",
@@ -66,7 +69,11 @@ export default function ProcessDataPage() {
   };
 
   const handleSort = (value: string) => {
-    setSortConfig(value);
+    if (value === "desc") {
+      setDesc();
+    } else {
+      setAsc();
+    }
     setIsOpenTab(false);
   };
 
@@ -104,8 +111,17 @@ export default function ProcessDataPage() {
       return;
     }
 
-    setCurrentData((prev) => [...prev].reverse());
-  }, [sortConfig]);
+    setCurrentData((prev) => {
+      const sortedData = [...prev].sort((a, b) => {
+        const aDate = new Date(a.created_at).getTime();
+        const bDate = new Date(b.created_at).getTime();
+
+        return isDesc ? bDate - aDate : aDate - bDate;
+      });
+
+      return sortedData;
+    });
+  }, [isDesc]);
 
   const productOptions = [
     { label: "전체", value: "전체" },

@@ -111,6 +111,12 @@ export default function AnalysisDataDetailPage() {
         handleBitmapImage();
     }, [selectedImageId]);
 
+    useEffect(() => {
+        return () => {
+            setSelectedImageId('');
+        }
+    }, [setSelectedImageId]);
+
     return (
         <Layout headerTitle="인공지능 분석">
             <div className="w-full flex flex-col">

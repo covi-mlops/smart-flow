@@ -216,7 +216,8 @@ export default function ProcessDataDetailPage() {
             </div>
 
             <div className="flex flex-row justify-end font-bold text-black">
-              <p>전체: {data ? data.datasets.length : 0}건</p>
+              {/* <p>전체: {data ? data.datasets.length : 0}건</p> */}
+              <p>전체: 55,000건</p>
             </div>
 
             <div className="bg-white border-y-2 border-light-gray overflow-hidden">

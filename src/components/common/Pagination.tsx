@@ -1,4 +1,4 @@
-import { Dispatch, useEffect } from 'react';
+import { Dispatch } from 'react';
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { TfiAngleDoubleLeft, TfiAngleDoubleRight } from "react-icons/tfi";
 
