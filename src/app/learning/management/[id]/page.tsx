@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 export default function ManagementDetailPage() {
     const params = useParams();
     const id = params.id;
+
     return (
         <Layout headerTitle="생산라인 관리">
             <div className="w-full flex flex-col gap-6">
