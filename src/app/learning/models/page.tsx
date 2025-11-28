@@ -9,7 +9,7 @@ import { LIST_MOCK_DATA } from "@/mock/learning/mock";
 import { ResultsItem } from "@/types/learning/types";
 import { GiCheckMark } from "react-icons/gi";
 import Pagination from "@/components/common/Pagination";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface FilterOptions {
     production_name: string;
@@ -18,7 +18,7 @@ interface FilterOptions {
 
 export default function ModelsPage() {
     const router = useRouter();
-    
+
     const [data, setData] = useState<ResultsItem[]>(LIST_MOCK_DATA);
     const [itemsPerPage, setItemsPerPage] = useState<string>('10');
     const [currentPage, setCurrentPage] = useState(1);
@@ -163,7 +163,7 @@ export default function ModelsPage() {
                                     currentData.map((item) => (
                                         <Fragment key={item.id}>
                                             <tr
-                                                className="h-[70px] text-medium-gray flex flex-row items-center text-center border-b border-light-gray bg-white hover:bg-light-gray/30"
+                                                className="h-[70px] text-medium-gray flex flex-row items-center text-center border-b border-light-gray bg-white hover:bg-light-gray/30 hover:cursor-pointer"
                                                 onClick={() => router.push(`/learning/models/${item.id}`)}
                                             >
                                                 <td className="w-[80px] flex items-center justify-center">

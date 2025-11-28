@@ -7,12 +7,11 @@ export default function HistogramChart() {
         >
             {/* 목데이터 */}
             <NextImage
-                src={`/assets/Histogram_image.png`}
-                alt="contact pin image"
+                src={'/assets/Histogram_image.png'}
+                alt="histogram image"
                 width={900}
                 height={400}
                 priority
-                fetchPriority="high"
             />
             {/* TODO: API 작업 시 구현 진행 */}
         </div>
