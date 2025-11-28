@@ -3,14 +3,14 @@ import NextImage from "next/image";
 export default function HistogramChart() {
     return (
         <div
-            className="w-full h-[250px] border-[4px] border-light-gray flex items-center justify-center"
+            className="w-full h-[400px] border-[4px] border-light-gray flex items-center justify-center"
         >
             {/* 목데이터 */}
             <NextImage
-                src={`/assets/Histogram_Image.png`}
+                src={`/assets/Histogram_image.png`}
                 alt="contact pin image"
-                width={1090}
-                height={207}
+                width={900}
+                height={400}
                 priority
                 fetchPriority="high"
             />
