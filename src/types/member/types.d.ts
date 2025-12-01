@@ -15,6 +15,7 @@ export interface SignupFormData {
     branch: string;
 }
 
+/* API */
 // API: Account - 정보 조회
 export interface MemberData {
     id: number;
@@ -90,26 +91,25 @@ export interface ActivateAccountFailResponse {
     };
 }
 // API: Account - 내 정보 변경
-// TODO: Request 필수 여부 확인해야 함
 export interface UpdateInfoRequest {
     password?: string;
     headquarter?: string;
     branch_name?: string;
 }
 
-export interface UpdateInfoData {
-    id: number;
-    username: string;
-    role: string;
-    branch: string;
-    headquarter: string;
-    created_at: string;
-    updated_at: string;
-}
+// export interface UpdateInfoData {
+//     id: number;
+//     username: string;
+//     role: string;
+//     branch: string;
+//     headquarter: string;
+//     created_at: string;
+//     updated_at: string;
+// }
 
 export interface UpdateInfoSuccessResponse {
     status: "SUCCESS";
-    data: UpdateInfoData;
+    data: string;
 }
 
 export interface UpdateInfoFailResponse {

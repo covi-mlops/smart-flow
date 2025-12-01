@@ -22,7 +22,6 @@ export default function EditInfoPage() {
     const { isModalOpen, setIsModalOpen, setIsModalClose } = useEditInfoSuccessStore();
 
     const [formData, setFormData] = useState<SignupFormData>({
-        /* TODO: API 연결 시 수정 */
         username: "",
         password: "",
         passwordConfirm: "",
@@ -62,8 +61,11 @@ export default function EditInfoPage() {
                 branch_name: formData.branch,
             }
             const response = await memberApi.updateInfo(updatedData);
+            console.log('in page', response);
             if (response && response.status === "SUCCESS") {
                 setIsModalOpen();
+            } else {
+                console.log('fail', response.data.message);
             }
         } catch (error) {
             console.error('handleEditInfo error', error);
@@ -73,10 +75,10 @@ export default function EditInfoPage() {
     };
 
     useEffect(() => {
-        if (formData.password !== "" && isValidPw(formData.password)) setIsPassPw(true);
-        if (formData.passwordConfirm !== "" && isValidPwConfirm(formData.password, formData.passwordConfirm)) setIsPassPwConfirm(true);
-        if (formData.headquarter !== "" && isValidHeadqurter(formData.headquarter)) setIsPassHeadquarter(true);
-        if (formData.branch !== "" && isValidBranchName(formData.branch)) setIsPassBranchName(true);
+        setIsPassPw(formData.password !== "" && isValidPw(formData.password));
+        setIsPassPwConfirm(formData.passwordConfirm !== "" && isValidPwConfirm(formData.password, formData.passwordConfirm));
+        setIsPassHeadquarter(formData.headquarter !== "" && isValidHeadqurter(formData.headquarter));
+        setIsPassBranchName(formData.branch !== "" && isValidBranchName(formData.branch));
     }, [formData]);
 
     useEffect(() => {
@@ -127,21 +129,22 @@ export default function EditInfoPage() {
                                 isCorrect={!isSignupButtonClick || isSignupButtonClick && isPassPw}
                                 onChange={(e) => {
                                     setFormData({ ...formData, password: e.target.value });
-                                    setIsSignupButtonClick(false);
                                 }}
                             />
 
                             {
                                 formData.password !== "" && isSignupButtonClick
                                     ? !isPassPw
-                                    && (
-                                        <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
-                                            <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
-                                                <BiInfo size={30} />
-                                            </Suspense>
-                                            <p>4자 숫자만 입력해주세요.</p>
-                                        </div>
-                                    )
+                                        ? (
+                                            <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
+                                                <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
+                                                    <BiInfo size={30} />
+                                                </Suspense>
+                                                <p>4자 숫자만 입력해주세요.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-row text-xl gap-3 h-[30px]" />
+                                        )
                                     : (
                                         <div className="flex flex-row text-xl gap-3 h-[30px]" />
                                     )
@@ -158,21 +161,22 @@ export default function EditInfoPage() {
                                 isCorrect={!isSignupButtonClick || isSignupButtonClick && isPassPwConfirm}
                                 onChange={(e) => {
                                     setFormData({ ...formData, passwordConfirm: e.target.value });
-                                    setIsSignupButtonClick(false);
                                 }}
                             />
 
                             {
                                 formData.passwordConfirm !== "" && isSignupButtonClick
                                     ? !isPassPwConfirm
-                                    && (
-                                        <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
-                                            <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
-                                                <BiInfo size={30} />
-                                            </Suspense>
-                                            <p>비밀번호와 동일하게 입력해주세요.</p>
-                                        </div>
-                                    )
+                                        ? (
+                                            <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
+                                                <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
+                                                    <BiInfo size={30} />
+                                                </Suspense>
+                                                <p>비밀번호와 동일하게 입력해주세요.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-row text-xl gap-3 h-[30px]" />
+                                        )
                                     : (
                                         <div className="flex flex-row text-xl gap-3 h-[30px]" />
                                     )
@@ -190,21 +194,22 @@ export default function EditInfoPage() {
                                 isCorrect={!isSignupButtonClick || isSignupButtonClick && isPassHeadquarter}
                                 onChange={(e) => {
                                     setFormData({ ...formData, headquarter: e.target.value });
-                                    setIsSignupButtonClick(false);
                                 }}
                             />
 
                             {
                                 formData.headquarter !== "" && isSignupButtonClick
                                     ? !isPassHeadquarter
-                                    && (
-                                        <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
-                                            <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
-                                                <BiInfo size={30} />
-                                            </Suspense>
-                                            <p>국영문, 숫자, 공백, 특수 기호(-), (_)만 입력해주세요.</p>
-                                        </div>
-                                    )
+                                        ? (
+                                            <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
+                                                <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
+                                                    <BiInfo size={30} />
+                                                </Suspense>
+                                                <p>국영문, 숫자, 공백, 특수 기호(-), (_)만 입력해주세요.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-row text-xl gap-3 h-[30px]" />
+                                        )
                                     : (
                                         <div className="flex flex-row text-xl gap-3 h-[30px]" />
                                     )
@@ -220,47 +225,48 @@ export default function EditInfoPage() {
                                 isCorrect={!isSignupButtonClick || isSignupButtonClick && isPassBranchName}
                                 onChange={(e) => {
                                     setFormData({ ...formData, branch: e.target.value });
-                                    setIsSignupButtonClick(false);
                                 }}
                             />
 
                             {
                                 formData.branch !== "" && isSignupButtonClick
                                     ? !isPassBranchName
-                                    && (
-                                        <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
-                                            <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
-                                                <BiInfo size={30} />
-                                            </Suspense>
-                                            <p>국영문, 숫자, 공백, 특수 기호(-), (_)만 입력해주세요.</p>
-                                        </div>
-                                    )
+                                        ? (
+                                            <div className="flex flex-row items-center text-point-red text-xl gap-3 h-[30px]">
+                                                <Suspense fallback={<div className="w-[30px] h-[30px]" />}>
+                                                    <BiInfo size={30} />
+                                                </Suspense>
+                                                <p>국영문, 숫자, 공백, 특수 기호(-), (_)만 입력해주세요.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-rowtext-xl gap-3 h-[30px]" />
+                                        )
                                     : (
                                         <div className="flex flex-rowtext-xl gap-3 h-[30px]" />
                                     )
                             }
                         </div>
                     </div>
+
+                    <div className="flex flex-row w-full gap-6">
+                        <BasicButton
+                            type="submit"
+                            variant="primary"
+                            disabled={!isPassPw || !isPassPwConfirm || !isPassHeadquarter || !isPassBranchName}
+                            className="cursor-pointer hover:bg-medium-gray/80"
+                        >
+                            변경
+                        </BasicButton>
+                        <BasicButton
+                            type="submit"
+                            variant="default"
+                            onClick={() => router.back()}
+                        >
+                            취소
+                        </BasicButton>
+                    </div>
                 </form>
 
-                <div className="flex flex-row w-full gap-6">
-                    <BasicButton
-                        type="submit"
-                        variant="primary"
-                        // TODO: API 연동 시 하나라도 정보 변경 시에만 활성화되도록 적용
-                        // disabled={!isPassPw || !isPassPwConfirm || !isPassHeadquarter || !isPassBranchName}
-                        className="cursor-pointer hover:bg-medium-gray/80"
-                    >
-                        변경
-                    </BasicButton>
-                    <BasicButton
-                        type="submit"
-                        variant="default"
-                        onClick={() => router.back()}
-                    >
-                        취소
-                    </BasicButton>
-                </div>
             </div>
 
             {

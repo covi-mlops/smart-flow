@@ -39,7 +39,7 @@ export default function Header({ title }: HeaderProps) {
                         onClick={() => setIsModalOpen()}
                     >
                         {
-                            role === "ADMIN"
+                            role === "admin"
                             && <div className="w-[100px] h-[50px] bg-medium-gray text-white flex items-center justify-center font-bold rounded-xl">
                                 관리자
                             </div>
@@ -49,6 +49,7 @@ export default function Header({ title }: HeaderProps) {
                             <BiDown size={50} />
                         </Suspense>
                     </button>
+
                     {
                         isModalOpen && <MemberModal onClose={() => setIsModalClose()} />
                     }

@@ -1,3 +1,4 @@
+import { useLogoutStore, useMemberStore } from "@/store/store";
 import axios from "axios";
 
 // let onUnauthorized: (() => void) | null = null;
@@ -30,13 +31,12 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-        // if (error.response?.status === 401 && error.response?.data.code === "AUTH_007") {
-        //     // access token 만료 
-        //     localStorage.removeItem('accessToken');
-        //     if (onUnauthorized) {
-        //         onUnauthorized();
-        //     }
-        // }
+        if (error.response?.status === 401) {
+            // access token 만료 
+            localStorage.removeItem('accessToken');
+            useMemberStore.setState({ isLogin: false });
+            useLogoutStore.setState({ isModalOpen: true });
+        }
         return Promise.reject(error);
     }
 )

@@ -15,7 +15,7 @@ export const useMemberStore = create<MemberStore>()(
             setIsLogin: (state) => set({ isLogin: state }),
         }),
         {
-            name: 'memberNameStorage',
+            name: 'memberStorage',
         }
     )
 )
@@ -34,6 +34,12 @@ export const useLoginSuccessStore = create<ModalStore>((set) => ({
 }))
 
 export const useSignupSuccessStore = create<ModalStore>((set) => ({
+    isModalOpen: false,
+    setIsModalOpen: () => set({ isModalOpen: true }),
+    setIsModalClose: () => set({ isModalOpen: false })
+}))
+
+export const useLogoutStore = create<ModalStore>((set) => ({
     isModalOpen: false,
     setIsModalOpen: () => set({ isModalOpen: true }),
     setIsModalClose: () => set({ isModalOpen: false })

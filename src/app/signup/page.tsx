@@ -256,31 +256,31 @@ export default function SignupPage() {
               }
             </div>
           </div>
-        </form>
 
-        <div className="flex flex-row w-full gap-6">
-          <BasicButton
-            type="submit"
-            variant="default"
-            onClick={() => router.back()}
-          >
-            뒤로 가기
-          </BasicButton>
-          <BasicButton
-            type="submit"
-            variant="primary"
-            disabled={!isSignupButtonActive}
-            className={`${isSignupButtonActive ? "cursor-pointer" : ""}`}
-          >
-            계정 생성
-          </BasicButton>
-        </div>
+          <div className="flex flex-row w-full gap-6">
+            <BasicButton
+              type="submit"
+              variant="default"
+              onClick={() => router.back()}
+            >
+              뒤로 가기
+            </BasicButton>
+            <BasicButton
+              type="submit"
+              variant="primary"
+              disabled={!isSignupButtonActive}
+              className={`${isSignupButtonActive ? "cursor-pointer" : ""}`}
+            >
+              계정 생성
+            </BasicButton>
+          </div>
+        </form>
       </div>
 
       {
         isModalOpen
           ? <Modal
-            text="회원가입에 성공했습니다.\n로그인 페이지로 넘어갑니다."
+            text={`회원가입에 성공했습니다.\n로그인 페이지로 넘어갑니다.`}
             onClick={() => {
               setIsModalClose();
               router.push('/');

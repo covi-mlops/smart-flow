@@ -5,6 +5,7 @@ export interface SortConfigStore {
     setAsc: () => void;
 }
 
+/* API */
 // API: 비정상 생산 이력 조회 - 개별 아이템
 export interface ProcessDataItem {
     id: number;
@@ -195,4 +196,27 @@ export interface ProductionHistoryEachItemData_A {
 export interface ProductionHistoryEachItemResponse_A {
     status: "SUCCESS" | "FAIL";
     data: ProductionHistoryEachItemData_A;
+}
+// ----------
+// API: 일일 불량 ROLL 알림
+export interface ViewDailyAbnormalRollResult {
+    id: number;
+    production_line: string; // 생산 라인 이름
+    mold_no: string; // 금형 번호
+    defective_count: number;
+    normal_count: number;
+    defect_rate: number;
+    created_at: string;
+}
+
+export interface ViewDailyAbnormalRollData {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: ViewDailyAbnormalRollData[];
+}
+
+export interface viewDailyAbnormalRollResponse {
+    status: "SUCCESS" | "FAIL";
+    data: ViewDailyAbnormalRollData;
 }

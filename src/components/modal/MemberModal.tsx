@@ -1,3 +1,4 @@
+import { useLogoutStore, useMemberStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { BsPerson } from "react-icons/bs";
@@ -10,6 +11,9 @@ interface MemberModalProps {
 export default function MemberModal({ onClose }: MemberModalProps) {
     const router = useRouter();
 
+    const { setIsLogin } = useMemberStore();
+    const { setIsModalOpen } = useLogoutStore();
+
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
             onClose();
@@ -17,8 +21,11 @@ export default function MemberModal({ onClose }: MemberModalProps) {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        setIsLogin(false);
+        localStorage.removeItem('memberStorage');
+        setIsModalOpen();
         onClose();
-        // TODO: 로그아웃 구현 시 로직 추가
     };
 
     return createPortal(
@@ -42,7 +49,7 @@ export default function MemberModal({ onClose }: MemberModalProps) {
                 <button
                     name="header member modal logout button"
                     className="h-[50px] flex-shrink-0 flex flex-row gap-2 items-center text-xl cursor-pointer"
-                // onClick={handleLogout}
+                    onClick={handleLogout}
                 >
                     <FaPowerOff size={24} className="dark:text-black" />
                     <p className="dark:text-black">로그아웃</p>
