@@ -1,19 +1,20 @@
+import { FailResponse } from "@/types/common/types";
 import axiosInstance from "./axiosInstance";
 
-import { ActivateAccountData, ActivateAccountFailResponse, ActivateAccountSuccessResponse, DeactivateInfoResponse, IssueTokenFailResponse, IssueTokenRequest, IssueTokenSuccessResponse, RegisterRequest, RegisterResponse, UpdateInfoFailResponse, UpdateInfoRequest, UpdateInfoSuccessResponse, ViewMemberInfoFailResponse, ViewMemberInfoSuccessResponse } from "@/types/member/types";
+import { ActivateAccountData, ActivateAccountSuccessResponse, DeactivateInfoResponse, IssueTokenRequest, IssueTokenSuccessResponse, RegisterRequest, RegisterResponse, UpdateInfoRequest, UpdateInfoSuccessResponse, ViewMemberInfoSuccessResponse } from "@/types/member/types";
 
 export const memberApi = {
     // 정보 조회
-    getInfo: async (): Promise<ViewMemberInfoSuccessResponse | ViewMemberInfoFailResponse> => {
+    getInfo: async (): Promise<ViewMemberInfoSuccessResponse | FailResponse> => {
         const { data } =
-            await axiosInstance.get<ViewMemberInfoSuccessResponse | ViewMemberInfoFailResponse>('/api/accounts/me/');
+            await axiosInstance.get<ViewMemberInfoSuccessResponse | FailResponse>('/api/accounts/me/');
         return data;
     },
     // 토큰 발급 (로그인)
     login: async (memberInfo: IssueTokenRequest)
-        : Promise<IssueTokenSuccessResponse | IssueTokenFailResponse | null> => {
+        : Promise<IssueTokenSuccessResponse | null> => {
         const { data } =
-            await axiosInstance.post<IssueTokenSuccessResponse | IssueTokenFailResponse>('/api/accounts/issue-token/',
+            await axiosInstance.post<IssueTokenSuccessResponse | FailResponse>('/api/accounts/issue-token/',
                 memberInfo
             );
 
@@ -42,9 +43,9 @@ export const memberApi = {
             return null;
         }
     },
-    activateAccount: async (id: number): Promise<ActivateAccountData | string | null> => {
+    activateAccount: async (id: number): Promise<ActivateAccountData | null> => {
         const { data } =
-            await axiosInstance.patch<ActivateAccountSuccessResponse | ActivateAccountFailResponse>
+            await axiosInstance.patch<ActivateAccountSuccessResponse | FailResponse>
                 (`/api/accounts/${id}/activate_account/`);
 
         if (data.status === "SUCCESS") {
@@ -55,9 +56,9 @@ export const memberApi = {
         }
     },
     // 내 정보 변경
-    updateInfo: async (updateInfo: UpdateInfoRequest): Promise<UpdateInfoSuccessResponse | UpdateInfoFailResponse> => {
+    updateInfo: async (updateInfo: UpdateInfoRequest): Promise<UpdateInfoSuccessResponse | FailResponse> => {
         const { data } =
-            await axiosInstance.patch<UpdateInfoSuccessResponse | UpdateInfoFailResponse>('/api/accounts/me/update/',
+            await axiosInstance.patch<UpdateInfoSuccessResponse | FailResponse>('/api/accounts/me/update/',
                 updateInfo
             );
         return data;

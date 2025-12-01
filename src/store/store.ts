@@ -11,7 +11,7 @@ export const useMemberStore = create<MemberStore>()(
             username: 'username',
             setUsername: (newState) => set({ username: newState }),
             role: 'user',
-            isLogin: false,
+            isLogin: true,
             setIsLogin: (state) => set({ isLogin: state }),
         }),
         {

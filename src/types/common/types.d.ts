@@ -38,3 +38,11 @@ export interface ProductionHistoryResponse {
         results: ProductionHistoryItem[];
     }
 }
+// ----------
+// API 공통 실패 응답
+export interface FailResponse {
+    status: "FAIL";
+    data: {
+        message: string;
+    };
+}

@@ -31,13 +31,6 @@ export interface ViewMemberInfoSuccessResponse {
     status: "SUCCESS";
     data: MemberData;
 }
-
-export interface ViewMemberInfoFailResponse {
-    status: "FAIL";
-    data: {
-        message: string;
-    };
-}
 // API: Account - 토큰 발급
 export interface IssueTokenRequest {
     username: string;
@@ -49,13 +42,6 @@ export interface IssueTokenSuccessResponse {
     data: {
         username: string;
         token: string;
-    };
-}
-
-export interface IssueTokenFailResponse {
-    status: "FAIL";
-    data: {
-        message: string;
     };
 }
 // API: Account - 계정 생성(회원가입)
@@ -83,13 +69,6 @@ export interface ActivateAccountSuccessResponse {
     status: "SUCCESS";
     data: ActivateAccountData
 }
-
-export interface ActivateAccountFailResponse {
-    status: "FAIL";
-    data: {
-        message: string;
-    };
-}
 // API: Account - 내 정보 변경
 export interface UpdateInfoRequest {
     password?: string;
@@ -110,13 +89,6 @@ export interface UpdateInfoRequest {
 export interface UpdateInfoSuccessResponse {
     status: "SUCCESS";
     data: string;
-}
-
-export interface UpdateInfoFailResponse {
-    status: "FAIL";
-    data: {
-        message: string;
-    };
 }
 // API: Account - 내 계정 삭제
 export interface DeactivateInfoResponse {

@@ -6,26 +6,6 @@ export interface SortConfigStore {
 }
 
 /* API */
-// API: 비정상 생산 이력 조회 - 개별 아이템
-export interface ProcessDataItem {
-    id: number;
-    production_line: string;
-    mold_no: string;
-    defective_count: number;
-    normal_count: number;
-    defect_rate: number;
-    created_at: string;
-}
-// API: 비정상 생산 이력 조회
-export interface DailyAbnormalRollResponse {
-    status: "SUCCESS" | "FAIL";
-    data: {
-        count: number;
-        next: string | null; // "/api/productions/..."
-        previous: string | null; // "/api/productions/..."
-        result: ProcessDataItem[];
-    }
-}
 // 생산 현황 히스토리 기간 조건
 export type PeriodType = 'daily' | 'weekly' | 'monthly' | 'annually';
 
@@ -129,8 +109,7 @@ export interface ProductionItemNameResponse {
     }
 }
 // ----------
-// API: 생산 이력 상세 조회
-// 생산 이력 단건
+// API: 생산 이력 상세 조회 (단건)
 interface DatasetItem {
     id: string;
     dataset_id: string;
@@ -160,6 +139,7 @@ export interface ProductionHistoryEachItem_A {
     defective_count: number;
     defect_rate: number;
     created_at: string; // 생산 일자
+    datasets: DatasetItem[];
     inspection_parameters: {
         head: {
             min: number;
@@ -179,7 +159,6 @@ export interface ProductionHistoryEachItem_A {
         };
     };
     is_abnormal: boolean; // 불량 여부
-    datasets: DatasetItem[];
 }
 
 export interface ProductionHistoryEachItemRequest_A {
@@ -194,7 +173,7 @@ export interface ProductionHistoryEachItemData_A {
 }
 
 export interface ProductionHistoryEachItemResponse_A {
-    status: "SUCCESS" | "FAIL";
+    status: "SUCCESS";
     data: ProductionHistoryEachItemData_A;
 }
 // ----------
@@ -216,7 +195,43 @@ export interface ViewDailyAbnormalRollData {
     results: ViewDailyAbnormalRollData[];
 }
 
-export interface viewDailyAbnormalRollResponse {
-    status: "SUCCESS" | "FAIL";
+export interface ViewDailyAbnormalRollSuccessResponse {
+    status: "SUCCESS";
     data: ViewDailyAbnormalRollData;
 }
+// ----------
+// API: 생산 품목 이름 리스트 조회
+export interface ViewProductionHistoryNamesData {
+    items: string[];
+    total: number;
+}
+
+export interface ViewProductionHistoryNamesSuccessResponse {
+    status: "SUCCESS";
+    data: ViewProductionHistoryNamesData;
+}
+// ----------
+// API: 데이터 업로드
+export interface UploadDataRequest {
+    production_name: string;
+    folder_name?: string;
+    files: string[];
+    is_folder_upload: boolean;
+}
+
+export interface UploadDataItem {
+    id: number;
+    production_name: string;
+    is_uploaded: string; // file_name.png or folder_name
+    file_count: number;
+    saved_files: string[];
+    status: "collecting" | "classifying" | "completed" | "error";
+}
+
+export interface UploadDataSuccessResponse {
+    status: "SUCCESS";
+    data: UploadDataItem;
+}
+// ----------
+// API: 생산 이력 상세 조회
+export interface ProductionHistory

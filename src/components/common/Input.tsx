@@ -6,7 +6,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isCorrect: boolean;
 }
 
-export default function Input({ label, isCorrect, className = "", type = "text", ...props }: InputProps) {
+export default function Input({ label, isCorrect = true, className = "", type = "text", ...props }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type === "password";
@@ -26,7 +26,8 @@ export default function Input({ label, isCorrect, className = "", type = "text",
 
       <div className="relative flex-1 w-[440px]">
         <input
-          className={`flex-1 w-full h-[70px] rounded-[30px] border-4 bg-white px-6 text-medium-gray text-xl outline-none focus:border-medium-gray transition-colors ${isCorrect ? 'border-light-gray' : 'border-point-red'} ${className}`}
+          className={`flex-1 w-full h-[70px] rounded-[30px] border-4 bg-white px-6 text-medium-gray text-xl outline-none focus:border-medium-gray transition-colors 
+            ${isCorrect ? 'border-light-gray' : 'border-point-red'} ${className}`}
           type={inputType}
           {...props}
         />
