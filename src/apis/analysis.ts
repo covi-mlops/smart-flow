@@ -1,4 +1,4 @@
-import { ViewDailyAbnormalRollSuccessResponse, ViewProductionHistoryNamesSuccessResponse, UploadDataRequest, UploadDataSuccessResponse, ProductionHistoryEachItem_A } from "@/types/analysis/types";
+import { ViewDailyAbnormalRollSuccessResponse, ViewProductionHistoryNamesSuccessResponse, UploadDataRequest, UploadDataSuccessResponse, ProductionHistoryEachItemResponse_A, ProductionLineListResponse, ProductionLineNameResponse, ProductionHistoryResponse, ViewUploadedHistoriesResponse, ProductionLineStatisticsResponse, PeriodType, DeleteProductionHistoriesRequest, DeleteProductionHistoriesResponse } from "@/types/analysis/types";
 import axiosInstance from "./axiosInstance";
 import { FailResponse } from "@/types/common/types";
 
@@ -39,32 +39,122 @@ export const analysisApi = {
         if (data.status === "SUCCESS") {
             return data;
         } else {
-            console.log('checkProductionHistoryNames api fail', data.data.message);
+            console.log('uploadData api fail', data.data.message);
             return null;
         }
     },
     // 생산 이력 상세 조회
-    // 여기부터 다시 하세요 !!!!!!!!!!!!!!!!!!!!!!
     viewProductionHistoryItem: async (
         id: number,
-        classification_result?: string,
-        page?: number,
-        page_size?: number,
-        refined?: string,
-    ) => {
-        const { data } = await axiosInstance.get<ProductionHistoryEachItem_A | null>
-            (`/api/productions/production-histories/${id}/?page=${page}&page_size=${page_size}&refined=${refined}&`)
+        classification_result: string | null = null,
+        page: number = 1,
+        page_size: number = 10,
+        refined: boolean | null = null,
+    ): Promise<ProductionHistoryEachItemResponse_A | null> => {
+        const { data } = await axiosInstance.get<ProductionHistoryEachItemResponse_A | FailResponse>
+            (`/api/productions/production-histories/${id}/?classification_result=${classification_result}&page=${page}&page_size=${page_size}&refined=${refined}`);
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewProductionHistoryItem api fail', data.data.message);
+            return null;
+        }
     },
     // 생산 라인 목록 조회
-    viewProductionLineList: async () => { },
+    viewProductionLineList: async (): Promise<ProductionLineListResponse | null> => {
+        const { data } = await axiosInstance.get<ProductionLineListResponse | FailResponse>
+            ('/api/productions/production-lines/');
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewProductionLineList api fail', data.data.message);
+            return null;
+        }
+    },
     // 생산 라인 이름 조회
-    viewProductionLineName: async () => { },
+    viewProductionLineName: async (): Promise<ProductionLineNameResponse | null> => {
+        const { data } = await axiosInstance.get<ProductionLineNameResponse | FailResponse>
+            ('/api/productions/production-lines/names/');
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewProductionLineName api fail', data.data.message);
+            return null;
+        }
+    },
     // 생산 이력 조회
-    viewProductionHistories: async () => { },
+    viewProductionHistories: async (
+        applied_model: string | null = null,
+        start_created_at: string | null = null,
+        end_created_at: string | null = null,
+        is_abnormal: boolean | null = null,
+        page: number = 1,
+        page_size: number = 10,
+        production_line: string | null = null,
+        production_name: string | null = null,
+    ): Promise<ProductionHistoryResponse | null> => {
+        const { data } = await axiosInstance.get<ProductionHistoryResponse | FailResponse>
+            (`/api/productions/production-lines/production-histories/
+                ?applied_model=${applied_model}&start_created_at=${start_created_at}&end_created_at=${end_created_at}
+                &is_abnormal=${is_abnormal}&page=${page}&page_size=${page_size}&production_line=${production_line}
+                &production_name=${production_name}`);
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewProductionHistories api fail', data.data.message);
+            return null;
+        }
+    },
     // 업로드 이력 조회
-    viewUploadHistories: async () => { },
+    viewUploadHistories: async (
+        page: number = 1,
+        page_size: number = 10,
+    ): Promise<ViewUploadedHistoriesResponse | null> => {
+        const { data } = await axiosInstance.get<ViewUploadedHistoriesResponse | FailResponse>
+            (`/api/productions/production-lines/production-histories/uploaded/?page=${page}&page_size=${page_size}`);
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewUploadHistories api fail', data.data.message);
+            return null;
+        }
+    },
     // 생산 라인별 통계
-    viewProductionLineSummary: async () => { },
+    viewProductionLineSummary: async (
+        date: string,
+        period: PeriodType,
+    ): Promise<ProductionLineStatisticsResponse | null> => {
+        const { data } = await axiosInstance.get<ProductionLineStatisticsResponse | FailResponse>
+            (`/api/productions/production-lines/summary/?date=${date}&period=${period}`);
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewProductionLineSummary api fail', data.data.message);
+            return null;
+        }
+    },
     // 생산 이력 삭제
-    deleteProductionHistories: async () => { },
+    deleteProductionHistories: async (
+        ids: DeleteProductionHistoriesRequest
+    ): Promise<string | null> => {
+        const { data } = await axiosInstance.delete<DeleteProductionHistoriesResponse | FailResponse>(
+            '/api/productions/production-histories/delete/',
+            {
+                data: ids
+            }
+        );
+
+        if (data.status === "SUCCESS") {
+            return data.data; // "" 예정
+        } else {
+            console.log('deleteProductionHistories api fail', data.data.message);
+            return null;
+        }
+    },
 }

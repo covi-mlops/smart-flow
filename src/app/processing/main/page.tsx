@@ -11,7 +11,7 @@ import type {
     ExceptionDataPoint,
     InspectionDataPoint,
 } from "@/types/processing/types";
-import { ProductionLines } from "@/components/processing/main/ProductionLines";
+import { ProductionLines } from "@/components/common/ProductionLines";
 
 export default function MainPage() {
     // TODO: 생산일자 별 데이터 검수 현황 그래프 시작/종료일자 연동

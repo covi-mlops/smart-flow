@@ -1,13 +1,37 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "../common/Pagination";
-import { MOCK_DATA } from "@/mock/processing/mock";
+import { analysisApi } from "@/apis/analysis";
+import { ViewDailyAbnormalRollData } from "@/types/analysis/types";
+import { formatDate } from "@/utils/formatDate";
 
 export default function DailyErrorTable() {
-  const [itemsPerPage, setItemsPerPage] = useState<string>('3');
+  const [itemsPerPage, setItemsPerPage] = useState<number>(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentTab, setCurrentTab] = useState(1);
+  const [data, setData] = useState<ViewDailyAbnormalRollData>({
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  });
+
+  const handleData = async () => {
+    try {
+      const response = await analysisApi.checkAiModelList(currentPage, itemsPerPage);
+
+      if (response !== null && response.status === "SUCCESS") {
+        setData(response.data);
+      }
+    } catch (error) {
+      console.error('handleData error', error);
+    }
+  };
+
+  useEffect(() => {
+    handleData();
+  }, [currentPage, currentTab, itemsPerPage]);
 
   return (
     <div className="border-4 border-light-gray p-6 bg-white">
@@ -28,26 +52,22 @@ export default function DailyErrorTable() {
 
             <tbody>
               {
-                MOCK_DATA.length !== 0 ? (
-                  MOCK_DATA.slice(
-                    (currentPage - 1) * Number(itemsPerPage),
-                    currentPage * Number(itemsPerPage)
-                  ).map((item) => (
+                data.count > 0 ? (
+                  data.results.map((item) => (
                     <tr
                       key={item.id}
                       className="h-[73px] text-base border-b border-light-gray text-center"
                     >
                       <td className="py-3 whitespace-pre-line">
-                        {item.created_at}
+                        {formatDate(item.created_at)}
                       </td>
                       <td className="py-3 whitespace-pre-line">
-                        {item.production_line.name}
+                        {item.production_line}
                       </td>
                       <td className="py-3">{item.mold_no}</td>
                       <td className="py-3">
-                        {item.defect_rate}%<br />(
-                        {item.defective_count}/
-                        {item.defective_count + item.normal_count})
+                        {item.defect_rate.toFixed(0)}%<br />(
+                        {item.defective_count}/{item.defective_count + item.normal_count})
                       </td>
                     </tr>
                   ))
@@ -64,10 +84,11 @@ export default function DailyErrorTable() {
               }
 
               {
+                data &&
                 Array.from({
                   length: Math.max(
                     0,
-                    Number(itemsPerPage) - MOCK_DATA.slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage)).length
+                    Number(itemsPerPage) - data.results.length
                   )
                 }).map((_, i) => (
                   <tr key={`empty-${i}`} className="h-[73px] border-b border-light-gray">
@@ -79,14 +100,17 @@ export default function DailyErrorTable() {
           </table>
         </div>
 
-        <Pagination
-          total={MOCK_DATA.length}
-          page={currentPage}
-          limit={Number(itemsPerPage)}
-          tab={currentTab}
-          setPage={setCurrentPage}
-          setTab={setCurrentTab}
-        />
+        {
+          data
+          && <Pagination
+            total={data.count}
+            page={currentPage}
+            limit={Number(itemsPerPage)}
+            tab={currentTab}
+            setPage={setCurrentPage}
+            setTab={setCurrentTab}
+          />
+        }
       </div>
     </div>
   );

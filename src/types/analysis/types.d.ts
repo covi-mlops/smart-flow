@@ -5,6 +5,11 @@ export interface SortConfigStore {
     setAsc: () => void;
 }
 
+export interface LineListStore {
+    lineList: ProductionLineListItem[];
+    setLineList: (newLineList: ProductionLineListItem[]) => void,
+}
+
 /* API */
 // 생산 현황 히스토리 기간 조건
 export type PeriodType = 'daily' | 'weekly' | 'monthly' | 'annually';
@@ -32,7 +37,7 @@ export interface DateRange {
 }
 // 개별 통계 데이터
 interface StatisticsItem {
-    // label: "2025-11-11 10:00" | "2025-11-15" | "2025-11-15" | "2024-11"
+    // label: "00" | "2025-11-15" | "2025-11-15" | "2024-11"
     label: string;
     total: number;
     normal: number;
@@ -66,8 +71,8 @@ interface Items {
     production_name: string;
     total: number;
 }
-// API: 라인 생산 통계 - 개별 데이터
-export interface LineProductionStatisticsData {
+// API: 생산 라인별 통계
+export interface ProductionLineStatisticsData {
     branch: {
         id: number;
         name: string;
@@ -80,20 +85,15 @@ export interface LineProductionStatisticsData {
     items: Items[];
     total: number;
 }
-// API: 라인 생산 통계
-export interface LineProductionStatisticsRequest {
-    date: string; // 2025-11-24
-    period: string; // daily, weekly, monthly, annually
-}
 
-export interface LineProductionStatisticsResponse {
-    status: "SUCCESS" | "FAIL";
-    data: LineProductionStatisticsData;
+export interface ProductionLineStatisticsResponse {
+    status: "SUCCESS";
+    data: ProductionLineStatisticsData;
 }
 // ----------
 // API: 생산 라인 이름 조회
 export interface ProductionLineNameResponse {
-    status: "SUCCESS" | "FAIL";
+    status: "SUCCESS";
     data: {
         items: string[];
         total: number;
@@ -101,8 +101,8 @@ export interface ProductionLineNameResponse {
 }
 // ----------
 // API: 생산 품목 리스트 조회
-export interface ProductionItemNameResponse {
-    status: "SUCCESS" | "FAIL";
+export interface ProductionItemListResponse {
+    status: "SUCCESS";
     data: {
         items: string[];
         total: number;
@@ -161,10 +161,6 @@ export interface ProductionHistoryEachItem_A {
     is_abnormal: boolean; // 불량 여부
 }
 
-export interface ProductionHistoryEachItemRequest_A {
-    id: number;
-}
-
 export interface ProductionHistoryEachItemData_A {
     count: number;
     next: string | null;
@@ -192,7 +188,7 @@ export interface ViewDailyAbnormalRollData {
     count: number;
     next: string | null;
     previous: string | null;
-    results: ViewDailyAbnormalRollData[];
+    results: ViewDailyAbnormalRollResult[];
 }
 
 export interface ViewDailyAbnormalRollSuccessResponse {
@@ -233,5 +229,89 @@ export interface UploadDataSuccessResponse {
     data: UploadDataItem;
 }
 // ----------
-// API: 생산 이력 상세 조회
-export interface ProductionHistory
+// API: 업로드 이력 조회
+export interface UploadedHistoryResult {
+    id: number;
+    production_name: string;
+    is_uploaded: string; // file_name or folder_name
+    file_count: number;
+    created_at: string;
+}
+
+export interface UploadedHistoryData {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: UploadedHistoryResult[];
+}
+
+export interface ViewUploadedHistoriesResponse {
+    status: "SUCCESS";
+    data: UploadedHistoryData;
+}
+// ----------
+// API: 생산 라인 목록 조회
+export interface ProductionLineListItem {
+    id: number;
+    branch: number; // 사업소 id
+    name: string; // 생산라인 이름
+    status: "activated" | "maintenance" | "stop";
+    latest_history: {
+        id: number;
+        status: "collecting" | "classifying" | "completed" | "stop";
+        production_name: string; // 생산품명
+        created_at: string; // 생산 날짜
+        total_count: number;
+        normal_count: number;
+        defective_count: number;
+    } | null;
+}
+
+export interface ProductionLineListResponse {
+    status: "SUCCESS";
+    data: {
+        items: ProductionLineListItem[];
+        total: number;
+    };
+}
+// ----------
+// API: 생산 이력 조회
+export interface ProductionHistoryResult {
+    id: number;
+    production_name: string;
+    mold_no: string;
+    production_line: {
+        id: number;
+        name: string;
+    };
+    applied_model: string | null;
+    total_count: number;
+    normal_count: number;
+    defective_count: number;
+    defect_rate: number;
+    is_abnormal: boolean;
+    status: "collecting" | "classifying" | "completed" | "error";
+    created_at: string;
+}
+
+export interface ProductionHistoryData {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: ProductionHistoryResult[];
+}
+
+export interface ProductionHistoryResponse {
+    status: "SUCCESS";
+    data: ProductionHistoryData;
+}
+// ----------
+// API: 생산 이력 삭제
+export interface DeleteProductionHistoriesRequest {
+    ids: number[];
+}
+
+export interface DeleteProductionHistoriesResponse {
+    status: "SUCCESS";
+    data: string; // "" 예정
+}

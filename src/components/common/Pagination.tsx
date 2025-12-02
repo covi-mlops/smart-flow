@@ -8,7 +8,7 @@ interface PaginationProps {
     limit: number;
     tab: number;
     setPage: Dispatch<React.SetStateAction<number>>;
-    setTab: Dispatch<React.SetStateAction<number>>
+    setTab: Dispatch<React.SetStateAction<number>>;
 }
 
 export default function Pagination({
@@ -17,7 +17,7 @@ export default function Pagination({
     limit,
     tab,
     setPage,
-    setTab
+    setTab,
 }: PaginationProps) {
     const pageNum = Math.ceil(total / limit);
     const tabNum = Math.ceil(total / (limit * 10));

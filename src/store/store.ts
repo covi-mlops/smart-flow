@@ -1,4 +1,4 @@
-import { SortConfigStore } from '@/types/analysis/types';
+import { LineListStore, SortConfigStore } from '@/types/analysis/types';
 import { MemberStore } from '@/types/member/types';
 import { ModalStore } from '@/types/modal/types';
 import { create } from 'zustand';
@@ -58,7 +58,13 @@ export const useSuccessChangeStandardStore = create<ModalStore>((set) => ({
 }))
 
 /* 분석 플랫폼 */
-// 인공지능 페이지
+// 메인 페이지
+// - 생산라인 가동 현황
+export const useProductionLineStore = create<LineListStore>((set) => ({
+    lineList: [],
+    setLineList: (newLineList) => set({ lineList: newLineList }),
+}))
+// 인공지능 분석 페이지
 export const useSortConfigStore = create<SortConfigStore>((set) => ({
     isDesc: true,
     setDesc: () => set({ isDesc: true }),

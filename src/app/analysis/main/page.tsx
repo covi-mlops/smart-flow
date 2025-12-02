@@ -2,7 +2,7 @@ import DailyErrorTable from "@/components/analysis/DailyErrorTable";
 import { DailyRollRateChart } from "@/components/analysis/DailyRollRateChart";
 import ProductionHistory from "@/components/analysis/ProductionHistory";
 import Layout from "@/components/layout/Layout";
-import { ProductionLines } from "@/components/processing/main/ProductionLines";
+import { ProductionLines } from "@/components/common/ProductionLines";
 import { DailyRollCostPoint } from "@/types/analysis/types";
 
 export default function MainPage() {
