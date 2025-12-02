@@ -1,4 +1,4 @@
-import { LineListStore, SortConfigStore } from '@/types/analysis/types';
+import { UploadedListStore, LineListStore, SortConfigStore } from '@/types/analysis/types';
 import { MemberStore } from '@/types/member/types';
 import { ModalStore } from '@/types/modal/types';
 import { create } from 'zustand';
@@ -58,11 +58,19 @@ export const useSuccessChangeStandardStore = create<ModalStore>((set) => ({
 }))
 
 /* 분석 플랫폼 */
-// 메인 페이지
+// 메인 탭
 // - 생산라인 가동 현황
 export const useProductionLineStore = create<LineListStore>((set) => ({
     lineList: [],
     setLineList: (newLineList) => set({ lineList: newLineList }),
+}))
+// 데이터 업로드 탭
+// - 업로드 이력
+export const useUploadedDataStore = create<UploadedListStore>((set) => ({
+    uploadedData: null,
+    setUploadedData: (newList) => set({ uploadedData: newList }),
+    uploadedDataLength: 0,
+    setUploadedDataLength: (length) => set({ uploadedDataLength: length }),
 }))
 // 인공지능 분석 페이지
 export const useSortConfigStore = create<SortConfigStore>((set) => ({
@@ -72,7 +80,8 @@ export const useSortConfigStore = create<SortConfigStore>((set) => ({
 }))
 
 /* 가공 플랫폼 */
-// 데이터 가공 - 결과 상세 조회 페이지
+// 데이터 가공 탭
+// - 결과 상세 조회 페이지
 interface SelectedImageStore {
     selectedImageId: string;
     setSelectedImageId: (id: string) => void;

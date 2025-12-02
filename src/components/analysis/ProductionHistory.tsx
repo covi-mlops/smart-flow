@@ -27,7 +27,7 @@ export default function ProductionHistory() {
     const [period, setPeriod] = useState<PeriodType>('daily');
     const [currentPage, setCurrentPage] = useState(1);
     const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]);
-    const [endDate, setEndDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
     const [itemStatisticsData, setItemStatisticsData] = useState<ProductionNameItem[]>([{
         production_name: '',

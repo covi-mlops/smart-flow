@@ -1,4 +1,4 @@
-import { ViewDailyAbnormalRollSuccessResponse, ViewProductionHistoryNamesSuccessResponse, UploadDataRequest, UploadDataSuccessResponse, ProductionHistoryEachItemResponse_A, ProductionLineListResponse, ProductionLineNameResponse, ProductionHistoryResponse, ViewUploadedHistoriesResponse, ProductionLineStatisticsResponse, PeriodType, DeleteProductionHistoriesRequest, DeleteProductionHistoriesResponse } from "@/types/analysis/types";
+import { ViewDailyAbnormalRollSuccessResponse, ViewProductionHistoryNamesSuccessResponse, UploadDataRequest, UploadDataSuccessResponse, ProductionHistoryEachItemResponse_A, ProductionLineListResponse, ProductionLineNameResponse, ProductionHistoryResponse, ViewUploadedHistoriesResponse, ProductionLineStatisticsResponse, PeriodType, DeleteProductionHistoriesRequest, DeleteProductionHistoriesResponse, ViewDailyNormalDefectRatioResponse } from "@/types/analysis/types";
 import axiosInstance from "./axiosInstance";
 import { FailResponse } from "@/types/common/types";
 
@@ -16,6 +16,20 @@ export const analysisApi = {
             return data;
         } else {
             console.log('checkAiModelList api fail', data.data.message);
+            return null;
+        }
+    },
+    // 일일 양불 비율 조회
+    checkDailyNormalDefectRatio: async (
+        date: string,
+    ) => {
+        const { data } = await axiosInstance.get<ViewDailyNormalDefectRatioResponse | FailResponse>
+            (`/api/productions/production-histories/daily-normal-defect-ratio-by-branch/?${date}`);
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('checkDailyNormalDefectRatio api fail', data.data.message);
             return null;
         }
     },

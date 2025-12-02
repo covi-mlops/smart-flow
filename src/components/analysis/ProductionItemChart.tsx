@@ -140,21 +140,29 @@ export default function ProductionItemChart({
                             fontSize="11"
                             fill="#9ca3af"
                         >
-                            {label.length > 10 ? label.slice(5) : label}
+                            {label.length >= 10 ? label.slice(5) : label}
                         </text>
                     ))
                 }
             </svg>
 
-            <div className="flex justify-center gap-4 mt-4 text-sm max-w-[800px]">
+            <div className="flex flex-col gap-2 mt-4 text-sm max-w-[800px]">
                 {
-                    data.map((line, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                            <div
-                                className="w-3 h-3"
-                                style={{ backgroundColor: COLORS[idx % COLORS.length] }}
-                            />
-                            <span>{line.production_name}</span>
+                    Array.from({ length: Math.ceil(data.length / 5) }).map((_, rowIdx) =>
+                    (
+                        <div key={rowIdx} className="flex justify-center gap-4">
+                            {
+                                data.slice(rowIdx * 5, rowIdx * 5 + 5)
+                                    .map((line, idx) => (
+                                        <div key={idx} className="flex items-center gap-2">
+                                            <div
+                                                className="w-3 h-3"
+                                                style={{ backgroundColor: COLORS[(rowIdx * 5 + idx) % COLORS.length] }}
+                                            />
+                                            <span>{line.production_name}</span>
+                                        </div>
+                                    ))
+                            }
                         </div>
                     ))
                 }

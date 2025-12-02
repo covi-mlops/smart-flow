@@ -1,23 +1,34 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-import { UploadedDataItem } from "@/types/analysis/upload";
 import Pagination from "@/components/common/Pagination";
 import { BsFillFolderFill, BsImages } from "react-icons/bs";
+import { analysisApi } from "@/apis/analysis";
+import { formatDate } from "@/utils/formatDate";
+import { useUploadedDataStore } from "@/store/store";
 
-interface UploadDataTableProps {
-    data: UploadedDataItem[];
-}
-
-export default function UploadDataTable({ data }: UploadDataTableProps) {
+export default function UploadDataTable() {
     const [page, setPage] = useState(1);
     const [tab, setTab] = useState(1);
     const limit = 5;
 
-    const paginatedData = useMemo(() => {
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
-        return data.slice(startIndex, endIndex);
-    }, [data, page, limit]);
+    const { uploadedData, setUploadedData, setUploadedDataLength } = useUploadedDataStore();
+
+    const handleUploadedData = useCallback(async () => {
+        try {
+            const response = await analysisApi.viewUploadHistories(page, limit);
+
+            if (response && response.status === "SUCCESS") {
+                setUploadedData(response.data);
+                setUploadedDataLength(response.data.count);
+            }
+        } catch (error) {
+            console.error('handleUploadedData error', error);
+        }
+    }, [page, limit]);
+
+    useEffect(() => {
+        handleUploadedData();
+    }, [page, tab, limit]);
 
     return (
         <div>
@@ -41,20 +52,20 @@ export default function UploadDataTable({ data }: UploadDataTableProps) {
                     </thead>
                     <tbody className="">
                         {
-                            paginatedData.length === 0 ? (
+                            !uploadedData || uploadedData.count === 0 ? (
                                 <tr className="border-b border-light-gray">
                                     <td colSpan={4} className="py-[205px] text-center text-medium-gray text-lg">
                                         업로드된 데이터가 없습니다.
                                     </td>
                                 </tr>
                             ) : (
-                                paginatedData.map((item, idx) => (
+                                uploadedData.results.map((item, idx) => (
                                     <tr key={idx} className="h-[82px] border-b border-light-gray text-center text-medium-gray">
                                         <td className="py-4 px-4">
                                             {(tab - 1) + (page - 1) * limit + idx + 1}
                                         </td>
                                         <td className="py-4 px-4">
-                                            {item.created_at}
+                                            {formatDate(item.created_at)}
                                         </td>
                                         <td className="py-4 px-4">
                                             {item.production_name}
@@ -75,10 +86,11 @@ export default function UploadDataTable({ data }: UploadDataTableProps) {
                         }
 
                         {
-                            Array.from({
+                            uploadedData && uploadedData.results.length > 0
+                            && Array.from({
                                 length: Math.max(
                                     0,
-                                    Number(limit) - data.slice((page - 1) * Number(limit), page * Number(limit)).length
+                                    Number(limit) - uploadedData.results.length
                                 )
                             }).map((_, i) => (
                                 <tr key={`empty-${i}`} className="h-[82px] border-b border-light-gray">
@@ -91,9 +103,9 @@ export default function UploadDataTable({ data }: UploadDataTableProps) {
             </div>
 
             {
-                data.length > 0 && (
+                uploadedData && uploadedData.results.length > 0 && (
                     <Pagination
-                        total={data.length}
+                        total={uploadedData.count}
                         page={page}
                         limit={limit}
                         tab={tab}

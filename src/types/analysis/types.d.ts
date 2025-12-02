@@ -10,6 +10,13 @@ export interface LineListStore {
     setLineList: (newLineList: ProductionLineListItem[]) => void,
 }
 
+export interface UploadedListStore {
+    uploadedData: UploadedHistoryData | null;
+    setUploadedData: (newList: UploadedHistoryData) => void;
+    uploadedDataLength: number;
+    setUploadedDataLength: (length: number) => void;
+}
+
 /* API */
 // 생산 현황 히스토리 기간 조건
 export type PeriodType = 'daily' | 'weekly' | 'monthly' | 'annually';
@@ -194,6 +201,23 @@ export interface ViewDailyAbnormalRollData {
 export interface ViewDailyAbnormalRollSuccessResponse {
     status: "SUCCESS";
     data: ViewDailyAbnormalRollData;
+}
+// ----------
+// API: 일일 양불 비율 조회
+export interface ViewDailyNormalDefectRatioLines {
+    line_id: number;
+    line_name: string;
+    normal_count: number;
+    defective_count: number;
+    total_count: number;
+    defect_rate: number;
+}
+
+export interface ViewDailyNormalDefectRatioResponse {
+    status: "SUCCESS";
+    data: {
+        lines: ViewDailyNormalDefectRatioLines[];
+    };
 }
 // ----------
 // API: 생산 품목 이름 리스트 조회

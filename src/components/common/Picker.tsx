@@ -2,11 +2,6 @@
 
 import { lazy, Suspense, useRef, useState, useEffect } from "react"
 
-interface PickerOption {
-    label: string;
-    value: string;
-}
-
 interface PickerProps {
     value: string;
     title: string;
@@ -14,7 +9,7 @@ interface PickerProps {
     borderColor?: string;
     className?: string;
     onChange: (value: string) => void;
-    options?: PickerOption[];
+    options?: string[];
 }
 
 const BiDown = lazy(() => import('react-icons/bi').then(module => ({
@@ -43,8 +38,8 @@ export function Picker({ value, title, type, borderColor = "light-gray", classNa
         if (type === "date") {
             return value;
         }
-        const selectedOption = options.find(opt => opt.value === value);
-        return selectedOption?.label || value;
+        const selectedOption = options.find(opt => opt === value);
+        return selectedOption || value;
     };
 
     useEffect(() => {
@@ -109,14 +104,14 @@ export function Picker({ value, title, type, borderColor = "light-gray", classNa
                         {
                             options.map((option) => (
                                 <div
-                                    key={option.value}
+                                    key={option}
                                     className="px-4 py-2 border border-hover:bg-light-gray/20 cursor-pointer text-sm"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleSelectOption(option.value);
+                                        handleSelectOption(option);
                                     }}
                                 >
-                                    {option.label}
+                                    {option}
                                 </div>
                             ))
                         }

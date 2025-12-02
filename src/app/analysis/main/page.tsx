@@ -20,7 +20,7 @@ export default function MainPage() {
             </div>
             <div className="flex flex-col flex-1 pt-[310px]">
                 <div className="grid grid-cols-2 p-6 gap-6">
-                    <DailyRollRateChart data={dailyData} />
+                    <DailyRollRateChart />
                     <DailyErrorTable />
                 </div>
 
