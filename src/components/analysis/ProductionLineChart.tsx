@@ -137,7 +137,7 @@ export default function ProductionLineChart({
                             x={getX(idx)}
                             y={chartHeight - paddingBottom + 20}
                             textAnchor="middle"
-                            fontSize="11"
+                            fontSize="10"
                             fill="#9ca3af"
                         >
                             {label.length >= 10 ? label.slice(5) : label}

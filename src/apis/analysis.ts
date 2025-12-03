@@ -126,10 +126,10 @@ export const analysisApi = {
         start_created_at: string | null = null,
         end_created_at: string | null = null,
         is_abnormal: boolean | null = null,
-        page: number = 1,
-        page_size: number = 10,
         production_line: string | null = null,
         production_name: string | null = null,
+        page: number = 1,
+        page_size: number = 10,
     ): Promise<ProductionHistoryResponse | null> => {
         const { data } = await axiosInstance.get<ProductionHistoryResponse | FailResponse>
             (`/api/productions/production-lines/production-histories/

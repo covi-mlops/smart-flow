@@ -16,7 +16,7 @@ export default function UploadPage() {
     const [isUploading, setIsUploading] = useState(false);
     const [modalType, setModalType] = useState<ModalType>(null);
     const [isNotify, setIsNotify] = useState<boolean>(false);
-    const [refreshKey, setRefreshKey] = useState(0); // 테이블 새로고침용
+    const [refreshKey, setRefreshKey] = useState(0); // 테이블 새로고침용 키
 
     const [options, setOptions] = useState<string[]>();
 

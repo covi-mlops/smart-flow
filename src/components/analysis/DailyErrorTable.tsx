@@ -7,7 +7,7 @@ import { ViewDailyAbnormalRollData } from "@/types/analysis/types";
 import { formatDate } from "@/utils/formatDate";
 
 export default function DailyErrorTable() {
-  const [itemsPerPage, setItemsPerPage] = useState<number>(3);
+  const itemsPerPage = 3;
   const [currentPage, setCurrentPage] = useState(1);
   const [currentTab, setCurrentTab] = useState(1);
   const [data, setData] = useState<ViewDailyAbnormalRollData>({
@@ -31,7 +31,7 @@ export default function DailyErrorTable() {
 
   useEffect(() => {
     handleData();
-  }, [currentPage, currentTab, itemsPerPage]);
+  }, [currentPage, currentTab]);
 
   return (
     <div className="border-4 border-light-gray p-6 bg-white">

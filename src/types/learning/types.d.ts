@@ -11,11 +11,11 @@ interface ResultsItem {
     id: number;
     server_type: string;
     status: "ready" | "processing" | "done";
-    dataset_count: number; // 데이터 수
     process_done_at: string | null; // 학습 완료 시각
     accuracy: number | null;
     loss: number | null;
     is_applied: boolean;
+    dataset_count: number; // 데이터 수
     trained_with: string[]; // 생산 이력 배열
 }
 
@@ -27,7 +27,7 @@ export interface AIModelListItem {
 }
 
 export interface AIModelListResponse {
-    status: "SUCCESS" | "FAIL";
+    status: "SUCCESS";
     data: AIModelListItem;
 }
 // ---------

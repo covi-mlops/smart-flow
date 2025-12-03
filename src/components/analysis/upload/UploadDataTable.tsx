@@ -9,7 +9,7 @@ import { useUploadedDataStore } from "@/store/store";
 export default function UploadDataTable() {
     const [page, setPage] = useState(1);
     const [tab, setTab] = useState(1);
-    const limit = 5;
+    const limit = 10;
 
     const { uploadedData, setUploadedData, setUploadedDataLength } = useUploadedDataStore();
 
@@ -28,7 +28,7 @@ export default function UploadDataTable() {
 
     useEffect(() => {
         handleUploadedData();
-    }, [page, tab, limit]);
+    }, [page, tab]);
 
     return (
         <div>

@@ -36,6 +36,6 @@ export interface FilterOptions {
     production_line: string;
     start_created_at: string;
     end_created_at: string;
-    is_abnormal: string;
+    is_abnormal: boolean | null;
     applied_model: string;
 }

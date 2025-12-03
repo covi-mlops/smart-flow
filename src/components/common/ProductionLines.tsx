@@ -32,7 +32,7 @@ export function ProductionLines() {
   const { lineList, setLineList } = useProductionLineStore();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(Math.max(1, Math.ceil(lineList.length / 2)));
+  const [totalPage, setTotalPage] = useState(1);
 
   const handleProductionLinelist = async () => {
     try {
@@ -40,6 +40,7 @@ export function ProductionLines() {
 
       if (response !== null && response.status === "SUCCESS") {
         setLineList(response.data.items);
+        setTotalPage(Math.max(1, Math.ceil(response.data.total / 2)));
       }
     } catch (error) {
       console.error('handleProductionLinelist error', error);

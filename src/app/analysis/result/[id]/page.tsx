@@ -7,14 +7,14 @@ import SemiHeader from "@/components/common/SemiHeader";
 import Layout from "@/components/layout/Layout";
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
-// import { DETAIL_MOCK_DATA } from "@/mock/analysis/mock";
 import { ProductionHistoryEachItem_A } from "@/types/analysis/types";
 import { useSelectedImageStore } from "@/store/store";
 import { MOCK_POLYGONS } from "@/mock/mock_polygons";
+import { analysisApi } from "@/apis/analysis";
 
 export default function AnalysisDataDetailPage() {
     const params = useParams();
-    const id = params.id;
+    const id = Number(params.id);
     const canvasRef = useRef<HTMLCanvasElement>(null); // 비트맵 이미지용 ref 객체
 
     const [data, setData] = useState<ProductionHistoryEachItem_A>();
@@ -25,26 +25,26 @@ export default function AnalysisDataDetailPage() {
     const { selectedImageId, setSelectedImageId } = useSelectedImageStore();
 
     const [filters, setFilters] = useState<{
-        inspectionResult: string,
-        isProcess: string,
+        classification_result: string,
+        refined: boolean | null,
         label: string
     }>({
-        inspectionResult: "전체",
-        isProcess: "전체",
+        classification_result: "전체",
+        refined: null,
         label: "Contact Pin",
     });
 
-    const inspectionResultOptions = [
-        { label: "전체", value: "전체" },
-        { label: "정상 데이터", value: "정상 데이터" },
-        { label: "분류 데이터", value: "분류 데이터" },
-        { label: "AI 예외 데이터", value: "AI 예외 데이터" },
+    const classificationResultOptions = [
+        { label: "전체", value: null },
+        { label: "정상 데이터", value: "정상" },
+        { label: "분류 데이터", value: "분류" },
+        { label: "AI 예외 데이터", value: "예외" },
     ];
 
-    const isProcessOptions = [
-        { label: "전체", value: "전체" },
-        { label: "O", value: "O" },
-        { label: "X", value: "X" },
+    const refinedOptions = [
+        { label: "전체", value: null },
+        { label: "O", value: "true" },
+        { label: "X", value: "false" },
     ];
 
     const handleFilterChange = (key: keyof { inspectionResult: string, isProcess: string, label: string }, value: string) => {
@@ -100,7 +100,22 @@ export default function AnalysisDataDetailPage() {
         image.src = `/assets/mock_data_images/${selectedImageId}.bmp`;
     };
 
+    const handleData = async () => {
+        try {
+            const response = await analysisApi.viewProductionHistoryItem(
+                id, filters.classification_result, currentPage, Number(itemsPerPage), filters.refined
+            );
+
+            if (response && response.status === "SUCCESS") {
+                setData(response.data.results);
+            }
+        } catch (error) {
+            console.log('handleData error', error);
+        }
+    };
+
     useEffect(() => {
+        handleData();
         // const selected_data = DETAIL_MOCK_DATA.filter((item) => item.id === Number(id) && item)
         // setData(selected_data[0]);
     }, []);
@@ -226,18 +241,18 @@ export default function AnalysisDataDetailPage() {
                                 <Picker
                                     type="select"
                                     title="AI 결과"
-                                    value={filters.inspectionResult}
+                                    value={filters.classification_result}
                                     onChange={(value) =>
                                         handleFilterChange("inspectionResult", value)
                                     }
-                                    options={inspectionResultOptions}
+                                    options={classificationResultOptions}
                                 />
                                 <Picker
                                     type="select"
                                     title="가공 여부"
-                                    value={filters.isProcess}
+                                    value={filters.refined === null ? "전체" : String(filters.refined)}
                                     onChange={(value) => handleFilterChange("isProcess", value)}
-                                    options={isProcessOptions}
+                                    options={refinedOptions}
                                 />
                             </div>
                         </div>

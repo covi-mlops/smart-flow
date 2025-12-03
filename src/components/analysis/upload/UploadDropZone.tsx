@@ -14,20 +14,21 @@ interface UploadDropZoneProps {
 export default function UploadDropZone(
     { selectedItem, isUploading, onUpload, onShowModal, onWarning }: UploadDropZoneProps
 ) {
-    const [isDragging, setIsDragging] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const folderInputRef = useRef<HTMLInputElement>(null);
+    const [isDragging, setIsDragging] = useState(false); // 드래그 중인지의 여부
+    const fileInputRef = useRef<HTMLInputElement>(null); // 파일 ref 객체
+    const folderInputRef = useRef<HTMLInputElement>(null); // 폴더 ref 객체
     // 이미지 파일 확장자 검증
     const validateFiles = (files: FileList | File[] | null): File[] | null => {
         if (!files || files.length === 0) return null;
 
-        const fileArray = Array.isArray(files) ? files : Array.from(files);
+        const fileArray = Array.isArray(files) ? files : Array.from(files); // 배열 처리
         const allTypeOk = fileArray.every(file =>
             file.type === 'image/png' ||
             file.type === "image/bmp" ||
             file.name.toLowerCase().endsWith('.png') ||
             file.name.toLowerCase().endsWith('.bmp')
         );
+
         if (!allTypeOk) {
             onShowModal('error-format');
             return null;
@@ -150,6 +151,7 @@ export default function UploadDropZone(
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = validateFiles(e.target.files);
+
         if (files) {
             onUpload(files, '');
         }

@@ -55,7 +55,7 @@ export default function ProductionItemChart({
     const yAxisLabels = [0, calculatedMaxValue / 2, calculatedMaxValue];
 
     return (
-        <div className="w-full min-w-[1600px] flex flex-col border-[2px] border-light-gray p-6 bg-white">
+        <div className="w-full flex flex-col border-[2px] border-light-gray p-6 bg-white">
             <h3 className="text-lg text-black font-bold mb-4">{title}</h3>
 
             <svg width={chartWidth} height={chartHeight} className="overflow-hidden">
@@ -137,7 +137,7 @@ export default function ProductionItemChart({
                             x={getX(idx)}
                             y={chartHeight - paddingBottom + 20}
                             textAnchor="middle"
-                            fontSize="11"
+                            fontSize="10"
                             fill="#9ca3af"
                         >
                             {label.length >= 10 ? label.slice(5) : label}

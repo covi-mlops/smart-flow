@@ -2,6 +2,11 @@
 
 import { lazy, Suspense, useRef, useState, useEffect } from "react"
 
+export interface OptionType {
+    label: string;
+    value: string | null;
+}
+
 interface PickerProps {
     value: string;
     title: string;
@@ -9,14 +14,22 @@ interface PickerProps {
     borderColor?: string;
     className?: string;
     onChange: (value: string) => void;
-    options?: string[];
+    options?: OptionType[];
 }
 
 const BiDown = lazy(() => import('react-icons/bi').then(module => ({
     default: module.BiChevronDown
 })));
 
-export function Picker({ value, title, type, borderColor = "light-gray", className = "", onChange, options = [] }: PickerProps) {
+export function Picker({
+    value,
+    title,
+    type,
+    borderColor = "light-gray",
+    className = "",
+    onChange,
+    options = []
+}: PickerProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +51,8 @@ export function Picker({ value, title, type, borderColor = "light-gray", classNa
         if (type === "date") {
             return value;
         }
-        const selectedOption = options.find(opt => opt === value);
-        return selectedOption || value;
+        const selectedOption = options.find(opt => opt.value === value);
+        return selectedOption?.value || value;
     };
 
     useEffect(() => {
@@ -104,14 +117,14 @@ export function Picker({ value, title, type, borderColor = "light-gray", classNa
                         {
                             options.map((option) => (
                                 <div
-                                    key={option}
+                                    key={option.value}
                                     className="px-4 py-2 border border-hover:bg-light-gray/20 cursor-pointer text-sm"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleSelectOption(option);
+                                        handleSelectOption(option.label);
                                     }}
                                 >
-                                    {option}
+                                    {option.label}
                                 </div>
                             ))
                         }
