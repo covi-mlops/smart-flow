@@ -125,17 +125,31 @@ export const analysisApi = {
         applied_model: string | null = null,
         start_created_at: string | null = null,
         end_created_at: string | null = null,
-        is_abnormal: boolean | null = null,
+        is_abnormal: string | null = null,
+        is_descending: boolean = true,
         production_line: string | null = null,
         production_name: string | null = null,
         page: number = 1,
         page_size: number = 10,
     ): Promise<ProductionHistoryResponse | null> => {
-        const { data } = await axiosInstance.get<ProductionHistoryResponse | FailResponse>
-            (`/api/productions/production-lines/production-histories/
-                ?applied_model=${applied_model}&start_created_at=${start_created_at}&end_created_at=${end_created_at}
-                &is_abnormal=${is_abnormal}&page=${page}&page_size=${page_size}&production_line=${production_line}
-                &production_name=${production_name}`);
+        const params: Record<string, any> = {
+            is_descending,
+            page,
+            page_size,
+        };
+        if (applied_model !== "전체") params.applied_model = applied_model;
+        if (start_created_at !== null) params.start_created_at = start_created_at;
+        if (end_created_at !== null) params.end_created_at = end_created_at;
+        if (is_abnormal !== "전체") {
+            params.is_abnormal = is_abnormal !== "true";
+        }
+        if (production_line !== "전체") params.production_line = production_line;
+        if (production_name !== "전체") params.production_name = production_name;
+
+        const { data } = await axiosInstance.get<ProductionHistoryResponse | FailResponse>(
+            `/api/productions/production-lines/production-histories/`,
+            { params }
+        );
 
         if (data.status === "SUCCESS") {
             return data;

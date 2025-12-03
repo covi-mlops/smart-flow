@@ -4,7 +4,7 @@ import { lazy, Suspense, useRef, useState, useEffect } from "react"
 
 export interface OptionType {
     label: string;
-    value: string | null;
+    value: string;
 }
 
 interface PickerProps {
@@ -52,7 +52,7 @@ export function Picker({
             return value;
         }
         const selectedOption = options.find(opt => opt.value === value);
-        return selectedOption?.value || value;
+        return selectedOption?.label || value;
     };
 
     useEffect(() => {
@@ -87,7 +87,7 @@ export function Picker({
 
             <div className="relative w-full" ref={dropdownRef}>
                 {
-                    type === "date" ? (
+                    type === "date" && value !== null ? (
                         <input
                             ref={inputRef}
                             type="date"
@@ -121,7 +121,7 @@ export function Picker({
                                     className="px-4 py-2 border border-hover:bg-light-gray/20 cursor-pointer text-sm"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleSelectOption(option.label);
+                                        handleSelectOption(option.value);
                                     }}
                                 >
                                     {option.label}

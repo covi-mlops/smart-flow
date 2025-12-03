@@ -12,6 +12,7 @@ import { useSortConfigStore } from "@/store/store";
 import { ProductionHistoryResult } from "@/types/analysis/types";
 import { analysisApi } from "@/apis/analysis";
 import { learningApi } from "@/apis/learning";
+import { formatDate } from "@/utils/formatDate";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
   default: module.HiArrowUp
@@ -27,20 +28,21 @@ const BiDown = lazy(() => import('react-icons/bi').then(module => ({
 
 export default function ResultPage() {
   const router = useRouter();
-  const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
+  // const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
 
   const { isDesc, setDesc, setAsc } = useSortConfigStore();
-
+  const todaysDate = new Date().toISOString().split('T')[0];
   const [filters, setFilters] = useState<FilterOptions>({
     production_name: "전체",
-    start_created_at: "2025-05-21",
-    end_created_at: "2025-05-21",
+    start_created_at: todaysDate,
+    end_created_at: todaysDate,
     production_line: "전체",
-    is_abnormal: null,
-    applied_model: "전체"
+    is_abnormal: "전체",
+    applied_model: "전체",
   });
   const modalRef = useRef<HTMLDivElement>(null);
   const [currentData, setCurrentData] = useState<ProductionHistoryResult[]>();
+  const [totalCount, setTotalCount] = useState<number>(1);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isOpenTab, setIsOpenTab] = useState<boolean>(false);
   const [itemsPerPage, setItemsPerPage] = useState<string>('10');
@@ -52,10 +54,12 @@ export default function ResultPage() {
   };
 
   const handleSelectAll = () => {
-    // const allIds = currentData
-    //   .slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage))
-    //   .map(item => item.id);
-    // setSelectedItems(allIds);
+    if (currentData) {
+      const allIds = currentData
+        .slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage))
+        .map(item => item.id);
+      setSelectedItems(allIds);
+    }
   };
 
   const handleDeselectAll = () => {
@@ -78,7 +82,7 @@ export default function ResultPage() {
   };
 
   const handleDeleteSelected = () => {
-    // setCurrentData(prev => prev.filter((data) => !selectedItems.includes(data.id)));
+    setCurrentData(prev => prev!.filter((data) => !selectedItems.includes(data.id)));
     setSelectedItems([]);
   };
 
@@ -103,40 +107,22 @@ export default function ResultPage() {
   }, [currentPage]);
 
   useEffect(() => {
-    if (isInitialRenderRef.current) {
-      isInitialRenderRef.current = false;
-      return;
-    }
-
-    // setCurrentData((prev) => {
-    //   const sortedData = [...prev].sort((a, b) => {
-    //     const aDate = new Date(a.created_at).getTime();
-    //     const bDate = new Date(b.created_at).getTime();
-
-    //     return isDesc ? bDate - aDate : aDate - bDate;
-    //   });
-
-    //   return sortedData;
-    // });
-  }, [isDesc]);
+    setCurrentPage(1);
+  }, [itemsPerPage]);
 
   const [productOptions, setProductOptions] = useState<OptionType[]>([
-    { label: "전체", value: null },
-    { label: "contactpin_1", value: "contactpin_1" },
-    { label: "contactpin_2", value: "contactpin_2" }
+    { label: "전체", value: "전체" },
   ]);
   const [lineOptions, setLineOptions] = useState<OptionType[]>([
-    { label: "전체", value: null },
-    { label: "생산라인1", value: "생산라인1" },
-    { label: "생산라인2", value: "생산라인2" }
+    { label: "전체", value: "전체" },
   ]);
   const resultOptions = [
-    { label: "전체", value: null },
+    { label: "전체", value: "전체" },
     { label: "정상", value: "true" },
     { label: "불량", value: "false" }
   ];
   const [modelOptions, setModelOptions] = useState<OptionType[]>([
-    { label: "전체", value: null },
+    { label: "전체", value: "전체" },
   ]);
   const itemsPerPageOptions = [
     { label: "10개", value: "10" },
@@ -148,18 +134,27 @@ export default function ResultPage() {
     try {
       const [pOptions, lOptions, mOptions] = await Promise.all([
         analysisApi.checkProductionHistoryNames(),
-        analysisApi.viewProductionLineList(),
-        learningApi.viewAIModelList(currentPage, Number(itemsPerPage))
+        analysisApi.viewProductionLineName(),
+        learningApi.viewAIModelList(1, 1000)
       ]);
 
       if (pOptions && pOptions.status === "SUCCESS") {
-        setProductOptions([...pOptions.data.items.map((item) => ({ label: item, value: item }))]);
+        setProductOptions((prev) => ([
+          ...prev,
+          ...pOptions.data.items.map((item) => ({ label: item, value: item }))
+        ]));
       }
       if (lOptions && lOptions.status === "SUCCESS") {
-        setLineOptions([...lOptions.data.items.map((item) => ({ label: item.name, value: item.name }))]);
+        setLineOptions((prev) => ([
+          ...prev,
+          ...lOptions.data.items.map((item) => ({ label: item, value: item }))
+        ]));
       }
       if (mOptions && mOptions.status === "SUCCESS") {
-        setModelOptions([...mOptions.data.results.map((item) => ({ label: item.server_type, value: item.server_type }))]);
+        setModelOptions((prev) => ([
+          ...prev,
+          ...mOptions.data.results.map((item) => ({ label: item.server_type, value: item.server_type }))
+        ]));
       }
     } catch (error) {
       console.log('handleOptions api error', error);
@@ -173,14 +168,17 @@ export default function ResultPage() {
         filters.start_created_at,
         filters.end_created_at,
         filters.is_abnormal,
+        isDesc,
         filters.production_line,
         filters.production_name,
         currentPage,
         Number(itemsPerPage)
       );
+      console.log('호출', filters)
 
       if (response && response.status === "SUCCESS") {
         setCurrentData(response.data.results);
+        setTotalCount(response.data.count);
       }
     } catch (error) {
       console.error('handleProductionHistories error', error);
@@ -189,8 +187,11 @@ export default function ResultPage() {
 
   useEffect(() => {
     handleOptions();
-    handleProductionHistories();
   }, []);
+
+  useEffect(() => {
+    handleProductionHistories();
+  }, [filters, currentPage, itemsPerPage, isDesc]);
 
   return (
     <Layout headerTitle="인공지능 분석">
@@ -209,6 +210,7 @@ export default function ResultPage() {
                 handleFilterChange("production_name", value)
               }
               options={productOptions}
+              className="w-[200px]"
             />
 
             <Picker
@@ -297,7 +299,7 @@ export default function ResultPage() {
                 <th className="py-3 w-16">선택</th>
                 <th className="py-3 w-16">No</th>
                 <th
-                  className="py-3 w-[300px] cursor-pointer"
+                  className="py-3 w-[260px] cursor-pointer"
                   onClick={() => setIsOpenTab(!isOpenTab)}
                 >
                   <div
@@ -315,10 +317,10 @@ export default function ResultPage() {
                     <BiDown size={26} />
                   </div>
                 </th>
-                <th className="py-3 font-bold">생산라인</th>
-                <th className="py-3 font-bold">생산 품목</th>
-                <th className="py-3 font-bold">AI 불량률</th>
-                <th className="py-3 font-bold">AI 검사 결과</th>
+                <th className="py-3 font-bold w-[210px]">생산라인</th>
+                <th className="py-3 font-bold w-[280px]">생산 품목</th>
+                <th className="py-3 font-bold w-[180px]">AI 불량률</th>
+                <th className="py-3 font-bold w-[150px]">AI 검사 결과</th>
                 <th className="py-3 font-bold">AI 모델</th>
               </tr>
             </thead>
@@ -326,10 +328,7 @@ export default function ResultPage() {
             <tbody>
               {
                 currentData && currentData.length !== 0 ? (
-                  currentData.slice(
-                    (currentPage - 1) * Number(itemsPerPage),
-                    currentPage * Number(itemsPerPage)
-                  ).map((item, idx) => (
+                  currentData.map((item, idx) => (
                     <tr
                       key={item.id}
                       className="h-[73px] text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
@@ -346,28 +345,27 @@ export default function ResultPage() {
                           className="w-8 h-8 cursor-pointer accent-point-blue"
                         />
                       </td>
-                      <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
-                      <td className="px-4 py-3 whitespace-pre-line">
-                        {item.created_at}
+                      <td className="py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
+                      <td className="py-3 whitespace-pre-line">
+                        {formatDate(item.created_at)}
                       </td>
-                      <td className="px-4 py-3 whitespace-pre-line">
+                      <td className="py-3 whitespace-pre-line">
                         {item.production_line.name}
                       </td>
-                      <td className="px-4 py-3">{item.mold_no}</td>
-                      <td className="px-4 py-3">
-                        {item.defect_rate}%<br />(
-                        {item.defective_count}/
-                        {item.total_count})
+                      <td className="py-3">{item.mold_no}</td>
+                      <td className="py-3">
+                        {item.defect_rate.toFixed(0)}%<br />(
+                        {item.defective_count.toLocaleString()}/{item.total_count.toLocaleString()})
                       </td>
                       <td
-                        className={`px-4 py-3 font-bold ${item.is_abnormal
+                        className={`py-3 font-bold ${item.is_abnormal
                           ? "text-point-red"
                           : ""
                           }`}
                       >
                         {item.is_abnormal ? "불량" : "정상"}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="py-3">
                         {item.applied_model}
                       </td>
                     </tr>
@@ -385,16 +383,12 @@ export default function ResultPage() {
               }
 
               {
-                currentData
-                  && currentData.length !== 0
+                currentData && currentData.length !== 0
                   ? Array.from({
                     length: Math.max(
                       0,
                       Number(itemsPerPage) -
-                      currentData.slice(
-                        (currentPage - 1) * Number(itemsPerPage),
-                        currentPage * Number(itemsPerPage)
-                      ).length
+                      currentData.length
                     ),
                   }).map((_, i) => (
                     <tr
@@ -439,11 +433,10 @@ export default function ResultPage() {
         </div>
 
         {
-          currentData
-            && currentData.length !== 0
+          currentData && currentData.length !== 0
             ? (
               <Pagination
-                total={currentData.length}
+                total={totalCount}
                 page={currentPage}
                 limit={Number(itemsPerPage)}
                 tab={tab}

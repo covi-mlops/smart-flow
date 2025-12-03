@@ -8,9 +8,14 @@ export const learningApi = {
         page: number = 1,
         page_size: number = 10,
     ): Promise<AIModelListResponse | null> => {
-        const { data } = await axiosInstance.get<AIModelListResponse | FailResponse>
-            (`/api/model_managements/inspection-ai-models/list/
-                ?page=${page}&page_size=${page_size}`);
+        const { data } = await axiosInstance.get<AIModelListResponse | FailResponse>(
+            `/api/model_managements/inspection-ai-models/list/`,
+            {
+                params: {
+                    page, page_size
+                }
+            }
+        );
 
         if (data.status === "SUCCESS") {
             return data;

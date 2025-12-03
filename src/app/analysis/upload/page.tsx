@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import Layout from "@/components/layout/Layout";
-import { Picker } from "@/components/common/Picker";
+import { OptionType, Picker } from "@/components/common/Picker";
 import UploadModal from "@/components/analysis/upload/UploadModal";
 import UploadDropZone from "@/components/analysis/upload/UploadDropZone";
 import UploadDataTable from "@/components/analysis/upload/UploadDataTable";
@@ -18,13 +18,13 @@ export default function UploadPage() {
     const [isNotify, setIsNotify] = useState<boolean>(false);
     const [refreshKey, setRefreshKey] = useState(0); // 테이블 새로고침용 키
 
-    const [options, setOptions] = useState<string[]>();
+    const [options, setOptions] = useState<OptionType[]>();
 
     const handleProductionNames = async () => {
         try {
             const response = await analysisApi.checkProductionHistoryNames();
             if (response && response.status === "SUCCESS") {
-                setOptions(response.data.items);
+                setOptions(response.data.items.map((item) => ({ label: item, value: item })));
             }
         } catch (error) {
             console.error('handleProductionNames api error', error);
