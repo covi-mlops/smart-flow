@@ -11,7 +11,7 @@ export interface ProductionHistoryRequest {
     page_size: number;
 }
 
-interface ProductionHistoryItem {
+export interface ProductionHistoryItem {
     id: number;
     production_name: string;
     mold_no: string;

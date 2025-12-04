@@ -1,3 +1,5 @@
+import { ProductionHistoryItem } from "../common/types";
+
 // 생산라인 별 일일 컨택트 핀 정상/불량 데이터 현황 그래프
 export interface DailyDataPoint {
   productionLine: string;

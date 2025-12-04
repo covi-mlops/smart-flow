@@ -32,7 +32,16 @@ export default function ResultPage() {
 
   const { isDesc, setDesc, setAsc } = useSortConfigStore();
   const { isModalOpen, setIsModalOpen, setIsModalClose } = useSuccessDeleteStore();
-  const { productOptions, lineOptions, modelOptions, isLoaded, setProductOptions, setLineOptions, setModelOptions, setIsLoaded, clearOptions } = useOptionsStore();
+  const {
+    productOptions,
+    lineOptions,
+    modelOptions,
+    isLoaded,
+    setProductOptions,
+    setLineOptions,
+    setModelOptions,
+    setIsLoaded
+  } = useOptionsStore();
 
   const [refreshKey, setRefreshKey] = useState(0); // 테이블 새로고침용 키
   const todaysDate = new Date().toISOString().split('T')[0];
@@ -369,7 +378,6 @@ export default function ResultPage() {
                       <td className="py-3">
                         {
                           item.defect_rate === Math.trunc(item.defect_rate) ? item.defect_rate : item.defect_rate.toFixed(2)
-                          // item.defect_rate
                         }%<br />(
                         {item.defective_count.toLocaleString()}/{item.total_count.toLocaleString()})
                       </td>

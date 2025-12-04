@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import NextImage from "next/image";
+import Image from "next/image";
 
 import SemiHeader from "@/components/common/SemiHeader";
 import Layout from "@/components/layout/Layout";
@@ -10,45 +10,52 @@ import HistogramChart from "@/components/processing/process-data/HistogramChart"
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
 import MultipleButton from "@/components/common/MultipleButton";
-import { MOCK_DATA } from "@/mock/processing/mock";
 import { ProductionHistoryEachItem_P } from "@/types/processing/process-data";
-import { MOCK_POLYGONS } from "@/mock/mock_polygons";
 import { useSelectedImageStore } from "@/store/store";
+import { processingApi } from "@/apis/processing";
+import { commonApi } from "@/apis/common";
+import { formatDate } from "@/utils/formatDate";
 
 export default function ProcessDataDetailPage() {
   const params = useParams();
   const id = params.id;
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null); // 비트맵 이미지용 ref 객체
+
   const [data, setData] = useState<ProductionHistoryEachItem_P>();
   const [bitmapOn, setBitmapOn] = useState<boolean>(false);
-  const [itemsPerPage, setItemsPerPage] = useState<string>('10');
+  const itemsPerPage = '10';
   const [currentPage, setCurrentPage] = useState(1);
   const [currentTab, setCurrentTab] = useState(1);
 
-  const { selectedImageId, setSelectedImageId } = useSelectedImageStore();
+  const {
+    selectedImageId,
+    setSelectedImageId,
+    selectedImageUrl,
+    setSelectedImageUrl,
+  } = useSelectedImageStore();
 
   const [filters, setFilters] = useState<{
-    inspectionResult: string,
-    isProcess: string,
+    classification_result: string,
+    refined: string,
     label: string
   }>({
-    inspectionResult: "전체",
-    isProcess: "전체",
+    classification_result: "전체",
+    refined: "전체",
     label: "Contact Pin",
   });
 
-  const inspectionResultOptions = [
+  const classificationResultOptions = [
     { label: "전체", value: "전체" },
-    { label: "정상 데이터", value: "정상 데이터" },
-    { label: "분류 데이터", value: "분류 데이터" },
-    { label: "AI 예외 데이터", value: "AI 예외 데이터" },
+    { label: "정상", value: "정상" },
+    { label: "불량", value: "불량" },
+    { label: "예외", value: "예외" },
   ];
 
-  const isProcessOptions = [
+  const refinedOptions = [
     { label: "전체", value: "전체" },
-    { label: "O", value: "O" },
-    { label: "X", value: "X" },
+    { label: "O", value: "true" },
+    { label: "X", value: "false" },
   ];
 
   const labelOptions = [
@@ -58,19 +65,18 @@ export default function ProcessDataDetailPage() {
   const handleFilterChange = (key: keyof { inspectionResult: string, isProcess: string, label: string }, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
-  // TODO: API 연동 시 수정
-  const handleBitmapImage = () => {
-    if (!canvasRef.current) {
+
+  const handleBitmapImage = (polygonData: number[][][]) => {
+    if (!canvasRef.current || !selectedImageUrl) {
       return;
     }
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return;
-    }
+    if (!ctx) return;
 
-    const image = new Image();
+    const image = new window.Image();
+    image.crossOrigin = "anonymous"; // CORS 설정
     image.onload = () => {
       canvas.width = image.width;
       canvas.height = image.height;
@@ -80,9 +86,9 @@ export default function ProcessDataDetailPage() {
 
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
-      // TODO: INITIAL_MASK_POLY -> 라벨 데이터로 변경
-      if (selectedImageId !== '') {
-        MOCK_POLYGONS[selectedImageId].forEach((polygon) => {
+
+      if (polygonData && polygonData.length > 0) {
+        polygonData.forEach((polygon) => {
           if (polygon.length > 0) {
             ctx.beginPath();
             ctx.moveTo(polygon[0][0], polygon[0][1]);
@@ -105,19 +111,56 @@ export default function ProcessDataDetailPage() {
       }
     };
 
-    image.src = `/assets/mock_data_images/${selectedImageId}.bmp`;
+    image.onerror = (error) => {
+      console.error('이미지 로드 실패', error);
+    };
+
+    image.src = selectedImageUrl;
+  };
+
+  const handleData = async () => {
+    try {
+      const data = await processingApi.viewProductionHistoryItem(
+        filters.classification_result, currentPage, Number(itemsPerPage), filters.refined, Number(id)
+      );
+
+      if (data && data.status === "SUCCESS") {
+        setData(data.data);
+        console.log(data.data) // debug
+      }
+    } catch (error) {
+      console.log('handleData error', error);
+    }
+  };
+
+  const handlePolygonData = async () => {
+    try {
+      const data = await commonApi.viewPolygonData(selectedImageId);
+
+      if (data && data.status === "SUCCESS") {
+        handleBitmapImage(data.data.mask_poly);
+      }
+    } catch (error) {
+      console.log('handlePolygonData error', error);
+    }
   };
 
   useEffect(() => {
-    const selected_data = MOCK_DATA.filter((item) => item.id === Number(id) && item)
-    setData(selected_data[0]);
-  }, []);
+    handleData();
+  }, [currentPage, currentTab, filters]);
 
   useEffect(() => {
-    if (bitmapOn) {
-      handleBitmapImage();
+    if (selectedImageId) {
+      handlePolygonData();
     }
-  }, [bitmapOn, selectedImageId]);
+  }, [selectedImageId, bitmapOn]);
+
+  useEffect(() => {
+    return () => {
+      setSelectedImageId('');
+      setSelectedImageUrl('');
+    }
+  }, [setSelectedImageId, setSelectedImageUrl]);
 
   useEffect(() => {
     return () => {
@@ -151,7 +194,7 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">생산일자</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              <p>{data?.created_at}</p>
+              <p>{data?.created_at ? formatDate(data?.created_at) : "ㅡ"}</p>
             </div>
             <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
               <h2 className="text-lg text-black">생산라인</h2>
@@ -166,7 +209,7 @@ export default function ProcessDataDetailPage() {
               <h2 className="text-lg text-black">AI 검사일자</h2>
             </div>
             <div className="flex flex-row items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-              <p>{data?.first_image_created_at}</p>
+              <p>{data?.first_image_created_at ? formatDate(data?.first_image_created_at) : "ㅡ"}</p>
             </div>
             <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
               <h2 className="text-lg text-black">AI 검사 결과</h2>
@@ -185,7 +228,10 @@ export default function ProcessDataDetailPage() {
         </div>
 
         <div className="px-6">
-          <HistogramChart />
+          <HistogramChart
+            datasets={data?.datasets}
+            totalCount={data?.datasets.length || 0}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-6 p-6">
@@ -198,25 +244,24 @@ export default function ProcessDataDetailPage() {
                 <Picker
                   type="select"
                   title="AI 결과"
-                  value={filters.inspectionResult}
+                  value={filters.classification_result}
                   onChange={(value) =>
                     handleFilterChange("inspectionResult", value)
                   }
-                  options={inspectionResultOptions}
+                  options={classificationResultOptions}
                 />
                 <Picker
                   type="select"
                   title="가공 여부"
-                  value={filters.isProcess}
+                  value={filters.refined}
                   onChange={(value) => handleFilterChange("isProcess", value)}
-                  options={isProcessOptions}
+                  options={refinedOptions}
                 />
               </div>
             </div>
 
             <div className="flex flex-row justify-end font-bold text-black">
-              {/* <p>전체: {data ? data.datasets.length : 0}건</p> */}
-              <p>전체: 55,000건</p>
+              <p>전체: {data ? data.datasets.length : 0}건</p>
             </div>
 
             <div className="bg-white border-y-2 border-light-gray overflow-hidden">
@@ -242,7 +287,10 @@ export default function ProcessDataDetailPage() {
                           <tr
                             key={String((currentPage - 1) * Number(itemsPerPage) + idx) + '_' + item.id}
                             className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageId === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
-                            onClick={() => setSelectedImageId(item.id)}
+                            onClick={() => {
+                              setSelectedImageId(item.id);
+                              setSelectedImageUrl(item.image_url);
+                            }}
                           >
                             <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                             <td className="px-4 py-3">{item.id}</td>
@@ -269,10 +317,7 @@ export default function ProcessDataDetailPage() {
                       length: Math.max(
                         0,
                         Number(itemsPerPage) -
-                        data.datasets.slice(
-                          (currentPage - 1) * Number(itemsPerPage),
-                          currentPage * Number(itemsPerPage)
-                        ).length
+                        data.datasets.length
                       ),
                     }).map((_, i) => (
                       <tr
@@ -288,7 +333,7 @@ export default function ProcessDataDetailPage() {
             </div>
 
             {
-              data
+              data && data.datasets.length > 0
               && <Pagination
                 total={data?.datasets.length}
                 page={currentPage}
@@ -359,14 +404,14 @@ export default function ProcessDataDetailPage() {
                           className="max-w-full max-h-[330px] object-contain"
                         />
                       )
-                        // TODO: API 연동 시 이미지 경로 수정
-                        : <NextImage
-                          src={`/assets/mock_data_images/${selectedImageId}.bmp`}
+                        : <Image
+                          src={selectedImageUrl}
                           alt="contact pin image"
                           width={440}
                           height={330}
                           priority
                           fetchPriority="high"
+                          unoptimized
                         />
                     }
                   </div>

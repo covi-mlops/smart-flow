@@ -5,11 +5,15 @@ import { useRouter } from "next/navigation";
 
 import Layout from "@/components/layout/Layout";
 import { Picker } from "@/components/common/Picker";
-import { FilterOptions, ProductionHistoryEachItem_P } from "@/types/processing/process-data";
+import { FilterOptions } from "@/types/processing/process-data";
 import MultipleButton from "@/components/common/MultipleButton";
 import Pagination from "@/components/common/Pagination";
-import { MOCK_DATA } from "@/mock/processing/mock";
-import { useSortConfigStore } from "@/store/store";
+import { useOptionsStore, useSortConfigStore, useSuccessDeleteStore } from "@/store/store";
+import { commonApi } from "@/apis/common";
+import { analysisApi } from "@/apis/analysis";
+import { ProductionHistoryResult } from "@/types/common/types";
+import { formatDate } from "@/utils/formatDate";
+import Modal from "@/components/modal/Modal";
 
 const HiArrowUp = lazy(() => import('react-icons/hi').then(module => ({
   default: module.HiArrowUp
@@ -25,46 +29,56 @@ const BiDown = lazy(() => import('react-icons/bi').then(module => ({
 
 export default function ProcessDataPage() {
   const router = useRouter();
-  const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
+  // const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
 
   const { isDesc, setDesc, setAsc } = useSortConfigStore();
+  const { isModalOpen, setIsModalOpen, setIsModalClose } = useSuccessDeleteStore();
+  const {
+    productOptions,
+    lineOptions,
+    modelOptions,
+    isLoaded,
+    setProductOptions,
+    setLineOptions,
+    setModelOptions,
+    setIsLoaded
+  } = useOptionsStore();
 
+  const [refreshKey, setRefreshKey] = useState(0); // 테이블 새로고침용 키
+  const todaysDate = new Date().toISOString().split('T')[0];
   const [filters, setFilters] = useState<FilterOptions>({
     production_name: "전체",
-    start_created_at: "2025-05-21",
-    end_created_at: "2025-05-21",
+    start_created_at: todaysDate,
+    end_created_at: todaysDate,
     production_line: "전체",
     is_abnormal: "전체",
     applied_model: "전체",
   });
   const modalRef = useRef<HTMLDivElement>(null);
-  const [currentData, setCurrentData] = useState<ProductionHistoryEachItem_P[]>(MOCK_DATA);
+  const [currentData, setCurrentData] = useState<ProductionHistoryResult[]>();
+  const [totalCount, setTotalCount] = useState<number>(1);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isOpenTab, setIsOpenTab] = useState<boolean>(false);
   const [itemsPerPage, setItemsPerPage] = useState<string>("10");
   const [currentPage, setCurrentPage] = useState(1);
   const [tab, setTab] = useState(1);
-  const [sortConfig, setSortConfig] = useState<string>("desc");
 
   const handleFilterChange = (key: keyof FilterOptions, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSelectAll = () => {
-    const allIds = MOCK_DATA.slice(
-      (currentPage - 1) * Number(itemsPerPage),
-      currentPage * Number(itemsPerPage)
-    ).map((item) => item.id);
-    setSelectedItems(allIds);
-  };
-
-  const handleDeselectAll = () => {
-    setSelectedItems([]);
+    if (currentData) {
+      const allIds = currentData
+        .slice((currentPage - 1) * Number(itemsPerPage), currentPage * Number(itemsPerPage))
+        .map(item => item.id);
+      setSelectedItems(allIds);
+    }
   };
 
   const handleToggleItem = (id: number) => {
-    setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+    setSelectedItems(prev =>
+      prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
     );
   };
 
@@ -77,17 +91,23 @@ export default function ProcessDataPage() {
     setIsOpenTab(false);
   };
 
-  const handleDeleteSelected = () => {
-    setCurrentData(prev => prev.filter((data) => !selectedItems.includes(data.id)));
-    setSelectedItems([]);
+  const handleDeleteSelected = async () => {
+    try {
+      const response = await commonApi.deleteProductionHistories({ ids: selectedItems });
+      if (response === "") {
+        setIsModalOpen(); // 삭제 완료 모달창 띄우기
+        setSelectedItems([]);
+        setRefreshKey(prev => prev + 1);
+        setCurrentPage(1);
+      }
+    } catch (error) {
+      console.error('handleDeleteSelected error', error);
+    }
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsOpenTab(false);
       }
     };
@@ -106,34 +126,8 @@ export default function ProcessDataPage() {
   }, [currentPage]);
 
   useEffect(() => {
-    if (isInitialRenderRef.current) {
-      isInitialRenderRef.current = false;
-      return;
-    }
-
-    setCurrentData((prev) => {
-      const sortedData = [...prev].sort((a, b) => {
-        const aDate = new Date(a.created_at).getTime();
-        const bDate = new Date(b.created_at).getTime();
-
-        return isDesc ? bDate - aDate : aDate - bDate;
-      });
-
-      return sortedData;
-    });
-  }, [isDesc]);
-
-  const productOptions = [
-    { label: "전체", value: "전체" },
-    { label: "contactpin_1", value: "contactpin_1" },
-    { label: "contactpin_2", value: "contactpin_2" },
-  ];
-
-  const lineOptions = [
-    { label: "전체", value: "전체" },
-    { label: "생산라인1", value: "생산라인1" },
-    { label: "생산라인2", value: "생산라인2" },
-  ];
+    setCurrentPage(1);
+  }, [itemsPerPage]);
 
   const resultOptions = [
     { label: "전체", value: "전체" },
@@ -141,16 +135,85 @@ export default function ProcessDataPage() {
     { label: "불량", value: "불량" },
   ];
 
-  const modelOptions = [
-    { label: "전체", value: "전체" },
-    { label: "covi_seq_00001", value: "covi_seq_00001" },
-  ];
-
   const itemsPerPageOptions = [
     { label: "10개", value: "10" },
     { label: "20개", value: "20" },
     { label: "50개", value: "50" },
   ];
+
+  const handleOptions = async () => {
+    if (isLoaded) return;
+
+    try {
+      const [pOptions, lOptions, mOptions] = await Promise.all([
+        analysisApi.checkProductionHistoryNames(),
+        analysisApi.viewProductionLineName(),
+        commonApi.viewAIModelNameList()
+      ]);
+
+      if (pOptions && pOptions.status === "SUCCESS") {
+        setProductOptions([
+          { label: "전체", value: "전체" },
+          ...pOptions.data.items.map((item) => ({ label: item, value: item }))
+        ]);
+      }
+      if (lOptions && lOptions.status === "SUCCESS") {
+        setLineOptions([
+          { label: "전체", value: "전체" },
+          ...lOptions.data.items.map((item) => ({ label: item, value: item }))
+        ]);
+      }
+      if (mOptions && mOptions.status === "SUCCESS") {
+        setModelOptions([
+          { label: "전체", value: "전체" },
+          ...mOptions.data.items.map((item) => ({ label: item, value: item }))
+        ]);
+      }
+
+      setIsLoaded(true);
+    } catch (error) {
+      console.log('handleOptions api error', error);
+    }
+  };
+
+  const handleProductionHistories = async () => {
+    try {
+      const response = await commonApi.viewProductionHistories(
+        filters.applied_model,
+        filters.start_created_at,
+        filters.end_created_at,
+        filters.is_abnormal,
+        isDesc,
+        filters.production_line,
+        filters.production_name,
+        currentPage,
+        Number(itemsPerPage)
+      );
+
+      if (response && response.status === "SUCCESS") {
+        setCurrentData(response.data.results);
+        setTotalCount(response.data.count);
+      }
+    } catch (error) {
+      console.error('handleProductionHistories error', error);
+    }
+  };
+
+  useEffect(() => {
+    handleOptions();
+
+    // return () => {
+    //   clearOptions();
+    // }
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+  useEffect(() => {
+    handleProductionHistories();
+  }, [filters, currentPage, itemsPerPage, isDesc, refreshKey]);
 
   return (
     <Layout headerTitle="데이터 가공">
@@ -232,7 +295,7 @@ export default function ProcessDataPage() {
               type="default"
               title="모두 해제"
               disabled={selectedItems.length === 0}
-              onClick={handleDeselectAll}
+              onClick={() => setSelectedItems([])}
             />
           </div>
 
@@ -259,7 +322,7 @@ export default function ProcessDataPage() {
                     className="flex items-center justify-center gap-3"
                   >
                     {
-                      sortConfig === "desc" ? (
+                      isDesc ? (
                         <HiArrowDown size={20} className="text-point-blue" />
                       ) : (
                         <HiArrowUp size={20} className="text-point-blue" />
@@ -279,11 +342,8 @@ export default function ProcessDataPage() {
 
             <tbody>
               {
-                currentData.length !== 0 ? (
-                  currentData.slice(
-                    (currentPage - 1) * Number(itemsPerPage),
-                    currentPage * Number(itemsPerPage)
-                  ).map((item, idx) => (
+                currentData && currentData.length !== 0 ? (
+                  currentData.map((item, idx) => (
                     <tr
                       key={item.id}
                       className="text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
@@ -302,14 +362,16 @@ export default function ProcessDataPage() {
                       </td>
                       <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                       <td className="px-4 py-3 whitespace-pre-line">
-                        {item.created_at}
+                        {formatDate(item.created_at)}
                       </td>
                       <td className="px-4 py-3 whitespace-pre-line">
                         {item.production_line.name}
                       </td>
-                      <td className="px-4 py-3">{item.mold_no}</td>
+                      <td className="px-4 py-3">{item.production_name}</td>
                       <td className="px-4 py-3">
-                        {item.defect_rate}%<br />(
+                        {
+                          item.defect_rate === Math.trunc(item.defect_rate) ? item.defect_rate : item.defect_rate.toFixed(2)
+                        }%<br />(
                         {item.defective_count}/{item.defective_count + item.normal_count}
                         )
                       </td>
@@ -337,7 +399,7 @@ export default function ProcessDataPage() {
               }
 
               {
-                currentData.length !== 0
+                currentData && currentData.length !== 0
                   ? Array.from({
                     length: Math.max(
                       0,
@@ -390,7 +452,7 @@ export default function ProcessDataPage() {
         </div>
 
         {
-          currentData.length !== 0
+          currentData && currentData.length !== 0
             ? (
               <Pagination
                 total={currentData.length}
@@ -404,6 +466,16 @@ export default function ProcessDataPage() {
             : (
               <div className="w-full h-[64px]" />
             )
+        }
+
+        {
+          isModalOpen
+            ? <Modal
+              text="삭제가 완료되었습니다."
+              onClick={() => setIsModalClose()}
+              onClose={setIsModalClose}
+            />
+            : null
         }
       </div>
     </Layout>

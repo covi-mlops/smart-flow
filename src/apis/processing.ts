@@ -11,14 +11,17 @@ export const processingApi = {
         page_size: number = 10,
         refined: string | null = null,
         id: number,
-    ) => {
+    ): Promise<ProductionHistoryEachItemResponse_P | null> => {
+        const params: Record<string, any> = {
+            page,
+            page_size,
+        };
+        if (refined !== "전체") params.refined = refined === "true";
+        if (classification_result !== "전체") params.classification_result = classification_result;
+
         const { data } = await axiosInstance.get<ProductionHistoryEachItemResponse_P | FailResponse>(
             `/api/productions/production-histories/${id}/poly/`,
-            {
-                params: {
-                    classification_result, page, page_size, refined
-                }
-            }
+            { params }
         );
 
         if (data.status === "SUCCESS") {

@@ -86,8 +86,8 @@ export const analysisApi = {
             page,
             page_size,
         };
-        if (refined !== "전체") params.refined = refined === "true"
-        if (classification_result !== "전체") params.classification_result = classification_result
+        if (refined !== "전체") params.refined = refined === "true";
+        if (classification_result !== "전체") params.classification_result = classification_result;
 
         const { data } = await axiosInstance.get<ProductionHistoryEachItemResponse_A | FailResponse>(
             `/api/productions/production-histories/${id}/`,

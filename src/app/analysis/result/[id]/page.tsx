@@ -193,7 +193,7 @@ export default function AnalysisDataDetailPage() {
                             <h2 className="text-lg text-black">AI 검사일자</h2>
                         </div>
                         <div className="flex flex-row text-medium-gray items-center justify-center w-full gap-3 px-4 py-4 font-bold">
-                            <p>{data?.results.first_image_created_at && formatDate(data.results.first_image_created_at)}</p>
+                            <p>{data?.results.first_image_created_at ? formatDate(data.results.first_image_created_at) : 'ㅡ'}</p>
                         </div>
                         <div className="flex items-center justify-center bg-soft-white min-w-[140px] h-[70px] font-bold">
                             <h2 className="text-lg text-black">AI 검사 결과</h2>
@@ -367,7 +367,6 @@ export default function AnalysisDataDetailPage() {
                                         이미지를 선택해주세요
                                     </p>
                                 ) : (
-                                    // TODO: API 연동 시 실제 이미지 id, 이미지 객체랑 연결
                                     <div className="flex flex-col items-center gap-12">
                                         <p className="text-xl text-black font-bold">이미지 View</p>
                                         <div className="w-[440px] h-[330px] relative">
