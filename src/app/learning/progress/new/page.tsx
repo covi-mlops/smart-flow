@@ -97,11 +97,11 @@ export default function NewAILearningPage() {
     };
 
     const totalDataCount = learningData.reduce((sum, item) =>
-        sum + item.normal_count + item.defective_count + item.exception_count, 0
+        sum + item.total_count, 0
     );
     const totalNormalCount = learningData.reduce((sum, item) => sum + item.normal_count, 0);
     const totalDefectiveCount = learningData.reduce((sum, item) => sum + item.defective_count, 0);
-    const totalAiExceptionCount = learningData.reduce((sum, item) => sum + item.exception_count, 0);
+    // const totalAiExceptionCount = learningData.reduce((sum, item) => sum + item.exception_count, 0);
 
     const currentData = MOCK_DATA.slice(
         (currentPage - 1) * itemsPerPage,
@@ -342,7 +342,8 @@ export default function NewAILearningPage() {
                                 <div className="flex flex-col gap-2">
                                     <span className="text-base text-medium-gray">AI 예외 데이터 수</span>
                                     <span className="text-2xl font-bold text-black">
-                                        {learningData.length > 0 ? totalAiExceptionCount.toLocaleString() : "—"}
+                                        {/* TODO: 필드 확인 후 수정 */}
+                                        {/* {learningData.length > 0 ? totalAiExceptionCount.toLocaleString() : "—"} */}
                                     </span>
                                 </div>
                             </div>
@@ -376,7 +377,7 @@ export default function NewAILearningPage() {
                                                     <td className="text-base">
                                                         {item.defect_rate}%<br />
                                                         <span className="text-sm text-medium-gray">
-                                                            ({item.defective_count.toLocaleString()}/{(item.normal_count + item.defective_count + item.exception_count).toLocaleString()})
+                                                            ({item.defective_count.toLocaleString()}/{item.total_count.toLocaleString()})
                                                         </span>
                                                     </td>
                                                     <td className={`text-base font-bold ${item.is_abnormal ? "text-point-red" : "text-medium-gray"}`}>
