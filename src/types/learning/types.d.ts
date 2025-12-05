@@ -5,7 +5,6 @@ export interface LearningDataItem {
     status: "ready" | "processing" | "done";
     start_at: string | null; // 학습 시작일
 }
-// ----------
 // API: 인공지능 학습 목록 조회
 export interface LearningListResults {
     id: number;
@@ -27,7 +26,6 @@ export interface LearningListResponse {
     status: "SUCCESS";
     data: LearningListData;
 }
-// ----------
 // API: AI 모델 목록 조회
 interface ResultsItem {
     id: number;
@@ -51,7 +49,6 @@ export interface AIModelListResponse {
     status: "SUCCESS";
     data: AIModelListItem;
 }
-// ----------
 // API: 인공지능 학습 > 인공지능 학습 모델 데이터셋 목록 조회
 export interface LearningModelDatasetListResults {
     product_history: number;
@@ -77,7 +74,6 @@ export interface LearningModelDatasetListResponse {
     status: "SUCCESS";
     data: LearningModelDatasetListData;
 }
-// ----------
 // API: 인공지능 학습 > 인공지능 학습 모델 정보 상세 조회
 export interface LearningModelDataDetailData {
     model_name: string;
@@ -92,7 +88,6 @@ export interface LearningModelDataDetailResponse {
     status: "SUCCESS";
     data: LearningModelDataDetailData;
 }
-// ---------
 // API: AI 모델 상세 조회
 export interface AIModelDetailData {
     id: number;
@@ -117,7 +112,6 @@ export interface AIModelDetailResponse {
     status: "SUCCESS";
     data: AIModelDetailData;
 }
-// ---------
 // API: AI 모델 기준, 생산 이력 조회
 export interface ModelProductionHistoriesResults {
     production_date: string;
@@ -143,7 +137,6 @@ export interface ModelProductionHistoriesResponse {
     status: "SUCCESS";
     data: ModelProductionHistoriesData;
 }
-// ----------
 // API: 인공지능 학습 > 데이터셋 포함 생산 이력 조회
 export interface ModelDataProductionHistoriesItem {
     batch_id: string;
@@ -168,7 +161,6 @@ export interface ModelDataProductionHistoriesResponse {
     status: "SUCCESS";
     data: ModelDataProductionHistoriesData;
 }
-// ----------
 // API: 사업소 소속 생산라인 조회 (썸네일)
 export interface ProductionLinesItem {
     id: number;
@@ -193,7 +185,6 @@ export interface ProductionLinesResponse {
     status: "SUCCESS";
     data: ProductionLinesData;
 }
-// ----------
 // API: 검사 기준 변경 로그 조회
 export interface TestStandard {
     parameters: {
@@ -229,7 +220,6 @@ export interface ViewTestStandardLogResponse {
     status: "SUCCESS";
     data: ViewTestStandardData;
 }
-// ----------
 // API: 생산라인을 상세 조회 (썸네일)
 export interface ProductionLineDetailDatasets {
     dataset_id: string;
@@ -263,7 +253,6 @@ export interface ProductionLineDetailResponse {
     status: "SUCCESS";
     data: ProductionLineDetailData;
 }
-// ----------
 // API: 인공지능 학습 > 검수 AI 모델 학습 준비
 export interface ReadyLearningRequest {
     model_name: string;
@@ -277,7 +266,6 @@ export interface ReadyLearningResponse {
     status: "SUCCESS";
     data: string; // "" 예정
 }
-// ----------
 // API: 인공지능 학습 데이터 수정
 export interface ModifyLearningRequest {
     selected_data: {
@@ -287,6 +275,11 @@ export interface ModifyLearningRequest {
 }
 
 export interface ModifyLearningResponse {
+    status: "SUCCESS";
+    data: string; // "" 예정
+}
+// AI 모델 적용
+export interface ApplyModelResponse {
     status: "SUCCESS";
     data: string; // "" 예정
 }

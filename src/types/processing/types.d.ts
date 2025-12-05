@@ -1,5 +1,12 @@
-import { ProductionHistoryItem } from "../common/types";
-
+// 데이터 필터링 옵션
+export interface FilterOptions {
+  production_name: string;
+  production_line: string;
+  start_created_at: string;
+  end_created_at: string;
+  is_abnormal: string;
+  applied_model: string;
+}
 // 생산라인 별 일일 컨택트 핀 정상/불량 데이터 현황 그래프
 export interface DailyDataPoint {
   productionLine: string;
@@ -14,6 +21,29 @@ export interface ExceptionDataPoint {
 
 /* API */
 // API: 생산 이력 상세 조회 + 폴리곤
+interface DatasetItem {
+  mask_poly: number;
+  classification_result: string; // AI 결과 (정상, 불량, 예외)
+}
+
+export interface ProductionHistoryItem {
+  id: number;
+  production_name: string;
+  mold_no: string;
+  production_line: {
+    id: number;
+    name: string;
+  };
+  first_image_created_at: string; // AI 검사 일자
+  total_count: number;
+  normal_count: number;
+  defective_count: number;
+  defect_rate: number;
+  is_abnormal: boolean; // 불량 여부
+  created_at: string; // 생산 일자
+  datasets: DatasetItem[];
+}
+
 export interface ProductionHistoryItemResponse {
   status: "SUCCESS";
   data: ProductionHistoryItem;
@@ -50,4 +80,33 @@ export interface DataInspectionData {
 export interface DataInspectionResponse {
   status: "SUCCESS";
   data: DataInspectionData[];
+}
+// API: 컨택트핀 이미지 조회
+export interface ContactpinImageResults {
+  id: string;
+  dataset_id: string;
+  image_url: string;
+  classification_result: string;
+  refined_at: string | null;
+  created_at: string;
+  attributes: {
+    head: number;
+    neck: number;
+    angl: number;
+    angr: number;
+  }
+}
+
+export interface ContactpinImageData {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: {
+    datasets: ContactpinImageResults[];
+  }
+}
+
+export interface ContactpinImageResonse {
+  status: "SUCCESS";
+  data: ContactpinImageData;
 }

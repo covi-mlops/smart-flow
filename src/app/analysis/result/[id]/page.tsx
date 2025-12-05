@@ -293,7 +293,7 @@ export default function AnalysisDataDetailPage() {
                                 <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
                                     <tr>
                                         <th className="py-3 w-[80px]">No</th>
-                                        <th className="py-3 w-[500px]">컨택트 핀 이미지</th>
+                                        <th className="py-3 w-[400px]">컨택트 핀 이미지</th>
                                         <th className="py-3">AI 결과</th>
                                         <th className="py-3">가공 여부</th>
                                     </tr>

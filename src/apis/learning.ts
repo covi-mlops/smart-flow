@@ -1,5 +1,5 @@
 import axiosInstance from "./axiosInstance";
-import { AIModelDetailResponse, AIModelListResponse, LearningListResponse, LearningModelDataDetailResponse, LearningModelDatasetListResponse, ModelProductionHistoriesResponse, ModifyLearningRequest, ModifyLearningResponse, ProductionLineDetailResponse, ProductionLinesResponse, ReadyLearningRequest, ReadyLearningResponse, TestStandard, ViewTestStandardLogResponse } from "@/types/learning/types";
+import { AIModelDetailResponse, AIModelListResponse, ApplyModelResponse, LearningListResponse, LearningModelDataDetailResponse, LearningModelDatasetListResponse, ModelProductionHistoriesResponse, ModifyLearningRequest, ModifyLearningResponse, ProductionLineDetailResponse, ProductionLinesResponse, ReadyLearningRequest, ReadyLearningResponse, TestStandard, ViewTestStandardLogResponse } from "@/types/learning/types";
 import { DeleteRequest, DeleteResponse, FailResponse } from "@/types/common/types";
 
 export const learningApi = {
@@ -132,8 +132,12 @@ export const learningApi = {
             page_size,
         };
         // TODO: 직접 함수 연결할 때 수정할 것
-        // if (first_image_created_at !== "전체") params.refined = refined === "true";
-        // if (classification_result !== "전체") params.classification_result = classification_result;
+        if (first_image_created_at !== null) params.first_image_created_at = first_image_created_at;
+        if (inspection_ai_model !== null) params.inspection_ai_model = inspection_ai_model;
+        if (is_abnormal !== null) params.is_abnormal = is_abnormal;
+        if (last_image_created_at !== null) params.last_image_created_at = last_image_created_at;
+        if (production_line !== null) params.production_line = production_line;
+        if (production_name !== null) params.production_name = production_name;
 
         const { data } = await axiosInstance.get<ModelProductionHistoriesResponse | FailResponse>(
             `/api/productions/production-histories/list-with-dataset`,
@@ -260,6 +264,21 @@ export const learningApi = {
             return data.data; // "" 예정
         } else {
             console.log('deleteModelManagements api fail', data.data.message);
+            return null;
+        }
+    },
+    // AI 모델 적용
+    applyModel: async (
+        id: number,
+    ): Promise<string | null> => {
+        const { data } = await axiosInstance.patch<ApplyModelResponse | FailResponse>(
+            `/api/model-managements/inspection-ai-models/${id}/apply/`
+        );
+
+        if (data.status === "SUCCESS") {
+            return data.data; // "" 예정
+        } else {
+            console.log('applyModel api fail', data.data.message);
             return null;
         }
     },

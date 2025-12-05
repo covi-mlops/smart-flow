@@ -10,11 +10,11 @@ import HistogramChart from "@/components/processing/process-data/HistogramChart"
 import { Picker } from "@/components/common/Picker";
 import Pagination from "@/components/common/Pagination";
 import MultipleButton from "@/components/common/MultipleButton";
-import { ProductionHistoryEachItem_P } from "@/types/processing/process-data";
 import { useSelectedImageStore } from "@/store/store";
 import { processingApi } from "@/apis/processing";
 import { commonApi } from "@/apis/common";
 import { formatDate } from "@/utils/formatDate";
+import { ContactpinImageResults, ProductionHistoryItem } from "@/types/processing/types";
 
 export default function ProcessDataDetailPage() {
   const params = useParams();
@@ -22,7 +22,8 @@ export default function ProcessDataDetailPage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null); // 비트맵 이미지용 ref 객체
 
-  const [data, setData] = useState<ProductionHistoryEachItem_P>();
+  const [data, setData] = useState<ProductionHistoryItem>();
+  const [imageData, setImageData] = useState<ContactpinImageResults[]>([]);
   const [bitmapOn, setBitmapOn] = useState<boolean>(false);
   const itemsPerPage = '10';
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +63,7 @@ export default function ProcessDataDetailPage() {
     { label: "Contact Pin", value: "Contact Pin" }
   ];
 
-  const handleFilterChange = (key: keyof { inspectionResult: string, isProcess: string, label: string }, value: string) => {
+  const handleFilterChange = (key: keyof { classification_result: string, refined: string, label: string }, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
@@ -120,13 +121,20 @@ export default function ProcessDataDetailPage() {
 
   const handleData = async () => {
     try {
-      const data = await processingApi.viewProductionHistoryItem(
-        filters.classification_result, currentPage, Number(itemsPerPage), filters.refined, Number(id)
-      );
+      const [data, imageData] = await Promise.all([
+        processingApi.viewProductionHistoryItem(
+          filters.classification_result, currentPage, Number(itemsPerPage), filters.refined, Number(id)
+        ),
+        processingApi.viewContactpinImage(
+          Number(id), currentPage, Number(itemsPerPage), filters.classification_result, filters.refined
+        ),
+      ]);
 
       if (data && data.status === "SUCCESS") {
         setData(data.data);
-        console.log(data.data) // debug
+      }
+      if (imageData && imageData.status === "SUCCESS") {
+        setImageData(imageData.data.results.datasets);
       }
     } catch (error) {
       console.log('handleData error', error);
@@ -246,7 +254,7 @@ export default function ProcessDataDetailPage() {
                   title="AI 결과"
                   value={filters.classification_result}
                   onChange={(value) =>
-                    handleFilterChange("inspectionResult", value)
+                    handleFilterChange("classification_result", value)
                   }
                   options={classificationResultOptions}
                 />
@@ -254,52 +262,47 @@ export default function ProcessDataDetailPage() {
                   type="select"
                   title="가공 여부"
                   value={filters.refined}
-                  onChange={(value) => handleFilterChange("isProcess", value)}
+                  onChange={(value) => handleFilterChange("refined", value)}
                   options={refinedOptions}
                 />
               </div>
             </div>
 
             <div className="flex flex-row justify-end font-bold text-black">
-              <p>전체: {data ? data.datasets.length : 0}건</p>
+              <p>전체: {data ? imageData.length : 0}건</p>
             </div>
 
             <div className="bg-white border-y-2 border-light-gray overflow-hidden">
               <table className="w-full h-[550px]">
                 <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
                   <tr>
-                    <th className="py-3">No</th>
-                    <th className="py-3">컨택트 핀 이미지</th>
-                    <th className="py-3">AI 결과</th>
+                    <th className="py-3 w-[80px]">No</th>
+                    <th className="py-3 w-[400px]">컨택트 핀 이미지</th>
+                    <th className="py-3 w-[140px]">AI 결과</th>
                     <th className="py-3">가공 여부</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {
-                    data?.datasets.length !== 0 ? (
-                      data?.datasets
-                        .slice(
-                          (currentPage - 1) * Number(itemsPerPage),
-                          currentPage * Number(itemsPerPage)
-                        )
-                        .map((item, idx) => (
-                          <tr
-                            key={String((currentPage - 1) * Number(itemsPerPage) + idx) + '_' + item.id}
-                            className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageId === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
-                            onClick={() => {
-                              setSelectedImageId(item.id);
-                              setSelectedImageUrl(item.image_url);
-                            }}
-                          >
-                            <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
-                            <td className="px-4 py-3">{item.id}</td>
-                            <td className={`px-4 py-3 font-bold ${item.classification_result === "불량" ? "text-point-red" : selectedImageId === item.id ? "text-white" : "text-medium-gray"} `}>
-                              {item.classification_result}
-                            </td>
-                            <td className="px-4 py-3">{item.refined_at !== null ? "O" : "X"}</td>
-                          </tr>
-                        ))
+                    imageData.length !== 0 ? (
+                      imageData.map((item, idx) => (
+                        <tr
+                          key={String((currentPage - 1) * Number(itemsPerPage) + idx) + '_' + item.id}
+                          className={`h-[55px] text-base border-b border-light-gray text-center cursor-pointer ${selectedImageId === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
+                          onClick={() => {
+                            setSelectedImageId(item.id);
+                            setSelectedImageUrl(item.image_url);
+                          }}
+                        >
+                          <td className="px-4 py-3 w-[80px]">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
+                          <td className="px-4 py-3 w-[400px]">{item.id}</td>
+                          <td className={`px-4 py-3 font-bold ${item.classification_result === "불량" ? "text-point-red" : selectedImageId === item.id ? "text-white" : "text-medium-gray"} `}>
+                            {item.classification_result}
+                          </td>
+                          <td className="px-4 py-3">{item.refined_at !== null ? "O" : "X"}</td>
+                        </tr>
+                      ))
                     ) : (
                       <tr>
                         <td
@@ -313,11 +316,11 @@ export default function ProcessDataDetailPage() {
                   }
 
                   {
-                    data?.datasets && Array.from({
+                    imageData && imageData.length > 0 && Array.from({
                       length: Math.max(
                         0,
                         Number(itemsPerPage) -
-                        data.datasets.length
+                        imageData.length
                       ),
                     }).map((_, i) => (
                       <tr
@@ -333,9 +336,9 @@ export default function ProcessDataDetailPage() {
             </div>
 
             {
-              data && data.datasets.length > 0
+              imageData && imageData.length > 0
               && <Pagination
-                total={data?.datasets.length}
+                total={imageData.length}
                 page={currentPage}
                 limit={Number(itemsPerPage)}
                 tab={currentTab}

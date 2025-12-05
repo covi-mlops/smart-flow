@@ -1,7 +1,6 @@
-import { DataInspectionResponse, MaskPolyResponse, UpdatedPolygonResponse } from "@/types/processing/types"
+import { ContactpinImageResonse, DataInspectionResponse, MaskPolyResponse, ProductionHistoryItemResponse, UpdatedPolygonResponse } from "@/types/processing/types"
 import axiosInstance from "./axiosInstance"
 import { FailResponse } from "@/types/common/types"
-import { ProductionHistoryEachItemResponse_P } from "@/types/processing/process-data";
 
 export const processingApi = {
     // 생산 이력 상세 조회 + 폴리곤
@@ -11,7 +10,7 @@ export const processingApi = {
         page_size: number = 10,
         refined: string | null = null,
         id: number,
-    ): Promise<ProductionHistoryEachItemResponse_P | null> => {
+    ): Promise<ProductionHistoryItemResponse | null> => {
         const params: Record<string, any> = {
             page,
             page_size,
@@ -19,7 +18,7 @@ export const processingApi = {
         if (refined !== "전체") params.refined = refined === "true";
         if (classification_result !== "전체") params.classification_result = classification_result;
 
-        const { data } = await axiosInstance.get<ProductionHistoryEachItemResponse_P | FailResponse>(
+        const { data } = await axiosInstance.get<ProductionHistoryItemResponse | FailResponse>(
             `/api/productions/production-histories/${id}/poly/`,
             { params }
         );
@@ -79,6 +78,34 @@ export const processingApi = {
             return data;
         } else {
             console.log('viewDataInspection api fail', data.data.message);
+            return null;
+        }
+    },
+    // 컨택트핀 이미지 조회
+    viewContactpinImage: async (
+        id: number,
+        page: number = 1,
+        page_size: number = 1,
+        classification_result: string | null = null,
+        refined: string | null = null,
+    ): Promise<ContactpinImageResonse | null> => {
+        const params: Record<string, any> = {
+            page,
+            page_size,
+        };
+        if (classification_result !== "전체") params.classification_result = classification_result;
+        if (refined !== "전체") params.refined = refined === "true";
+
+
+        const { data } = await axiosInstance.get<ContactpinImageResonse | FailResponse>(
+            `/api/productions/production-histories/${id}/datasets/`,
+            { params }
+        );
+
+        if (data.status === "SUCCESS") {
+            return data;
+        } else {
+            console.log('viewContactpinImage api fail', data.data.message);
             return null;
         }
     },

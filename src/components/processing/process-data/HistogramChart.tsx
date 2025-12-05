@@ -1,19 +1,19 @@
 'use client';
 
+import { DatasetItem } from "@/types/processing/types";
 import { useState, useMemo } from "react";
-
-interface DatasetItem {
-  id: string;
-  classification_result: string;
-  refined_at: string | null;
-  created_at: string;
-  mask_poly: number;
-  image_url: string;
-}
 
 interface HistogramChartProps {
   datasets?: DatasetItem[];
   totalCount?: number;
+}
+
+interface HistogramDataItem {
+  maskPoly: number;
+  count: number;
+  normal: number;
+  defect: number;
+  exception: number;
 }
 
 export default function HistogramChart({
@@ -26,27 +26,44 @@ export default function HistogramChart({
     if (!datasets || datasets.length === 0) {
       return [];
     }
-    // X축 값 정의
-    const countMap = new Map<number, number>();
+    // X축 값 정의 - classification_result별로 카운트
+    const countMap = new Map<number, { normal: number; defect: number; exception: number }>();
+
     datasets.forEach(item => {
       const maskPolyValue = item.mask_poly;
-      countMap.set(maskPolyValue, (countMap.get(maskPolyValue) || 0) + 1);
+      const current = countMap.get(maskPolyValue) || { normal: 0, defect: 0, exception: 0 };
+
+      if (item.classification_result === "정상") {
+        current.normal += 1;
+      } else if (item.classification_result === "불량") {
+        current.defect += 1;
+      } else if (item.classification_result === "예외") {
+        current.exception += 1;
+      }
+
+      countMap.set(maskPolyValue, current);
     });
+
     const minMaskPolyValue = Math.min(...datasets.map((d) => d.mask_poly));
     const maxMaskPolyValue = Math.max(...datasets.map((d) => d.mask_poly));
+
     Array.from(
       { length: maxMaskPolyValue - minMaskPolyValue + 1 },
       (_, i) => i + minMaskPolyValue
     ).forEach((number) => {
       if (!countMap.has(number)) {
-        countMap.set(number, 0);
+        countMap.set(number, { normal: 0, defect: 0, exception: 0 });
       }
     });
+
     // 정렬
     const data = Array.from(countMap.entries())
-      .map(([maskPoly, count]) => ({
+      .map(([maskPoly, counts]): HistogramDataItem => ({
         maskPoly,
-        count
+        count: counts.normal + counts.defect + counts.exception,
+        normal: counts.normal,
+        defect: counts.defect,
+        exception: counts.exception
       }))
       .sort((a, b) => a.maskPoly - b.maskPoly);
 
@@ -118,9 +135,13 @@ export default function HistogramChart({
                     {
                       hoveredBar === index
                       && (
-                        <div className="absolute -top-16 left-1/2 -translate-x-1/2 bg-black/80 text-white px-3 py-2 rounded text-sm whitespace-nowrap z-10">
-                          <p className="font-bold">점 개수: {item.maskPoly}</p>
-                          <p>수량: {item.count.toLocaleString()}건</p>
+                        <div className="absolute -top-50 left-1/2 -translate-x-1/2 bg-black/90 text-white px-4 py-3 rounded-lg text-sm whitespace-nowrap z-10 shadow-lg">
+                          <p className="font-bold mb-2 border-b border-white/20 pb-2">점 개수: {item.maskPoly}</p>
+                          <div className="space-y-1 text-center">
+                            <p className="text-green-400">정상: {item.normal.toLocaleString()}건</p>
+                            <p className="text-red-400">불량: {item.defect.toLocaleString()}건</p>
+                            <p className="text-yellow-400">예외: {item.exception.toLocaleString()}건</p>
+                          </div>
                         </div>
                       )
                     }
@@ -129,7 +150,13 @@ export default function HistogramChart({
                       className="w-full transition-all duration-300 cursor-pointer relative"
                       style={{
                         height: `${barHeight}px`,
-                        backgroundColor: hoveredBar === index ? '#0066FF' : '#4A90E2',
+                        backgroundColor: (Math.max(item.normal, item.defect, item.exception) === item.normal && Math.max(item.normal, item.defect, item.exception) === item.defect)
+                          ? (hoveredBar === index ? "#ea580c" : "#fb923c")
+                          : Math.max(item.normal, item.defect, item.exception) === item.normal
+                            ? (hoveredBar === index ? "#16a34a" : "#4ade80")
+                            : Math.max(item.normal, item.defect, item.exception) === item.defect
+                              ? (hoveredBar === index ? "#dc2626" : "#f87171")
+                              : (hoveredBar === index ? "#ca8a04" : "#facc15"),
                         minHeight: item.count > 0 ? '4px' : '0px'
                       }}
                     >
