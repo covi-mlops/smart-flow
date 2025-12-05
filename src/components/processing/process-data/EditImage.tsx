@@ -99,7 +99,7 @@ export default function EditImage({ onDataChange }: EditImageProps) {
 
     const { selectedImageId } = useSelectedImageStore();
 
-    const [maskPoly, setMaskPoly] = useState<number[][][]>(MOCK_POLYGONS[selectedImageId]);
+    const [maskPoly, setMaskPoly] = useState<number[][][]>(MOCK_POLYGONS[selectedImageId]); // TODO: 수정해야 함
     const [editedPoints, setEditedPoints] = useState<Set<string>>(new Set());
     const [isDragging, setIsDragging] = useState(false); // 드래그 여부
     const [draggedPoint, setDraggedPoint] = useState<Point | null>(null);

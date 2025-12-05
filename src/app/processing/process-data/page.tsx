@@ -29,7 +29,6 @@ const BiDown = lazy(() => import('react-icons/bi').then(module => ({
 
 export default function ProcessDataPage() {
   const router = useRouter();
-  // const isInitialRenderRef = useRef(true); // 페이지 렌더링 여부 감지
 
   const { isDesc, setDesc, setAsc } = useSortConfigStore();
   const { isModalOpen, setIsModalOpen, setIsModalClose } = useSuccessDeleteStore();
@@ -374,7 +373,7 @@ export default function ProcessDataPage() {
                         {
                           item.defect_rate === Math.trunc(item.defect_rate) ? item.defect_rate : item.defect_rate.toFixed(2)
                         }%<br />(
-                        {item.defective_count}/{item.defective_count + item.normal_count}
+                        {item.defective_count.toLocaleString()}/{item.total_count.toLocaleString()}
                         )
                       </td>
                       <td

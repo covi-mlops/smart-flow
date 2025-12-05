@@ -113,12 +113,12 @@ export default function AnalysisDataDetailPage() {
         image.src = selectedImageUrl;
     };
 
-    const handleData = async () => {
+    const handleData = async (page = currentPage) => {
         try {
             setIsImageListLoading(true);
 
             const data = await analysisApi.viewProductionHistoryItem(
-                id, filters.classification_result, currentPage, Number(itemsPerPage), filters.refined
+                id, filters.classification_result, page, Number(itemsPerPage), filters.refined
             );
 
             if (data && data.status === "SUCCESS") {
@@ -146,12 +146,14 @@ export default function AnalysisDataDetailPage() {
 
     useEffect(() => {
         handleData();
-    }, [currentPage, tab, filters]);
+    }, [currentPage, tab]);
 
     useEffect(() => {
+        handleData(1);
+        setCurrentPage(1);
         setSelectedImageId('');
         setSelectedImageUrl('');
-    }, [filters, currentPage]);
+    }, [filters]);
 
     useEffect(() => {
         if (selectedImageId) {
@@ -305,82 +307,84 @@ export default function AnalysisDataDetailPage() {
                                         isImageListLoading
                                             ? <DetailTableSkeleton />
                                             : (
-                                                <div className="bg-white border-y-2 border-light-gray overflow-hidden">
-                                                    <table className="w-full min-w-[720px] h-[550px]">
-                                                        <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
-                                                            <tr>
-                                                                <th className="py-3 w-[80px]">No</th>
-                                                                <th className="py-3 w-[400px]">컨택트 핀 이미지</th>
-                                                                <th className="py-3 w-[140px]">AI 결과</th>
-                                                                <th className="py-3">가공 여부</th>
-                                                            </tr>
-                                                        </thead>
+                                                <>
+                                                    <div className="bg-white border-y-2 border-light-gray overflow-hidden">
+                                                        <table className="w-full min-w-[720px] h-[550px]">
+                                                            <thead className="border-b border-light-gray bg-soft-white py-3 text-center text-lg font-bold text-black">
+                                                                <tr>
+                                                                    <th className="py-3 w-[80px]">No</th>
+                                                                    <th className="py-3 w-[400px]">컨택트 핀 이미지</th>
+                                                                    <th className="py-3 w-[140px]">AI 결과</th>
+                                                                    <th className="py-3">가공 여부</th>
+                                                                </tr>
+                                                            </thead>
 
-                                                        <tbody>
-                                                            {
-                                                                data?.count !== 0 ? (
-                                                                    data?.results.datasets
-                                                                        .map((item, idx) => (
-                                                                            <tr
-                                                                                key={String((currentPage - 1) * Number(itemsPerPage) + idx) + '_' + item.id}
-                                                                                className={`h-[55px] text-base border-b border-light-gray cursor-pointer ${selectedImageId === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
-                                                                                onClick={() => {
-                                                                                    setSelectedImageId(item.id);
-                                                                                    setSelectedImageUrl(item.image_url);
-                                                                                }}
+                                                            <tbody>
+                                                                {
+                                                                    data?.count !== 0 ? (
+                                                                        data?.results.datasets
+                                                                            .map((item, idx) => (
+                                                                                <tr
+                                                                                    key={String((currentPage - 1) * Number(itemsPerPage) + idx) + '_' + item.id}
+                                                                                    className={`h-[55px] text-base border-b border-light-gray cursor-pointer ${selectedImageId === item.id ? "bg-point-blue/50 text-white" : "bg-white hover:bg-light-gray/30"}`}
+                                                                                    onClick={() => {
+                                                                                        setSelectedImageId(item.id);
+                                                                                        setSelectedImageUrl(item.image_url);
+                                                                                    }}
+                                                                                >
+                                                                                    <td className="px-6 py-3 text-center">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
+                                                                                    <td className="px-4 py-3">{item.dataset_id}</td>
+                                                                                    <td className={`px-4 py-3 font-bold text-center ${item.classification_result === "불량" ? "text-point-red" : selectedImageId === item.id ? "text-white" : "text-medium-gray"} `}>{item.classification_result}</td>
+                                                                                    <td className="px-4 py-3 text-center">{item.refined_at !== null ? "O" : "X"}</td>
+                                                                                </tr>
+                                                                            ))
+                                                                    ) : (
+                                                                        <tr>
+                                                                            <td
+                                                                                colSpan={8}
+                                                                                className="py-[260px] text-center font-bold text-lg text-medium-gray"
                                                                             >
-                                                                                <td className="px-6 py-3 text-center">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
-                                                                                <td className="px-4 py-3">{item.dataset_id}</td>
-                                                                                <td className={`px-4 py-3 font-bold text-center ${item.classification_result === "불량" ? "text-point-red" : selectedImageId === item.id ? "text-white" : "text-medium-gray"} `}>{item.classification_result}</td>
-                                                                                <td className="px-4 py-3 text-center">{item.refined_at !== null ? "O" : "X"}</td>
-                                                                            </tr>
-                                                                        ))
-                                                                ) : (
-                                                                    <tr>
-                                                                        <td
-                                                                            colSpan={8}
-                                                                            className="py-[260px] text-center font-bold text-lg text-medium-gray"
-                                                                        >
-                                                                            조회되는 데이터가 없습니다.
-                                                                        </td>
-                                                                    </tr>
-                                                                )
-                                                            }
+                                                                                조회되는 데이터가 없습니다.
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                }
 
-                                                            {
-                                                                data && data.results.datasets.length > 0
-                                                                && Array.from({
-                                                                    length: Math.max(
-                                                                        0,
-                                                                        Number(itemsPerPage) -
-                                                                        data.results.datasets.length
-                                                                    ),
-                                                                }).map((_, i) => (
-                                                                    <tr
-                                                                        key={`empty-${i}`}
-                                                                        className="h-[55px] border-b border-light-gray"
-                                                                    >
-                                                                        <td colSpan={8}></td>
-                                                                    </tr>
-                                                                ))
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                                {
+                                                                    data && data.results.datasets.length > 0
+                                                                    && Array.from({
+                                                                        length: Math.max(
+                                                                            0,
+                                                                            Number(itemsPerPage) -
+                                                                            data.results.datasets.length
+                                                                        ),
+                                                                    }).map((_, i) => (
+                                                                        <tr
+                                                                            key={`empty-${i}`}
+                                                                            className="h-[55px] border-b border-light-gray"
+                                                                        >
+                                                                            <td colSpan={8}></td>
+                                                                        </tr>
+                                                                    ))
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    {
+                                                        data && data?.count > 0
+                                                        && <Pagination
+                                                            total={data.count}
+                                                            page={currentPage}
+                                                            limit={Number(itemsPerPage)}
+                                                            tab={tab}
+                                                            setPage={setCurrentPage}
+                                                            setTab={setTab}
+                                                        />
+                                                    }
+                                                </>
                                             )
                                     }
 
-                                    {
-                                        data && data?.count > 0
-                                        && <Pagination
-                                            total={data.count}
-                                            page={currentPage}
-                                            limit={Number(itemsPerPage)}
-                                            tab={tab}
-                                            setPage={setCurrentPage}
-                                            setTab={setTab}
-                                        />
-                                    }
                                 </div>
 
                                 <div className="min-w-[500px] flex flex-col gap-6 pt-[74px]">

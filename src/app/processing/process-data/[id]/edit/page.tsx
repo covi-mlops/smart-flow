@@ -16,7 +16,6 @@ export default function ProcessDataDetailPage() {
     };
 
     const handleSave = () => {
-        console.log("Saving edited data:", editedData);
         router.back();
     };
 

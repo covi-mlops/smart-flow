@@ -3,15 +3,14 @@
 import MultipleButton from "@/components/common/MultipleButton";
 import Pagination from "@/components/common/Pagination";
 import Layout from "@/components/layout/Layout";
-import { LIST_MOCK_DATA } from "@/mock/learning/mock";
-import { ResultsItem } from "@/types/learning/types";
+import { LearningListResults } from "@/types/learning/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ProgressPage() {
     const router = useRouter();
 
-    const [data, setData] = useState<ResultsItem[]>(LIST_MOCK_DATA);
+    const [data, setData] = useState<LearningListResults[]>();
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [tab, setTab] = useState(1);
@@ -43,11 +42,8 @@ export default function ProgressPage() {
 
                         <tbody>
                             {
-                                data.length !== 0 ? (
-                                    data.slice(
-                                        (currentPage - 1) * Number(itemsPerPage),
-                                        currentPage * Number(itemsPerPage)
-                                    ).map((item, idx) => (
+                                data && data.length !== 0 ? (
+                                    data.map((item, idx) => (
                                         <tr
                                             key={item.id}
                                             className="h-[73px] text-base border-b border-light-gray text-center hover:bg-light-gray/30 cursor-pointer"
@@ -60,10 +56,10 @@ export default function ProgressPage() {
                                         >
                                             <td className="px-4 py-3">{(currentPage - 1) * Number(itemsPerPage) + idx + 1}</td>
                                             <td className="px-4 py-3 whitespace-pre-line">
-                                                {item.server_type}
+                                                {/* {item.server_type} */}
                                             </td>
                                             <td className="px-4 py-3 whitespace-pre-line">
-                                                {item.dataset_count.toLocaleString()}
+                                                {/* {item.dataset_count.toLocaleString()} */}
                                             </td>
                                             <td className={
                                                 `px-4 py-3 font-bold
@@ -82,7 +78,7 @@ export default function ProgressPage() {
                                                 }
                                             </td>
                                             <td>
-                                                {item.status === "ready" ? "ㅡ" : item.process_done_at}
+                                                {/* {item.status === "ready" ? "ㅡ" : item.process_done_at} */}
                                             </td>
                                         </tr>
                                     ))
@@ -99,15 +95,12 @@ export default function ProgressPage() {
                             }
 
                             {
-                                LIST_MOCK_DATA.length > 0
+                                data && data.length > 0
                                 && Array.from({
                                     length: Math.max(
                                         0,
                                         Number(itemsPerPage) -
-                                        data.slice(
-                                            (currentPage - 1) * Number(itemsPerPage),
-                                            currentPage * Number(itemsPerPage)
-                                        ).length
+                                        data.length
                                     ),
                                 }).map((_, i) => (
                                     <tr
@@ -123,7 +116,7 @@ export default function ProgressPage() {
                 </div>
 
                 {
-                    data.length !== 0 && (
+                    data && data.length !== 0 && (
                         <Pagination
                             total={data.length}
                             page={currentPage}

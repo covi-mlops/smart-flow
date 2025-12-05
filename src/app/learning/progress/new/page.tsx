@@ -8,7 +8,7 @@ import { Picker } from "@/components/common/Picker";
 import MultipleButton from "@/components/common/MultipleButton";
 import { MOCK_DATA } from "@/mock/processing/mock";
 import Pagination from "@/components/common/Pagination";
-import { ProductionHistoryEachItem_P } from "@/types/processing/process-data";
+import { ProductionHistoryItem } from "@/types/processing/types";
 
 export default function NewAILearningPage() {
     const router = useRouter();
@@ -27,7 +27,7 @@ export default function NewAILearningPage() {
 
     const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
     const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-    const [learningData, setLearningData] = useState<ProductionHistoryEachItem_P[]>([]);
+    const [learningData, setLearningData] = useState<ProductionHistoryItem[]>([]);
 
     const productionLineNameOptions = [
         { label: "전체", value: "전체" }
